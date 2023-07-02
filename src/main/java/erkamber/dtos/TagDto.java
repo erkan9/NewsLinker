@@ -12,7 +12,7 @@ import javax.validation.constraints.*;
 public class TagDto {
 
     @Positive
-    private int tagsID;
+    private int tagID;
 
     @NotBlank(message = "Tag Name cannot be Blank")
     @NotEmpty(message = "Tag Name cannot be Empty")

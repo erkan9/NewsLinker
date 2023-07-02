@@ -1,6 +1,9 @@
 package erkamber.validations;
 
 
+import erkamber.configurations.CharAndNumberPatternConfiguration;
+import erkamber.configurations.OnlyCharPatternConfiguration;
+import erkamber.configurations.PasswordPatternConfiguration;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Pattern;
@@ -8,25 +11,40 @@ import java.util.regex.Pattern;
 @Component
 public class UserValidation {
 
-    public boolean isUserNameValid(String usernName) {
+    private final OnlyCharPatternConfiguration onlyCharPatternConfiguration;
 
-        String usernamePattern = "([A-Za-z_]{5,15})\\w+";
+    private final CharAndNumberPatternConfiguration charAndNumberPatternConfiguration;
 
-        return Pattern.compile(usernamePattern).matcher(usernName).matches();
+    private final PasswordPatternConfiguration passwordPatternConfiguration;
+
+    public UserValidation(OnlyCharPatternConfiguration onlyCharPatternConfiguration,
+                          CharAndNumberPatternConfiguration charAndNumberPatternConfiguration,
+                          PasswordPatternConfiguration passwordPatternConfiguration) {
+
+        this.onlyCharPatternConfiguration = onlyCharPatternConfiguration;
+        this.charAndNumberPatternConfiguration = charAndNumberPatternConfiguration;
+        this.passwordPatternConfiguration = passwordPatternConfiguration;
+    }
+
+    public boolean isUserNameValid(String userName) {
+
+        String userNamePattern = charAndNumberPatternConfiguration.getCharAndNumberPattern();
+
+        return Pattern.compile(userNamePattern).matcher(userName).matches();
     }
 
     public boolean isUserPasswordValid(String password) {
 
-        String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[@-_~])[A-Za-z@-_~|]{6,20}$";
+        String passwordPattern = passwordPatternConfiguration.getPasswordPattern();
 
         return Pattern.compile(passwordPattern).matcher(password).matches();
     }
 
     public boolean isUserFirstOrLastNameValid(String name) {
 
-        String passwordPattern = "^[A-Za-z]+$";
+        String userFirstLastNamePatterns = onlyCharPatternConfiguration.getOnlyCharPattern();
 
-        return Pattern.compile(passwordPattern).matcher(name).matches();
+        return Pattern.compile(userFirstLastNamePatterns).matcher(name).matches();
 
     }
 }

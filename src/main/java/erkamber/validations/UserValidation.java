@@ -4,8 +4,10 @@ package erkamber.validations;
 import erkamber.configurations.CharAndNumberPatternConfiguration;
 import erkamber.configurations.OnlyCharPatternConfiguration;
 import erkamber.configurations.PasswordPatternConfiguration;
+import erkamber.entities.User;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Component
@@ -46,5 +48,10 @@ public class UserValidation {
 
         return Pattern.compile(userFirstLastNamePatterns).matcher(name).matches();
 
+    }
+
+    public boolean isUserExistsByUserID(List<User> allUsers, int searchedUserID) {
+
+        return allUsers.stream().anyMatch(user -> user.getUserID() == searchedUserID);
     }
 }

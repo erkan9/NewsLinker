@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface NewsService {
 
-    void getNewsByNewsID(int newsID);
+    NewsDto getNewsByNewsID(int newsID);
 
-    void getNews(int newsID, int userID);
+    NewsDto getNews(int newsID, int userID);
 
     int addNews(NewsDto newsDto);
 

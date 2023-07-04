@@ -29,13 +29,15 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public void getNewsByNewsID(int newsID) {
+    public NewsDto getNewsByNewsID(int newsID) {
 
+        return null;
     }
 
     @Override
-    public void getNews(int newsID, int userID) {
+    public NewsDto getNews(int newsID, int userID) {
 
+        return null;
     }
 
     @Override

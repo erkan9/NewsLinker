@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface ViewRepository extends JpaRepository<View, Integer> {
 
-    List<View> findViewByViewNewsID(int postID);
+    List<View> findViewByViewNewsID(int newsID);
 
-    List<View> findViewByViewNewsIDAndViewCreationDate(int postID, LocalDate creationDate);
+    List<View> findViewByViewNewsIDAndViewCreationDate(int newsID, LocalDate creationDate);
 
-    List<View> findViewByViewNewsIDAndViewCreationDateBefore(int postID, LocalDate beforeCreationDate);
+    List<View> findViewByViewNewsIDAndViewCreationDateBefore(int newsID, LocalDate beforeCreationDate);
 
-    List<View> findViewByViewNewsIDAndViewCreationDateAfter(int postID, LocalDate afterCreationDate);
+    List<View> findViewByViewNewsIDAndViewCreationDateAfter(int newsID, LocalDate afterCreationDate);
 
     List<View> findViewByViewUserID(int userID);
 }

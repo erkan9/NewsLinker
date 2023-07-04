@@ -24,4 +24,10 @@ public class ViewDto {
 
     @Positive(message = "User ID must be Positive number")
     private int viewUserID;
+
+    public ViewDto(int viewID, int viewNewsID, int viewUserID) {
+        this.viewID = viewID;
+        this.viewNewsID = viewNewsID;
+        this.viewUserID = viewUserID;
+    }
 }

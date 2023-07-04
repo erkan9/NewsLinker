@@ -46,4 +46,6 @@ public class UserDto {
     private String userPassword;
 
     private String userPhoto;
+
+    private boolean isUserReporter;
 }

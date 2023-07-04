@@ -35,22 +35,35 @@ public class User {
     @Column(name = "user_photo", length = 255, unique = false, updatable = true, insertable = true, nullable = true)
     private String userPhoto;
 
+    @Column(name = "user_is_reporter", unique = false, updatable = false, insertable = true, nullable = false)
+    private boolean isUserReporter = false;
+
     public User() {
     }
 
-    public User(int userID, String userName, String userEmail, String userPassword) {
+    public User(int userID, String userFirstName, String userLastName, String userName, String userEmail,
+                String userPassword, boolean isUserReporter) {
+
         this.userID = userID;
+        this.userFirstName = userFirstName;
+        this.userLastName = userLastName;
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
+        this.isUserReporter = isUserReporter;
     }
 
-    public User(int userID, String userName, String userEmail, String userPassword, String userPhoto) {
+    public User(int userID, String userFirstName, String userLastName, String userName, String userEmail,
+                String userPassword, String userPhoto, boolean isUserReporter) {
+
         this.userID = userID;
+        this.userFirstName = userFirstName;
+        this.userLastName = userLastName;
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
         this.userPhoto = userPhoto;
+        this.isUserReporter = isUserReporter;
     }
 
     @Override

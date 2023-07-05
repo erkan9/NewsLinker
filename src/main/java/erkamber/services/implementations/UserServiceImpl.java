@@ -2,6 +2,7 @@ package erkamber.services.implementations;
 
 import erkamber.dtos.UserDto;
 import erkamber.entities.User;
+import erkamber.exceptions.InvalidInputException;
 import erkamber.exceptions.ResourceNotFoundException;
 import erkamber.mappers.UserMapper;
 import erkamber.repositories.UserRepository;
@@ -19,7 +20,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
 
-    //TODO DO validations for user inputs using userValidation class
     private final UserValidation userValidation;
 
     public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, UserValidation userValidation) {
@@ -34,13 +34,15 @@ public class UserServiceImpl implements UserService {
         Optional<User> searchedUser = userRepository.findById(userID);
 
         User user = searchedUser.orElseThrow(() ->
-                new ResourceNotFoundException("User not Found:" + userID, "User"));
+                new ResourceNotFoundException("User ID not Found:" + userID, "User"));
 
         return userMapper.mapUserToUserDto(user);
     }
 
     @Override
     public UserDto getUserByUserName(String userName) {
+
+        isUserNameValid(userName);
 
         Optional<User> searchedUser = userRepository.findUserByUserName(userName);
 
@@ -56,13 +58,17 @@ public class UserServiceImpl implements UserService {
         Optional<User> searchedUser = userRepository.findUserByUserEmail(userEmail);
 
         User user = searchedUser.orElseThrow(() ->
-                new ResourceNotFoundException("User not Found:" + userEmail, "User"));
+                new ResourceNotFoundException("User Email not Found:" + userEmail, "User"));
 
         return userMapper.mapUserToUserDto(user);
     }
 
     @Override
     public UserDto getUserByFirstAndLastName(String firstName, String lastName) {
+
+        isUserFirstOrLastNameValid(firstName);
+
+        isUserFirstOrLastNameValid(lastName);
 
         Optional<User> searchedUser = userRepository.findUserByUserFirstNameAndUserLastName(firstName, lastName);
 
@@ -75,6 +81,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getUsersByFirstName(String userFirstName) {
 
+        isUserFirstOrLastNameValid(userFirstName);
+
         List<User> searchedUsersByFirstName = userRepository.findUserByUserFirstName(userFirstName);
 
         return userMapper.mapUserListToUserDto(searchedUsersByFirstName);
@@ -82,6 +90,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getUsersByLastName(String userLastName) {
+
+        isUserFirstOrLastNameValid(userLastName);
 
         List<User> searchedUsersByLastName = userRepository.findUserByUserLastName(userLastName);
 
@@ -94,5 +104,30 @@ public class UserServiceImpl implements UserService {
         List<User> allUsers = userRepository.findAll();
 
         return userMapper.mapUserListToUserDto(allUsers);
+    }
+
+    private void isUserPasswordValid(String userPassword) {
+
+        if (!userValidation.isUserPasswordValid(userPassword)) {
+
+            throw new InvalidInputException("Invalid Password");
+        }
+    }
+
+
+    private void isUserFirstOrLastNameValid(String userFirstOrLastName) {
+
+        if (!userValidation.isUserFirstOrLastNameValid(userFirstOrLastName)) {
+
+            throw new InvalidInputException("Invalid Name");
+        }
+    }
+
+    private void isUserNameValid(String userName) {
+
+        if (!userValidation.isUserNameValid(userName)) {
+
+            throw new InvalidInputException("Invalid Username");
+        }
     }
 }

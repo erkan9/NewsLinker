@@ -77,13 +77,7 @@ public class ViewServiceImpl implements ViewService {
         View view = viewRepository.findById(viewID)
                 .orElseThrow(() -> new ResourceNotFoundException("View with that ID, could not be found", "View"));
 
-        UserDto userDto = userService.getUserByID(view.getViewUserID());
-
-        NewsDto newsDto = newsService.getNewsByNewsID(view.getViewNewsID());
-
-        ViewDto viewDto = viewMapper.mapViewToViewDto(view);
-
-        return viewMapper.mapToViewDetailedDto(viewDto, newsDto, userDto);
+        return fetchViewDetailedDtoData(view);
     }
 
     @Override

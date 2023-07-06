@@ -19,9 +19,6 @@ public class NewsServiceImpl implements NewsService {
 
     private final NewsValidation newsValidation;
 
-
-    // TODO: Need View and User Services in order to finish the News Service
-
     public NewsServiceImpl(NewsRepository newsRepository, NewsMapper newsMapper, NewsValidation newsValidation) {
         this.newsRepository = newsRepository;
         this.newsMapper = newsMapper;

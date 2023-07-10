@@ -1,5 +1,6 @@
 package erkamber.dtos;
 
+import erkamber.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,7 @@ public class CommentDetailedDto {
     private int commendID;
 
     @Positive
-    private UserDto author;
+    private User author;
 
     @Positive
     private int commentNewsID;

@@ -16,7 +16,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id", unique = true, updatable = false, insertable = false, nullable = false)
-    private int commendID;
+    private int commentID;
 
     @Column(name = "author_id", unique = false, updatable = false, insertable = true, nullable = false)
     private int commentAuthorID;
@@ -38,10 +38,10 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(int commendID, int commentAuthorID, int commentNewsID, String commentContent,
+    public Comment(int commentID, int commentAuthorID, int commentNewsID, String commentContent,
                    int commentUpVotes, int commentDownVotes, LocalDate creationDate) {
 
-        this.commendID = commendID;
+        this.commentID = commentID;
         this.commentAuthorID = commentAuthorID;
         this.commentNewsID = commentNewsID;
         this.commentContent = commentContent;
@@ -55,7 +55,7 @@ public class Comment {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Comment comment = (Comment) o;
-        return commendID == comment.commendID && commentAuthorID == comment.commentAuthorID &&
+        return commentID == comment.commentID && commentAuthorID == comment.commentAuthorID &&
                 commentUpVotes == comment.commentUpVotes && commentDownVotes == comment.commentDownVotes &&
                 Objects.equals(commentContent, comment.commentContent) &&
                 Objects.equals(creationDate, comment.creationDate);
@@ -63,6 +63,6 @@ public class Comment {
 
     @Override
     public int hashCode() {
-        return Objects.hash(commendID, commentAuthorID, commentContent, commentUpVotes, commentDownVotes, creationDate);
+        return Objects.hash(commentID, commentAuthorID, commentContent, commentUpVotes, commentDownVotes, creationDate);
     }
 }

@@ -15,6 +15,8 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     List<Comment> findCommentsByCommentAuthorID(int authorID);
 
+    List<Comment> findCommentsByCommentNewsID(int newsID);
+
     List<Comment> findCommentsByCreationDate(LocalDate creationDate);
 
     List<Comment> findCommentsByCreationDateBefore(LocalDate creationDate);

@@ -10,19 +10,17 @@ public interface CommentService {
 
     int addNewComment(CommentDto commentDto);
 
-    int addCommentUpVote(int commentID, int userID);
-
-    int addCommentDownVote(int commentID, int userID);
-
     void updateCommentContent(int commentID, int userID, String newContent);
 
     void deleteCommentByCommentID(int commentID);
 
-    void deleteCommentByUserID(int userID);
+    int deleteAllCommentsOfUser(int userID);
 
     CommentDetailedDto getCommentByID(int commentID);
 
     List<CommentDetailedDto> getCommentsByUserID(int userID);
+
+    List<CommentDetailedDto> getCommentsByNewsID(int newsID);
 
     List<CommentDetailedDto> getCommentsByCreationDate(LocalDate creationDate);
 

@@ -3,12 +3,13 @@ package erkamber.services.interfaces;
 import erkamber.dtos.CommentDetailedDto;
 import erkamber.dtos.CommentDto;
 
+import javax.mail.MessagingException;
 import java.time.LocalDate;
 import java.util.List;
 
 public interface CommentService {
 
-    int addNewComment(CommentDto commentDto);
+    int addNewComment(CommentDto commentDto) throws MessagingException;
 
     void updateCommentContent(int commentID, int userID, String newContent);
 

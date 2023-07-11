@@ -130,4 +130,22 @@ public class UserServiceImpl implements UserService {
             throw new InvalidInputException("Invalid Username");
         }
     }
+
+    protected User getNewsAuthor(int newsAuthorID) {
+
+        Optional<User> newsAuthor = userRepository.findById(newsAuthorID);
+
+        return newsAuthor.orElseThrow(() ->
+                new ResourceNotFoundException("User not Found:" + newsAuthorID, "User"));
+    }
+
+    protected String getUserNameOfCommentAuthor(int commentAuthorID) {
+
+        Optional<User> commentAuthor = userRepository.findById(commentAuthorID);
+
+        User searchedCommentAuthor = commentAuthor.orElseThrow(() ->
+                new ResourceNotFoundException("User not Found:" + commentAuthorID, "User"));
+
+        return searchedCommentAuthor.getUserName();
+    }
 }

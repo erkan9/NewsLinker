@@ -3,6 +3,7 @@ package erkamber.services.implementations;
 import erkamber.dtos.CommentDetailedDto;
 import erkamber.dtos.CommentDto;
 import erkamber.entities.Comment;
+import erkamber.entities.News;
 import erkamber.entities.User;
 import erkamber.exceptions.AuthorMismatchException;
 import erkamber.exceptions.ResourceNotFoundException;
@@ -11,10 +12,12 @@ import erkamber.mappers.CommentMapper;
 import erkamber.repositories.CommentRepository;
 import erkamber.repositories.UserRepository;
 import erkamber.services.interfaces.CommentService;
+import erkamber.services.interfaces.EmailService;
 import erkamber.validations.CommentValidation;
 import erkamber.validations.InjectionValidation;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,31 +31,50 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentMapper commentMapper;
 
-    private final InjectionValidation injectionValidation;
+    private final CommentValidation commentValidation;
 
     private final UserRepository userRepository;
 
-    private final CommentValidation commentValidation;
+    private final UserServiceImpl userService;
+
+    private final NewsServiceImpl newsService;
+
+    private final EmailService emailService;
+
+    private final InjectionValidation injectionValidation;
 
     public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper,
                               InjectionValidation injectionValidation, UserRepository userRepository,
-                              CommentValidation commentValidation) {
+                              CommentValidation commentValidation, EmailService emailService, UserServiceImpl userService,
+                              NewsServiceImpl newsService) {
 
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
         this.injectionValidation = injectionValidation;
         this.userRepository = userRepository;
         this.commentValidation = commentValidation;
+        this.emailService = emailService;
+        this.userService = userService;
+        this.newsService = newsService;
     }
 
     @Override
-    public int addNewComment(CommentDto commentDto) {
+    public int addNewComment(CommentDto commentDto) throws MessagingException {
 
         isCommentContentValid(commentDto.getCommentContent());
 
         Comment newComment = commentMapper.mapCommentDtoToComment(commentDto);
 
         commentRepository.save(newComment);
+
+        String commentAuthorUserName = userService.getUserNameOfCommentAuthor(commentDto.getCommentAuthorID());
+
+        News searchedNews = newsService.getNewsOfComment(commentDto.getCommentNewsID());
+
+        User newsAuthor = userService.getNewsAuthor(searchedNews.getUserID());
+
+        emailService.sendEmail(newsAuthor.getUserFirstName(), commentAuthorUserName, commentDto.getCommentContent(),
+                newsAuthor.getUserEmail(), searchedNews.getNewsTitle());
 
         return newComment.getCommentID();
     }

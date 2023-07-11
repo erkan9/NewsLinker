@@ -1,6 +1,8 @@
 package erkamber.services.implementations;
 
 import erkamber.dtos.NewsDto;
+import erkamber.entities.News;
+import erkamber.exceptions.ResourceNotFoundException;
 import erkamber.mappers.NewsMapper;
 import erkamber.repositories.NewsRepository;
 import erkamber.services.interfaces.NewsService;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NewsServiceImpl implements NewsService {
@@ -120,5 +123,13 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public List<NewsDto> findNewsByContentContaining(String content) {
         return null;
+    }
+
+    protected News getNewsOfComment(int newsID) {
+
+        Optional<News> newsOfComment = newsRepository.findById(newsID);
+
+        return newsOfComment.orElseThrow(() ->
+                new ResourceNotFoundException("News not Found:" + newsID, "News"));
     }
 }

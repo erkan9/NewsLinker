@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
 <head>
     <meta charset="UTF-8">
     <title>New Comment Notification</title>
@@ -61,17 +61,17 @@
 </head>
 <body>
 <div class="container">
-    <h1>New Comment Notification</h1>
-    <p>Dear <span th:text="${newsAuthorName}"></span>,</p>
-    <p>We would like to inform you about a new comment that has been posted to your news <span th:text="${postTitle}"></span>:</p>
+    <h1>Нов Коментар</h1>
+    <p>Здравейте, <span th:text="${newsAuthorName}"></span>,</p>
+    <p>Искаме да Ви информираме, че нов коментар беше добавен към вашата новина: <span th:text="${postTitle}"></span></p>
     <div class="comment">
-        <p><strong>Username:</strong> <span th:text="${commentAuthorName}"></span></p>
-        <p><strong>Comment:</strong></p>
+        <p><strong>От:</strong> <span th:text="${commentAuthorName}"></span></p>
+        <p><strong>Коментар:</strong></p>
         <p th:text="${comment}"></p>
     </div>
     <div class="signature">
-        <p>Best regards,</p>
-        <p>Your Team</p>
+        <p>Поздрави,</p>
+        <p>Екип NewsLinker</p>
     </div>
 </div>
 </body>

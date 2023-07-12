@@ -22,6 +22,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserValidation userValidation;
 
+    //TODO write implementation for login and register
+
     public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, UserValidation userValidation) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;

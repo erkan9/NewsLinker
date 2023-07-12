@@ -33,6 +33,7 @@ public class Comment {
     @Column(name = "down_votes", unique = false, updatable = true, insertable = true, nullable = false)
     private int commentDownVotes;
 
+    @Column(name = "comment_creation_date", unique = false, updatable = false, insertable = true, nullable = false)
     private LocalDate creationDate;
 
     public Comment() {

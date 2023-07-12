@@ -11,8 +11,6 @@ import java.util.Optional;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
-    List<Comment> getAllComments();
-
     List<Comment> findCommentsByCommentAuthorID(int authorID);
 
     List<Comment> findCommentsByCommentNewsID(int newsID);

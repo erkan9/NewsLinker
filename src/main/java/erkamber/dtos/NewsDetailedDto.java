@@ -17,7 +17,7 @@ public class NewsDetailedDto {
     private int newsID;
 
     @NotNull
-    private UserDto userDto;
+    private UserDto authorDto;
 
     @NotBlank(message = "News Title cannot be Blank")
     @NotEmpty(message = "News Title cannot be Empty")
@@ -43,4 +43,10 @@ public class NewsDetailedDto {
     private List<TagDto> listOfNewsTags;
 
     private List<MediaDto> listOfNewsMedia;
+
+    private List<CommentDetailedDto> listOfComments;
+
+    private List<VoteDto> listOfUpVotes;
+
+    private List<VoteDto> listOfDownVotes;
 }

@@ -1,7 +1,6 @@
 package erkamber.handlers;
 
-import erkamber.exceptions.InvalidInputException;
-import erkamber.exceptions.ResourceNotFoundException;
+import erkamber.exceptions.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -21,8 +20,26 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<String> resourceNotFoundException(ResourceNotFoundException exception) {
+    public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException exception) {
         logger.error("Caught exception: ", exception);
-        return new ResponseEntity<>("Resource not found. Please try again", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Resource not found. Please try again", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(TextInjectionException.class)
+    public ResponseEntity<String> handleTextInjectionException(TextInjectionException exception) {
+        logger.error("Caught exception: ", exception);
+        return new ResponseEntity<>("Text has possibility of containing SQL injection", HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AuthorMismatchException.class)
+    public ResponseEntity<String> handleAuthorMismatchException(AuthorMismatchException exception) {
+        logger.error("Caught exception: ", exception);
+        return new ResponseEntity<>("Author ID of the comment does not match the provided User ID", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(NotReporterException.class)
+    public ResponseEntity<String> authorNotReporterException(NotReporterException exception) {
+        logger.error("Caught exception: ", exception);
+        return new ResponseEntity<>("The User is not Reporter. Cannot subscribe", HttpStatus.NOT_FOUND);
     }
 }

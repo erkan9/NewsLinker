@@ -23,4 +23,8 @@ public class MediaDto {
     @Size(max = 255, message = "Media String must be up to 255 characters long")
     private String mediaString;
 
+    public MediaDto(int newsID, String mediaString) {
+        this.newsID = newsID;
+        this.mediaString = mediaString;
+    }
 }

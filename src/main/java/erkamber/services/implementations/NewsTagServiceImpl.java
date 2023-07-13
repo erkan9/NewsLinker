@@ -77,11 +77,19 @@ public class NewsTagServiceImpl implements NewsTagService {
     }
 
     @Override
-    public List<NewsTagDetailedDto> getTagsOfNews(int newsID) {
+    public List<NewsTagDetailedDto> getTagsOfNewsDetailed(int newsID) {
 
         List<NewsTag> listOfNewsTag = newsTagRepository.findNewsTagsByNewsID(newsID);
 
         return convertListToListOfNewsTagDetailedDto(listOfNewsTag);
+    }
+
+    @Override
+    public List<NewsTagDto> getTagsOfNews(int newsID) {
+
+        List<NewsTag> listOfNewsTag = newsTagRepository.findNewsTagsByNewsID(newsID);
+
+        return newsTagMapper.mapListToNewsTagDto(listOfNewsTag);
     }
 
     @Override
@@ -108,7 +116,7 @@ public class NewsTagServiceImpl implements NewsTagService {
 
             TagDto tagDto = tagService.findTagByTagID(newsTag.getNewsTagID());
 
-            NewsDetailedDto newsDetailedDto = newsService.findNewsByNewsID(newsTag.getNewsID());
+            NewsDetailedDto newsDetailedDto = newsService.getNewsDetailedByNewsID(newsTag.getNewsID());
 
             NewsTagDetailedDto newsTagDetailedDto1 = newsTagMapper.mapToNewsTagDetailedDto(newsTag.getNewsTagID(), newsDetailedDto, tagDto);
 

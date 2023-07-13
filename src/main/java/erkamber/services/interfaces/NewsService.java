@@ -10,39 +10,23 @@ public interface NewsService {
 
     NewsDto getNewsByNewsID(int newsID);
 
-    NewsDto getNews(int newsID, int userID);
+    NewsDetailedDto getNewsDetailedByNewsID(int newsID);
+
+    NewsDetailedDto getNewsAsLoggedUser(int newsID, int userID);
 
     int addNews(NewsDto newsDto);
 
-    int updateNews(NewsDto newsDto, int userID);
+    void updateNewsContent(String content, int newsID, int userID);
 
-    int updateNewsContent(String content, int newsID, int userID);
+    void updateNewsTitle(String title, int newsID, int userID);
 
-    int updateNewsTitle(String title, int newsID, int userID);
+    List<NewsDetailedDto> getAllNews();
 
-    NewsDetailedDto findNewsByNewsID(int newsID);
+    List<NewsDetailedDto> findNewsByUserID(int userID);
 
-    List<NewsDto> getAllNews();
+    List<NewsDetailedDto> findNewsByNewsTitle(String newsTitle);
 
-    List<NewsDto> findNewsByUserID(int userID);
+    List<NewsDetailedDto> findNewsByCreationDateBefore(LocalDate beforeDate);
 
-    List<NewsDto> findNewsByUserName(String userName);
-
-    List<NewsDto> findNewsByNewsTitle(String newsTitle);
-
-    List<NewsDto> findNewsByUpVotesLowerThan(int upVotesCount);
-
-    List<NewsDto> findNewsByUpVotesGreaterThan(int upVotesCount);
-
-    List<NewsDto> findNewsByDownVotesLowerThan(int downVotesCount);
-
-    List<NewsDto> findNewsByDownVotesGreaterThan(int downVotesCount);
-
-    List<NewsDto> findNewsByCreationDateBefore(LocalDate beforeDate);
-
-    List<NewsDto> findNewsByCreationDateAfter(LocalDate afterDate);
-
-    List<NewsDto> findNewsByCreationBetween(LocalDate startDate, LocalDate endDate);
-
-    List<NewsDto> findNewsByContentContaining(String content);
+    List<NewsDetailedDto> findNewsByCreationDateAfter(LocalDate afterDate);
 }

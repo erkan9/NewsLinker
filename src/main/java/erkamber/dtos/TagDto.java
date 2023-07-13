@@ -19,4 +19,8 @@ public class TagDto {
     @NotNull(message = "Tag Name cannot be Null")
     @Size(max = 40, message = "Tag Name must be up to 40 characters long")
     private String tagName;
+
+    public TagDto(String tagName) {
+        this.tagName = tagName;
+    }
 }

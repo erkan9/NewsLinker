@@ -37,6 +37,8 @@ public class NewsDetailedDto {
     @PositiveOrZero(message = "Down votes must be Positive number or Zero")
     private int newsDownVotes;
 
+    private int numberOfViews;
+
     @NotNull(message = "News Creation Date cannot be Null")
     private LocalDate newsCreationDate;
 

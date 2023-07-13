@@ -10,6 +10,8 @@ public interface ViewService {
 
     int addNewView(ViewDto viewDto);
 
+    int getNumberOfViewsOfNews(int newsID);
+
     void deleteViewsByViewID(int viewID);
 
     void deleteViewsByUserID(int userID);

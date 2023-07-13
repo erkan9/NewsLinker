@@ -22,12 +22,12 @@ public class NewsMapper {
                 newsDto.getNewsUpVotes(), newsDto.getNewsDownVotes(), newsDto.getNewsCreationDate());
     }
 
-    public NewsDetailedDto mapNewsToNewsDtoDetailed(NewsDto newsDto, UserDto userDto, List<TagDto> listOfNewsTags,
-                                                    List<MediaDto> listOfNewsMedia, List<CommentDetailedDto> listOfComments,
-                                                    List<VoteDto> listOfUpVotes, List<VoteDto> listOfDownVotes) {
+    public NewsDetailedDto mapToNewsDtoDetailed(NewsDto newsDto, UserDto userDto, int numberOfViews, List<TagDto> listOfNewsTags,
+                                                List<MediaDto> listOfNewsMedia, List<CommentDetailedDto> listOfComments,
+                                                List<VoteDto> listOfUpVotes, List<VoteDto> listOfDownVotes) {
 
         return new NewsDetailedDto(newsDto.getNewsID(), userDto, newsDto.getNewsTitle(), newsDto.getNewsContent(),
-                newsDto.getNewsUpVotes(), newsDto.getNewsDownVotes(), newsDto.getNewsCreationDate(),
+                newsDto.getNewsUpVotes(), newsDto.getNewsDownVotes(), numberOfViews, newsDto.getNewsCreationDate(),
                 listOfNewsTags, listOfNewsMedia, listOfComments, listOfUpVotes, listOfDownVotes);
     }
 

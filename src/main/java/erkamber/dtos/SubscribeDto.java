@@ -19,4 +19,9 @@ public class SubscribeDto {
 
     @Positive(message = "Subscribe to person's ID must be Positive number")
     private int subscribedToID;
+
+    public SubscribeDto(int subscriberID, int subscribedToID) {
+        this.subscriberID = subscriberID;
+        this.subscribedToID = subscribedToID;
+    }
 }

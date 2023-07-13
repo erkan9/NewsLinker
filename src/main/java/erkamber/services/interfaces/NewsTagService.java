@@ -2,7 +2,6 @@ package erkamber.services.interfaces;
 
 import erkamber.dtos.NewsTagDetailedDto;
 import erkamber.dtos.NewsTagDto;
-import erkamber.dtos.TagDto;
 
 import java.util.List;
 
@@ -16,7 +15,9 @@ public interface NewsTagService {
 
     void deleteNewsTag(int newsID, int tagID);
 
-    List<NewsTagDetailedDto> getTagsOfNews(int newsID);
+    List<NewsTagDetailedDto> getTagsOfNewsDetailed(int newsID);
+
+    List<NewsTagDto> getTagsOfNews(int newsID);
 
     List<NewsTagDetailedDto> getNewsOfTag(int tagID);
 

@@ -1,16 +1,27 @@
 package erkamber.services.implementations;
 
-import erkamber.dtos.NewsDetailedDto;
-import erkamber.dtos.NewsDto;
+import erkamber.dtos.*;
 import erkamber.entities.News;
+import erkamber.entities.NewsTag;
+import erkamber.entities.User;
+import erkamber.entities.View;
+import erkamber.enums.VoteTypeNews;
+import erkamber.exceptions.InvalidInputException;
 import erkamber.exceptions.ResourceNotFoundException;
+import erkamber.exceptions.TextInjectionException;
 import erkamber.mappers.NewsMapper;
 import erkamber.repositories.NewsRepository;
-import erkamber.services.interfaces.NewsService;
+import erkamber.repositories.NewsTagRepository;
+import erkamber.repositories.UserRepository;
+import erkamber.repositories.ViewRepository;
+import erkamber.services.interfaces.*;
+import erkamber.validations.InjectionValidation;
 import erkamber.validations.NewsValidation;
+import erkamber.validations.UserValidation;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,107 +34,196 @@ public class NewsServiceImpl implements NewsService {
 
     private final NewsValidation newsValidation;
 
-    public NewsServiceImpl(NewsRepository newsRepository, NewsMapper newsMapper, NewsValidation newsValidation) {
+    private final UserService userService;
+
+    private final NewsTagRepository newsTagRepository;
+
+    private final MediaService mediaService;
+
+    private final CommentService commentService;
+
+    private final VoteService voteService;
+
+    private final TagService tagService;
+
+    private final UserValidation userValidation;
+
+    private final UserRepository userRepository;
+
+    private final ViewService viewService;
+
+    private final ViewRepository viewRepository;
+
+    private final InjectionValidation injectionValidation;
+
+    public NewsServiceImpl(NewsRepository newsRepository, NewsMapper newsMapper, NewsValidation newsValidation,
+                           UserService userService, NewsTagRepository newsTagRepository, MediaService mediaService,
+                           CommentService commentService, VoteService voteService, TagService tagService, UserValidation userValidation,
+                           UserRepository userRepository, ViewService viewService, ViewRepository viewRepository, InjectionValidation injectionValidation) {
+
         this.newsRepository = newsRepository;
         this.newsMapper = newsMapper;
         this.newsValidation = newsValidation;
+        this.userService = userService;
+        this.newsTagRepository = newsTagRepository;
+        this.mediaService = mediaService;
+        this.commentService = commentService;
+        this.voteService = voteService;
+        this.tagService = tagService;
+        this.userValidation = userValidation;
+        this.userRepository = userRepository;
+        this.viewService = viewService;
+        this.viewRepository = viewRepository;
+        this.injectionValidation = injectionValidation;
     }
 
     @Override
     public NewsDto getNewsByNewsID(int newsID) {
 
-        return null;
+        Optional<News> searchedNewsOptional = newsRepository.findById(newsID);
+
+        News searchedNews = searchedNewsOptional.orElseThrow(() ->
+                new ResourceNotFoundException("News not Found: " + newsID, "News"));
+
+        return newsMapper.mapNewsToNewsDto(searchedNews);
     }
 
     @Override
-    public NewsDto getNews(int newsID, int userID) {
+    public NewsDetailedDto getNewsDetailedByNewsID(int newsID) {
 
-        return null;
+        return gatherDataForNewsDetailedDtoByNewsID(newsID);
+    }
+
+    @Override
+    public NewsDetailedDto getNewsAsLoggedUser(int newsID, int userID) {
+
+        isUserExists(userID);
+
+        Optional<News> searchedNewsOptional = newsRepository.findById(newsID);
+
+        News searchedNews = searchedNewsOptional.orElseThrow(() ->
+                new ResourceNotFoundException("News not Found: " + newsID, "News"));
+
+        View view = new View(LocalDate.now(), newsID, userID);
+
+        viewRepository.save(view);
+
+        return gatherDataForNewsDetailedDtoByNewsID(newsID);
     }
 
     @Override
     public int addNews(NewsDto newsDto) {
-        return 0;
+
+        isUserExists(newsDto.getUserID());
+
+        validateNewsTitle(newsDto.getNewsTitle());
+
+        validateTextForInjection(newsDto.getNewsContent());
+
+        News news = newsMapper.mapNewsDtoToNews(newsDto);
+
+        newsRepository.save(news);
+
+        return news.getNewsID();
     }
 
     @Override
-    public int updateNews(NewsDto newsDto, int userID) {
-        return 0;
+    public void updateNewsContent(String content, int newsID, int userID) {
+
+        isUserExists(userID);
+
+        Optional<News> searchedNewsOptional = newsRepository.findById(newsID);
+
+        News searchedNews = searchedNewsOptional.orElseThrow(() ->
+                new ResourceNotFoundException("News not Found: " + newsID, "News"));
+
+        isUserTheAuthorOfNews(searchedNews, userID);
+
+        validateTextForInjection(content);
+
+        searchedNews.setNewsContent(content);
+
+        newsRepository.save(searchedNews);
+
     }
 
     @Override
-    public int updateNewsContent(String content, int newsID, int userID) {
-        return 0;
+    public void updateNewsTitle(String title, int newsID, int userID) {
+
+        isUserExists(userID);
+
+        Optional<News> searchedNewsOptional = newsRepository.findById(newsID);
+
+        News searchedNews = searchedNewsOptional.orElseThrow(() ->
+                new ResourceNotFoundException("News not Found: " + newsID, "News"));
+
+        isUserTheAuthorOfNews(searchedNews, userID);
+
+        validateNewsTitle(title);
+
+        searchedNews.setNewsTitle(title);
+
+        newsRepository.save(searchedNews);
     }
 
     @Override
-    public int updateNewsTitle(String title, int newsID, int userID) {
-        return 0;
+    public List<NewsDetailedDto> getAllNews() {
+
+        List<News> listOfAllNews = newsRepository.findAll();
+
+        return convertListToNewsDetailedDto(listOfAllNews);
     }
 
     @Override
-    public NewsDetailedDto findNewsByNewsID(int newsID) {
-        return null;
+    public List<NewsDetailedDto> findNewsByUserID(int userID) {
+
+        isUserExists(userID);
+
+        List<News> listOfNewsByUser = newsRepository.findNewsByUserID(userID);
+
+        return convertListToNewsDetailedDto(listOfNewsByUser);
     }
 
     @Override
-    public List<NewsDto> getAllNews() {
-        return null;
+    public List<NewsDetailedDto> findNewsByNewsTitle(String newsTitle) {
+
+        validateNewsTitle(newsTitle);
+
+        validateTextForInjection(newsTitle);
+
+        List<News> listOfNewsByTitle = newsRepository.findNewsByNewsTitle(newsTitle);
+
+        return convertListToNewsDetailedDto(listOfNewsByTitle);
     }
 
     @Override
-    public List<NewsDto> findNewsByUserID(int userID) {
-        return null;
+    public List<NewsDetailedDto> findNewsByCreationDateBefore(LocalDate beforeDate) {
+
+        List<News> listOfNewsByCreationDateBefore = newsRepository.findNewsByNewsCreationDateBefore(beforeDate);
+
+        return convertListToNewsDetailedDto(listOfNewsByCreationDateBefore);
     }
 
     @Override
-    public List<NewsDto> findNewsByUserName(String userName) {
-        return null;
+    public List<NewsDetailedDto> findNewsByCreationDateAfter(LocalDate afterDate) {
+
+        List<News> listOfNewsByCreationDateAfter = newsRepository.findNewsByNewsCreationDateAfter(afterDate);
+
+        return convertListToNewsDetailedDto(listOfNewsByCreationDateAfter);
     }
 
-    @Override
-    public List<NewsDto> findNewsByNewsTitle(String newsTitle) {
-        return null;
-    }
+    private List<NewsDetailedDto> convertListToNewsDetailedDto(List<News> listOfNews) {
 
-    @Override
-    public List<NewsDto> findNewsByUpVotesLowerThan(int upVotesCount) {
-        return null;
-    }
+        List<NewsDetailedDto> listOfNewsDetailedDtoList = new ArrayList<>();
 
-    @Override
-    public List<NewsDto> findNewsByUpVotesGreaterThan(int upVotesCount) {
-        return null;
-    }
+        for (News news : listOfNews) {
 
-    @Override
-    public List<NewsDto> findNewsByDownVotesLowerThan(int downVotesCount) {
-        return null;
-    }
+            NewsDetailedDto newsDetailedDto = gatherDataForNewsDetailedDtoByNewsID(news.getNewsID());
 
-    @Override
-    public List<NewsDto> findNewsByDownVotesGreaterThan(int downVotesCount) {
-        return null;
-    }
+            listOfNewsDetailedDtoList.add(newsDetailedDto);
+        }
 
-    @Override
-    public List<NewsDto> findNewsByCreationDateBefore(LocalDate beforeDate) {
-        return null;
-    }
-
-    @Override
-    public List<NewsDto> findNewsByCreationDateAfter(LocalDate afterDate) {
-        return null;
-    }
-
-    @Override
-    public List<NewsDto> findNewsByCreationBetween(LocalDate startDate, LocalDate endDate) {
-        return null;
-    }
-
-    @Override
-    public List<NewsDto> findNewsByContentContaining(String content) {
-        return null;
+        return listOfNewsDetailedDtoList;
     }
 
     protected News getNewsOfComment(int newsID) {
@@ -132,5 +232,86 @@ public class NewsServiceImpl implements NewsService {
 
         return newsOfComment.orElseThrow(() ->
                 new ResourceNotFoundException("News not Found:" + newsID, "News"));
+    }
+
+    private void isUserTheAuthorOfNews(News news, int userID) {
+
+        if (newsValidation.isUserTheAuthorOfNews(news.getUserID(), userID)) {
+
+            throw new InvalidInputException("Provided User with ID" + userID + "is not the Author");
+        }
+    }
+
+    private NewsDetailedDto gatherDataForNewsDetailedDtoByNewsID(int newsID) {
+
+        Optional<News> searchedNewsOptional = newsRepository.findById(newsID);
+
+        News searchedNews = searchedNewsOptional.orElseThrow(() ->
+                new ResourceNotFoundException("News not Found: " + newsID, "News"));
+
+        UserDto userDto = userService.getUserByID(searchedNews.getUserID());
+
+        List<TagDto> listOfTags = getTagsOfNews(newsID);
+
+        List<MediaDto> listOfMediasForNews = mediaService.findMediaByNewsID(newsID);
+
+        List<CommentDetailedDto> listOfCommentsForNews = commentService.getCommentsByNewsID(newsID);
+
+        List<VoteDto> listOfUpVotesForNews = voteService.getAllUpVotesByContentIDAndType(newsID, VoteTypeNews.NEWS.getType());
+
+        List<VoteDto> listOfDownVotesForNews = voteService.getAllDownVotesByContentIDAndType(newsID, VoteTypeNews.NEWS.getType());
+
+        int numberOfViews = viewService.getNumberOfViewsOfNews(newsID);
+
+        return newsMapper.mapToNewsDtoDetailed(newsMapper.mapNewsToNewsDto(searchedNews), userDto, numberOfViews, listOfTags,
+                listOfMediasForNews, listOfCommentsForNews, listOfUpVotesForNews, listOfDownVotesForNews);
+    }
+
+    private List<TagDto> getTagsOfNews(int newsID) {
+
+        List<NewsTag> listOfTagsForNews = newsTagRepository.findNewsTagsByNewsID(newsID);
+
+        List<TagDto> listOfTags = new ArrayList<>();
+
+        for (NewsTag newsTag : listOfTagsForNews) {
+
+            int tagID = newsTag.getTagID();
+
+            TagDto tagDto = tagService.findTagByTagID(tagID);
+
+            listOfTags.add(tagDto);
+        }
+
+        return listOfTags;
+    }
+
+    private void isUserExists(int userID) {
+
+        List<User> allUsers = userRepository.findAll();
+
+        if (!userValidation.isUserExistsByUserID(allUsers, userID)) {
+
+            throw new InvalidInputException("Not existing User");
+        }
+    }
+
+    private void validateTextForInjection(String text) {
+
+        if (injectionValidation.isTextContainingSqlInjection(text)) {
+
+            throw new TextInjectionException("Invalid News Content. Text might contain SQL Injection!!");
+        }
+        if (injectionValidation.isTextContainingInjection(text)) {
+
+            throw new TextInjectionException("Invalid News Content. Text might contain Injection!!");
+        }
+    }
+
+    private void validateNewsTitle(String title) {
+
+        if (!newsValidation.isNewsTitleValid(title)) {
+
+            throw new InvalidInputException("Invalid News Title!");
+        }
     }
 }

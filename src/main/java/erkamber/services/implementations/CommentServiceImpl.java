@@ -10,6 +10,7 @@ import erkamber.exceptions.ResourceNotFoundException;
 import erkamber.exceptions.TextInjectionException;
 import erkamber.mappers.CommentMapper;
 import erkamber.repositories.CommentRepository;
+import erkamber.repositories.NewsRepository;
 import erkamber.services.interfaces.CommentService;
 import erkamber.services.interfaces.EmailService;
 import erkamber.validations.CommentValidation;
@@ -34,21 +35,21 @@ public class CommentServiceImpl implements CommentService {
 
     private final UserServiceImpl userService;
 
-    private final NewsServiceImpl newsService;
+    private final NewsRepository newsRepository;
 
     private final EmailService emailService;
 
     private final InjectionValidation injectionValidation;
 
     public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper,
-                              CommentValidation commentValidation, UserServiceImpl userService, NewsServiceImpl newsService,
+                              CommentValidation commentValidation, UserServiceImpl userService, NewsRepository newsRepository,
                               EmailService emailService, InjectionValidation injectionValidation) {
 
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
         this.commentValidation = commentValidation;
         this.userService = userService;
-        this.newsService = newsService;
+        this.newsRepository = newsRepository;
         this.emailService = emailService;
         this.injectionValidation = injectionValidation;
     }
@@ -65,7 +66,10 @@ public class CommentServiceImpl implements CommentService {
 
         String commentAuthorUserName = userService.getUserNameOfCommentAuthor(commentDto.getCommentAuthorID());
 
-        News searchedNews = newsService.getNewsOfComment(commentDto.getCommentNewsID());
+        Optional<News> searchedNewsOptional = newsRepository.findById(commentDto.getCommentNewsID());
+
+        News searchedNews = searchedNewsOptional.orElseThrow(() ->
+                new ResourceNotFoundException("News not Found: " + commentDto.getCommentNewsID(), "News"));
 
         UserDto newsAuthor = userService.getUserByID(searchedNews.getUserID());
 
@@ -267,6 +271,10 @@ public class CommentServiceImpl implements CommentService {
         if (injectionValidation.isTextContainingInjection(commentContent)) {
 
             throw new TextInjectionException("Comment content might contain Injection");
+        }
+        if (injectionValidation.isTextContainingSqlInjection(commentContent)) {
+
+            throw new TextInjectionException("Comment content might contain SQL Injection");
         }
     }
 

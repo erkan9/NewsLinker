@@ -4,10 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 
@@ -38,4 +34,13 @@ public class CommentDto {
     private int commentDownVotes;
 
     private LocalDate creationDate;
+
+    public CommentDto(int commentAuthorID, int commentNewsID, String commentContent, int commentUpVotes, int commentDownVotes, LocalDate creationDate) {
+        this.commentAuthorID = commentAuthorID;
+        this.commentNewsID = commentNewsID;
+        this.commentContent = commentContent;
+        this.commentUpVotes = commentUpVotes;
+        this.commentDownVotes = commentDownVotes;
+        this.creationDate = creationDate;
+    }
 }

@@ -27,4 +27,11 @@ public class VoteDto {
     private String votedContentType;
 
     private boolean isUpVote;
+
+    public VoteDto(int votedContentID, int userID, String votedContentType, boolean isUpVote) {
+        this.votedContentID = votedContentID;
+        this.userID = userID;
+        this.votedContentType = votedContentType;
+        this.isUpVote = isUpVote;
+    }
 }

@@ -1,14 +1,15 @@
 package erkamber.services.implementations;
 
-import erkamber.dtos.NewsDto;
 import erkamber.dtos.UserDto;
 import erkamber.dtos.ViewDetailedDto;
 import erkamber.dtos.ViewDto;
+import erkamber.entities.News;
 import erkamber.entities.View;
 import erkamber.exceptions.ResourceNotFoundException;
+import erkamber.mappers.NewsMapper;
 import erkamber.mappers.ViewMapper;
+import erkamber.repositories.NewsRepository;
 import erkamber.repositories.ViewRepository;
-import erkamber.services.interfaces.NewsService;
 import erkamber.services.interfaces.UserService;
 import erkamber.services.interfaces.ViewService;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -27,13 +29,18 @@ public class ViewServiceImpl implements ViewService {
 
     private final UserService userService;
 
-    private final NewsService newsService;
+    private final NewsRepository newsRepository;
 
-    public ViewServiceImpl(ViewMapper viewMapper, ViewRepository viewRepository, UserService userService, NewsService newsService) {
+    private final NewsMapper newsMapper;
+
+    public ViewServiceImpl(ViewMapper viewMapper, ViewRepository viewRepository, UserService userService,
+                           NewsRepository newsRepository, NewsMapper newsMapper) {
+
         this.viewMapper = viewMapper;
         this.viewRepository = viewRepository;
         this.userService = userService;
-        this.newsService = newsService;
+        this.newsRepository = newsRepository;
+        this.newsMapper = newsMapper;
     }
 
     @Override
@@ -69,6 +76,14 @@ public class ViewServiceImpl implements ViewService {
         viewRepository.save(newView);
 
         return newView.getViewID();
+    }
+
+    @Override
+    public int getNumberOfViewsOfNews(int newsID) {
+
+        List<View> viewsByNewsID = viewRepository.findViewByViewNewsID(newsID);
+
+        return viewsByNewsID.size();
     }
 
     @Override
@@ -144,10 +159,13 @@ public class ViewServiceImpl implements ViewService {
 
         UserDto userDto = userService.getUserByID(view.getViewUserID());
 
-        NewsDto newsDto = newsService.getNewsByNewsID(view.getViewNewsID());
+        Optional<News> news = newsRepository.findById(view.getViewNewsID());
+
+        News searchedNews = news.orElseThrow(() ->
+                new ResourceNotFoundException("News not Found: " + view.getViewNewsID(), "News"));
 
         ViewDto viewDto = viewMapper.mapViewToViewDto(view);
 
-        return viewMapper.mapToViewDetailedDto(viewDto, newsDto, userDto);
+        return viewMapper.mapToViewDetailedDto(viewDto, newsMapper.mapNewsToNewsDto(searchedNews), userDto);
     }
 }

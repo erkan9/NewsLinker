@@ -38,4 +38,13 @@ public class NewsDto {
 
     @NotNull(message = "News Creation Date cannot be Null")
     private LocalDate newsCreationDate;
+
+    public NewsDto(int userID, String newsTitle, String newsContent, int newsUpVotes, int newsDownVotes, LocalDate newsCreationDate) {
+        this.userID = userID;
+        this.newsTitle = newsTitle;
+        this.newsContent = newsContent;
+        this.newsUpVotes = newsUpVotes;
+        this.newsDownVotes = newsDownVotes;
+        this.newsCreationDate = newsCreationDate;
+    }
 }

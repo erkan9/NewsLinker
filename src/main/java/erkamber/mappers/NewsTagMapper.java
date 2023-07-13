@@ -4,6 +4,9 @@ import erkamber.dtos.*;
 import erkamber.entities.NewsTag;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class NewsTagMapper {
 
@@ -20,5 +23,10 @@ public class NewsTagMapper {
     public NewsTagDetailedDto mapToNewsTagDetailedDto(int newsTagID, NewsDetailedDto newsDetailedDto, TagDto tagDto) {
 
         return new NewsTagDetailedDto(newsTagID, newsDetailedDto, tagDto);
+    }
+
+    public List<NewsTagDto> mapListToNewsTagDto(List<NewsTag> listOfNewsTags) {
+
+        return listOfNewsTags.stream().map(this::mapNewsTagToNewsTagDto).collect(Collectors.toList());
     }
 }

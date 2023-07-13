@@ -20,4 +20,9 @@ public class NewsValidation {
 
         return Pattern.compile(charAndNumberPattern).matcher(newsTitle).matches();
     }
+
+    public boolean isUserTheAuthorOfNews(int authorID, int userID) {
+
+        return authorID == userID;
+    }
 }

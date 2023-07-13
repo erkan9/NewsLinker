@@ -48,4 +48,14 @@ public class UserDto {
     private String userPhoto;
 
     private boolean isUserReporter;
+
+    public UserDto(String userFirstName, String userLastName, String userName, String userEmail, String userPassword, String userPhoto, boolean isUserReporter) {
+        this.userFirstName = userFirstName;
+        this.userLastName = userLastName;
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
+        this.userPhoto = userPhoto;
+        this.isUserReporter = isUserReporter;
+    }
 }

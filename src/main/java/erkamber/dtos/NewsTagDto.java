@@ -4,10 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.Positive;
 
 @Data
@@ -23,4 +19,9 @@ public class NewsTagDto {
 
     @Positive
     private int tagID;
+
+    public NewsTagDto(int newsID, int tagID) {
+        this.newsID = newsID;
+        this.tagID = tagID;
+    }
 }

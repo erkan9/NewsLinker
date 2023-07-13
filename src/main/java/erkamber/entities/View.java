@@ -30,10 +30,10 @@ public class View {
     public View() {
     }
 
-    public View(int viewID, LocalDate viewCreationDate, int viewNewsID) {
-        this.viewID = viewID;
+    public View(LocalDate viewCreationDate, int viewNewsID, int viewUserID) {
         this.viewCreationDate = viewCreationDate;
         this.viewNewsID = viewNewsID;
+        this.viewUserID = viewUserID;
     }
 
     public View(int viewID, LocalDate viewCreationDate, int viewNewsID, int viewUserID) {

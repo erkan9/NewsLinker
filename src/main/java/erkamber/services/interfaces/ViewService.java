@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface ViewService {
 
+    int addNewView(ViewDto viewDto);
+
     void deleteViewsByViewID(int viewID);
 
     void deleteViewsByUserID(int userID);
 
     void deleteViewsByNewsID(int newsID);
-
-    int addNewView(ViewDto viewDto);
 
     ViewDetailedDto getViewByID(int viewID);
 

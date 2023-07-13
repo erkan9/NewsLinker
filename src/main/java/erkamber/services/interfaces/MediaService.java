@@ -1,13 +1,12 @@
 package erkamber.services.interfaces;
 
 import erkamber.dtos.MediaDto;
-import erkamber.entities.Media;
 
 import java.util.List;
 
 public interface MediaService {
 
-    int addMedia(MediaDto mediaDto);
+    int addNewMedia(MediaDto mediaDto);
 
     void deleteMediaByMediaID(int mediaID);
 

@@ -107,7 +107,7 @@ public class ViewServiceImpl implements ViewService {
     @Override
     public List<ViewDetailedDto> findViewByViewNewsIDAndViewCreationDateBefore(int newsID, LocalDate beforeCreationDate) {
 
-        List<View> viewsByNewsIDAndCreationDate = viewRepository.findViewByViewNewsIDAndViewCreationDate(newsID, beforeCreationDate);
+        List<View> viewsByNewsIDAndCreationDate = viewRepository.findViewByViewNewsIDAndViewCreationDateBefore(newsID, beforeCreationDate);
 
         return convertListOfViewToViewDetailedDto(viewsByNewsIDAndCreationDate);
     }
@@ -115,7 +115,7 @@ public class ViewServiceImpl implements ViewService {
     @Override
     public List<ViewDetailedDto> findViewByViewNewsIDAndViewCreationDateAfter(int newsID, LocalDate afterCreationDate) {
 
-        List<View> viewsByNewsIDAndCreationDate = viewRepository.findViewByViewNewsIDAndViewCreationDate(newsID, afterCreationDate);
+        List<View> viewsByNewsIDAndCreationDate = viewRepository.findViewByViewNewsIDAndViewCreationDateAfter(newsID, afterCreationDate);
 
         return convertListOfViewToViewDetailedDto(viewsByNewsIDAndCreationDate);
     }

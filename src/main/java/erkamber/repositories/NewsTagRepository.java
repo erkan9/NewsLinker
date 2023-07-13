@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface NewsTagRepository extends JpaRepository<NewsTag, Integer> {
 
-    List<NewsTag> findNewsTagsByNewsIDAndTagID(int newsID, int tagID);
+    Optional<NewsTag> findNewsTagsByNewsIDAndTagID(int newsID, int tagID);
 
     List<NewsTag> findNewsTagsByNewsID(int newsID);
 

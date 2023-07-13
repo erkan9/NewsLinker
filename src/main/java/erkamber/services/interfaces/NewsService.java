@@ -1,5 +1,6 @@
 package erkamber.services.interfaces;
 
+import erkamber.dtos.NewsDetailedDto;
 import erkamber.dtos.NewsDto;
 
 import java.time.LocalDate;
@@ -19,7 +20,7 @@ public interface NewsService {
 
     int updateNewsTitle(String title, int newsID, int userID);
 
-    NewsDto findNewsByNewsID(int newsID);
+    NewsDetailedDto findNewsByNewsID(int newsID);
 
     List<NewsDto> getAllNews();
 

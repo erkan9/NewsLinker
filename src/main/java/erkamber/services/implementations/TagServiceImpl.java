@@ -29,7 +29,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public int addTag(TagDto newTagDto) {
+    public int addNewTag(TagDto newTagDto) {
 
         isTagNameCorrect(newTagDto.getTagName());
 

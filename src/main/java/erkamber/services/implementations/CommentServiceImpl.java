@@ -2,15 +2,14 @@ package erkamber.services.implementations;
 
 import erkamber.dtos.CommentDetailedDto;
 import erkamber.dtos.CommentDto;
+import erkamber.dtos.UserDto;
 import erkamber.entities.Comment;
 import erkamber.entities.News;
-import erkamber.entities.User;
 import erkamber.exceptions.AuthorMismatchException;
 import erkamber.exceptions.ResourceNotFoundException;
 import erkamber.exceptions.TextInjectionException;
 import erkamber.mappers.CommentMapper;
 import erkamber.repositories.CommentRepository;
-import erkamber.repositories.UserRepository;
 import erkamber.services.interfaces.CommentService;
 import erkamber.services.interfaces.EmailService;
 import erkamber.validations.CommentValidation;
@@ -33,8 +32,6 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentValidation commentValidation;
 
-    private final UserRepository userRepository;
-
     private final UserServiceImpl userService;
 
     private final NewsServiceImpl newsService;
@@ -44,19 +41,18 @@ public class CommentServiceImpl implements CommentService {
     private final InjectionValidation injectionValidation;
 
     public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper,
-                              InjectionValidation injectionValidation, UserRepository userRepository,
-                              CommentValidation commentValidation, EmailService emailService, UserServiceImpl userService,
-                              NewsServiceImpl newsService) {
+                              CommentValidation commentValidation, UserServiceImpl userService, NewsServiceImpl newsService,
+                              EmailService emailService, InjectionValidation injectionValidation) {
 
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
-        this.injectionValidation = injectionValidation;
-        this.userRepository = userRepository;
         this.commentValidation = commentValidation;
-        this.emailService = emailService;
         this.userService = userService;
         this.newsService = newsService;
+        this.emailService = emailService;
+        this.injectionValidation = injectionValidation;
     }
+
 
     @Override
     public int addNewComment(CommentDto commentDto) throws MessagingException {
@@ -71,7 +67,7 @@ public class CommentServiceImpl implements CommentService {
 
         News searchedNews = newsService.getNewsOfComment(commentDto.getCommentNewsID());
 
-        User newsAuthor = userService.getNewsAuthor(searchedNews.getUserID());
+        UserDto newsAuthor = userService.getUserByID(searchedNews.getUserID());
 
         emailService.sendEmail(newsAuthor.getUserFirstName(), commentAuthorUserName, commentDto.getCommentContent(),
                 newsAuthor.getUserEmail(), searchedNews.getNewsTitle());
@@ -199,7 +195,7 @@ public class CommentServiceImpl implements CommentService {
         Comment searchedComment = optionalComment.orElseThrow(() ->
                 new ResourceNotFoundException("Comment not Found:" + commentID, "Comment"));
 
-        User author = convertUserIDToObject(searchedComment.getCommentAuthorID());
+        UserDto author = userService.getUserByID(searchedComment.getCommentAuthorID());
 
         return commentMapper.mapToCommentDetailedDto(searchedComment, author);
     }
@@ -258,20 +254,12 @@ public class CommentServiceImpl implements CommentService {
 
         for (Comment comment : listOfComments) {
 
-            User author = convertUserIDToObject(comment.getCommentAuthorID());
+            UserDto author = userService.getUserByID(comment.getCommentAuthorID());
 
             listOfDetailedCommentDto.add(commentMapper.mapToCommentDetailedDto(comment, author));
         }
 
         return listOfDetailedCommentDto;
-    }
-
-    private User convertUserIDToObject(int userID) {
-
-        Optional<User> user = userRepository.findById(userID);
-
-        return user.orElseThrow(() ->
-                new ResourceNotFoundException("User not Found:" + user, "User"));
     }
 
     private void isCommentContentValid(String commentContent) {

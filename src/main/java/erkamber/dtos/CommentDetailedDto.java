@@ -17,7 +17,7 @@ public class CommentDetailedDto {
     private int commendID;
 
     @Positive
-    private User author;
+    private UserDto author;
 
     @Positive
     private int commentNewsID;

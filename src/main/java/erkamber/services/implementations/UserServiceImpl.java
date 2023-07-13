@@ -133,14 +133,6 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    protected User getNewsAuthor(int newsAuthorID) {
-
-        Optional<User> newsAuthor = userRepository.findById(newsAuthorID);
-
-        return newsAuthor.orElseThrow(() ->
-                new ResourceNotFoundException("User not Found:" + newsAuthorID, "User"));
-    }
-
     protected String getUserNameOfCommentAuthor(int commentAuthorID) {
 
         Optional<User> commentAuthor = userRepository.findById(commentAuthorID);

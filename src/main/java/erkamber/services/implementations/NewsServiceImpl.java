@@ -1,5 +1,6 @@
 package erkamber.services.implementations;
 
+import erkamber.dtos.NewsDetailedDto;
 import erkamber.dtos.NewsDto;
 import erkamber.entities.News;
 import erkamber.exceptions.ResourceNotFoundException;
@@ -61,7 +62,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public NewsDto findNewsByNewsID(int newsID) {
+    public NewsDetailedDto findNewsByNewsID(int newsID) {
         return null;
     }
 

@@ -25,7 +25,7 @@ public class MediaServiceImpl implements MediaService {
 
 
     @Override
-    public int addMedia(MediaDto mediaDto) {
+    public int addNewMedia(MediaDto mediaDto) {
 
         Media newMedia = mediaMapper.mapMediaDtoToMedia(mediaDto);
 

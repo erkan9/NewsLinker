@@ -15,7 +15,7 @@ public class BookmarkDetailedDto {
     @Positive
     private int bookmarkID;
 
-    @NotNull(message = "News cannot be Null")
+    @NotNull(message = "User cannot be Null")
     private UserDto user;
 
     @NotNull(message = "News cannot be Null")

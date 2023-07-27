@@ -45,6 +45,12 @@ public class MediaController {
         return ResponseEntity.ok(mediaService.getAllMedias());
     }
 
+    @GetMapping("/medias/{mediaID}")
+    public ResponseEntity<MediaDto> getMediaByID(@PathVariable int mediaID) {
+
+        return ResponseEntity.ok(mediaService.findMediaByMediaID(mediaID));
+    }
+
     @GetMapping(value = "/medias", params = {"newsId"})
     public ResponseEntity<List<MediaDto>> getMediaByNewsID(@RequestParam("newsId")
                                                            @Positive(message = "News ID must be a Positive number!")

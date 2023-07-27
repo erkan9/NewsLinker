@@ -66,6 +66,17 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
+    public MediaDto findMediaByMediaID(int mediaID) {
+
+        Optional<Media> searchedMedia = mediaRepository.findById(mediaID);
+
+        Media searchedMediaObject = searchedMedia.orElseThrow(() ->
+                new ResourceNotFoundException("Media not Found: " + mediaID, "Media"));
+
+        return mediaMapper.mapMediaToMediaDto(searchedMediaObject);
+    }
+
+    @Override
     public List<MediaDto> findMediaByNewsID(int newsID) {
 
         List<Media> searchedMediaByNewsID = mediaRepository.findMediaByMediaNewsID(newsID);

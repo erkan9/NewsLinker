@@ -14,6 +14,8 @@ public interface MediaService {
 
     MediaDto findMediaByString(String mediaString);
 
+    MediaDto findMediaByMediaID(int mediaID);
+
     List<MediaDto> findMediaByNewsID(int newsID);
 
     List<MediaDto> getAllMedias();

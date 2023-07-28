@@ -12,6 +12,6 @@ import org.springframework.context.annotation.Import;
 public class NewsLinker {
     public static void main(String[] args) {
 
-        SpringApplication.run(NewsLinker.class);
+        SpringApplication.rudddn(NewsLinker.class);
     }
 }

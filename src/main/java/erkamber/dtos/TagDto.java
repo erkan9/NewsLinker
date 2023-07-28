@@ -1,17 +1,14 @@
 package erkamber.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.*;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class TagDto {
 
-    @Positive
+    @PositiveOrZero(message = "Tag ID must be a Positive Number")
     private int tagID;
 
     @NotBlank(message = "Tag Name cannot be Blank")
@@ -20,7 +17,15 @@ public class TagDto {
     @Size(max = 40, message = "Tag Name must be up to 40 characters long")
     private String tagName;
 
+    public TagDto() {
+    }
+
     public TagDto(String tagName) {
+        this.tagName = tagName;
+    }
+
+    public TagDto(int tagID, String tagName) {
+        this.tagID = tagID;
         this.tagName = tagName;
     }
 }

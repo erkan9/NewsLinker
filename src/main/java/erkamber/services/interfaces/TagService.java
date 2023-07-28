@@ -12,9 +12,9 @@ public interface TagService {
 
     void deleteTagByTagID(int tagID);
 
-    void updateTag(TagDto updateTagDto);
+    void updateTag(int searchedTagID, TagDto updateTagDto);
 
-    void updateTagByTagName(String tagName);
+    void updateTagByTagName(String searchedTagName, String newTagName);
 
     TagDto findTagByTagID(int tagID);
 

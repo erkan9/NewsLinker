@@ -66,12 +66,12 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void updateTag(TagDto updateTagDto) {
+    public void updateTag(int searchedTagID, TagDto updateTagDto) {
 
-        Optional<Tag> tagToUpdate = tagRepository.findById(updateTagDto.getTagID());
+        Optional<Tag> tagToUpdate = tagRepository.findById(searchedTagID);
 
         Tag tagWithUpdates = tagToUpdate.orElseThrow(() ->
-                new ResourceNotFoundException("Tag not Found: " + updateTagDto.getTagID(), "Tag"));
+                new ResourceNotFoundException("Tag not Found: " + searchedTagID, "Tag"));
 
         isTagNameCorrect(updateTagDto.getTagName());
 
@@ -81,16 +81,18 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void updateTagByTagName(String tagName) {
+    public void updateTagByTagName(String searchedTagName, String newTagName) {
 
-        isTagNameCorrect(tagName);
+        isTagNameCorrect(searchedTagName);
 
-        Optional<Tag> tagToUpdate = tagRepository.findTagByTagName(tagName);
+        isTagNameCorrect(newTagName);
+
+        Optional<Tag> tagToUpdate = tagRepository.findTagByTagName(searchedTagName);
 
         Tag tagWithUpdates = tagToUpdate.orElseThrow(() ->
-                new ResourceNotFoundException("Tag not Found: " + tagName, "Tag"));
+                new ResourceNotFoundException("Tag not Found: " + searchedTagName, "Tag"));
 
-        tagWithUpdates.setTagName(tagName);
+        tagWithUpdates.setTagName(newTagName);
 
         tagRepository.save(tagWithUpdates);
     }

@@ -4,9 +4,9 @@
 
 [Please provide a brief description of the changes introduced by this pull request.]
 
-### Motivation
+### Trello
 
-[Explain the motivation behind these changes. Why are they necessary?]
+Trello Ticket: [Please specific the Trello card related to those changes]
 
 ### Related Issues
 

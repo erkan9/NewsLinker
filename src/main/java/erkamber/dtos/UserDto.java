@@ -1,14 +1,11 @@
 package erkamber.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.*;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class UserDto {
 
     @Positive
@@ -49,7 +46,25 @@ public class UserDto {
 
     private boolean isUserReporter;
 
-    public UserDto(String userFirstName, String userLastName, String userName, String userEmail, String userPassword, String userPhoto, boolean isUserReporter) {
+    public UserDto() {
+    }
+
+    public UserDto(String userFirstName, String userLastName, String userName, String userEmail, String userPassword,
+                   String userPhoto, boolean isUserReporter) {
+
+        this.userFirstName = userFirstName;
+        this.userLastName = userLastName;
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
+        this.userPhoto = userPhoto;
+        this.isUserReporter = isUserReporter;
+    }
+
+    public UserDto(int userID, String userFirstName, String userLastName, String userName, String userEmail,
+                   String userPassword, String userPhoto, boolean isUserReporter) {
+
+        this.userID = userID;
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;
         this.userName = userName;

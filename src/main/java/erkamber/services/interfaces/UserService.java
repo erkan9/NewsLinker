@@ -6,6 +6,10 @@ import java.util.List;
 
 public interface UserService {
 
+    int registerUser(UserDto userDto);
+
+    int loginUser(String userName, String userPassword);
+
     UserDto getUserByID(int userID);
 
     UserDto getUserByUserName(String userName);

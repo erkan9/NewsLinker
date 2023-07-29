@@ -1,5 +1,6 @@
 package erkamber.services.implementations;
 
+import erkamber.configurations.PasswordEncoderConfiguration;
 import erkamber.dtos.UserDto;
 import erkamber.entities.User;
 import erkamber.exceptions.InvalidInputException;
@@ -22,12 +23,37 @@ public class UserServiceImpl implements UserService {
 
     private final UserValidation userValidation;
 
-    //TODO write implementation for login and register
+    private final PasswordEncoderConfiguration passwordEncoderConfiguration;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, UserValidation userValidation) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, UserValidation userValidation,
+                           PasswordEncoderConfiguration passwordEncoderConfiguration) {
+
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.userValidation = userValidation;
+        this.passwordEncoderConfiguration = passwordEncoderConfiguration;
+    }
+
+    @Override
+    public int registerUser(UserDto userDto) {
+
+        isNewUserCredentialsValid(userDto);
+
+        String encodedUserPassword = passwordEncoderConfiguration.passwordEncoder().encode(userDto.getUserPassword());
+
+        userDto.setUserPassword(encodedUserPassword);
+
+        userRepository.save(userMapper.mapUserDtoToUser(userDto));
+
+        return userDto.getUserID();
+    }
+
+    @Override
+    public int loginUser(String userName, String userPassword) {
+
+        User searchedUser = getLoginUser(userName, userPassword);
+
+        return searchedUser.getUserID();
     }
 
     @Override
@@ -141,5 +167,27 @@ public class UserServiceImpl implements UserService {
                 new ResourceNotFoundException("User not Found:" + commentAuthorID, "User"));
 
         return searchedCommentAuthor.getUserName();
+    }
+
+    private void isNewUserCredentialsValid(UserDto userDto) {
+
+        isUserFirstOrLastNameValid(userDto.getUserFirstName());
+
+        isUserFirstOrLastNameValid(userDto.getUserLastName());
+
+        isUserNameValid(userDto.getUserName());
+
+        isUserPasswordValid(userDto.getUserPassword());
+    }
+
+    private User getLoginUser(String userName, String password) {
+
+        List<User> allUsers = userRepository.findAll();
+
+        return allUsers.stream()
+                .filter(user -> user.getUserName().equals(userName) &&
+                        passwordEncoderConfiguration.passwordEncoder().matches(password, user.getUserPassword()))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("User not found: " + userName, "User"));
     }
 }

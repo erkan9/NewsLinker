@@ -6,7 +6,7 @@
 
 ### Trello
 
-Trello Ticket: [Please specific the Trello card related to those changes]
+Trello Ticket: [Please specify the Trello card URL related to current changes]
 
 ### Related Issues
 

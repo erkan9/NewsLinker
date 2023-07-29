@@ -43,9 +43,11 @@ public class UserServiceImpl implements UserService {
 
         userDto.setUserPassword(encodedUserPassword);
 
-        userRepository.save(userMapper.mapUserDtoToUser(userDto));
+        User newUser = userMapper.mapUserDtoToUser(userDto);
 
-        return userDto.getUserID();
+        userRepository.save(newUser);
+
+        return newUser.getUserID();
     }
 
     @Override
@@ -92,18 +94,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserByFirstAndLastName(String firstName, String lastName) {
+    public List<UserDto> getUserByFirstAndLastName(String firstName, String lastName) {
 
         isUserFirstOrLastNameValid(firstName);
 
         isUserFirstOrLastNameValid(lastName);
 
-        Optional<User> searchedUser = userRepository.findUserByUserFirstNameAndUserLastName(firstName, lastName);
+        List<User> searchedUsers = userRepository.findUserByUserFirstNameAndUserLastName(firstName, lastName);
 
-        User user = searchedUser.orElseThrow(() ->
-                new ResourceNotFoundException("User not Found:" + firstName + " " + lastName, "User"));
-
-        return userMapper.mapUserToUserDto(user);
+        return userMapper.mapUserListToUserDto(searchedUsers);
     }
 
     @Override
@@ -155,7 +154,7 @@ public class UserServiceImpl implements UserService {
 
         if (!userValidation.isUserNameValid(userName)) {
 
-            throw new InvalidInputException("Invalid Username");
+            throw new InvalidInputException("Invalid Username. It can only contain chars and numbers!");
         }
     }
 

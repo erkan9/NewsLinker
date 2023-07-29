@@ -16,7 +16,7 @@ public interface UserService {
 
     UserDto getUserByEmail(String userEmail);
 
-    UserDto getUserByFirstAndLastName(String firstName, String lastName);
+    List<UserDto> getUserByFirstAndLastName(String firstName, String lastName);
 
     List<UserDto> getUsersByFirstName(String userFirstName);
 

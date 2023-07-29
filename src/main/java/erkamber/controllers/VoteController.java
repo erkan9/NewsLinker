@@ -36,7 +36,7 @@ public class VoteController {
 
         httpHeadersConfiguration.getHeaders().set("NewVoteID", String.valueOf(newVoteDtoId));
 
-        return new ResponseEntity<>(httpHeadersConfiguration.getHeaders(), HttpStatus.CREATED);
+        return new ResponseEntity<>(httpHeadersConfiguration.getHeaders(), HttpStatus.OK);
     }
 
     @GetMapping("/votes")

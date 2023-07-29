@@ -8,7 +8,7 @@ import javax.validation.constraints.*;
 @Setter
 public class UserDto {
 
-    @Positive
+    @PositiveOrZero
     private int userID;
 
     @NotBlank(message = "First Name cannot be Blank")
@@ -58,6 +58,17 @@ public class UserDto {
         this.userEmail = userEmail;
         this.userPassword = userPassword;
         this.userPhoto = userPhoto;
+        this.isUserReporter = isUserReporter;
+    }
+
+    public UserDto(String userFirstName, String userLastName, String userName, String userEmail, String userPassword,
+                   boolean isUserReporter) {
+
+        this.userFirstName = userFirstName;
+        this.userLastName = userLastName;
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
         this.isUserReporter = isUserReporter;
     }
 

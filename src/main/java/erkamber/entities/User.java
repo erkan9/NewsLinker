@@ -29,7 +29,7 @@ public class User {
     @Column(name = "user_email", length = 30, unique = true, updatable = false, insertable = true, nullable = false)
     private String userEmail;
 
-    @Column(name = "user_password", length = 35, unique = false, updatable = true, insertable = true, nullable = false)
+    @Column(name = "user_password", unique = false, updatable = true, insertable = true, nullable = false)
     private String userPassword;
 
     @Column(name = "user_photo", length = 255, unique = false, updatable = true, insertable = true, nullable = true)

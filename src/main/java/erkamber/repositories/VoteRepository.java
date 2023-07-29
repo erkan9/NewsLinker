@@ -10,4 +10,6 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     List<Vote> getVoteByUserID(int userID);
 
     List<Vote> getVoteByVotedContentID(int contentID);
+
+    List<Vote> getVoteByIsUpVoteAndVotedContentIDAndVotedContentType(boolean isUpvote, int contentID, String contentType);
 }

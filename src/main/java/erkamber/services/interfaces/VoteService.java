@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface VoteService {
 
-    void addNewVote(VoteDto voteDto);
+    int addNewVote(VoteDto voteDto);
 
     List<VoteDto> getAllUpVotesByContentIDAndType(int votedContentID, String votedContentType);
 

@@ -89,6 +89,8 @@ public class CommentServiceImpl implements CommentService {
         int numberOfUpVotes = searchedComment.getCommentUpVotes();
 
         searchedComment.setCommentUpVotes(numberOfUpVotes + 1);
+
+        commentRepository.save(searchedComment);
     }
 
     protected void updateCommentVoteByRemovingVote(int commentID, boolean isUpvote) {

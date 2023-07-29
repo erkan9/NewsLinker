@@ -7,6 +7,7 @@ import erkamber.mappers.VoteMapper;
 import erkamber.repositories.VoteRepository;
 import erkamber.services.interfaces.VoteService;
 import erkamber.validations.VoteContentTypeValidation;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,17 +24,21 @@ public class VoteServiceImpl implements VoteService {
 
     private final CommentServiceImpl commentService;
 
+    @Lazy
+    private final NewsServiceImpl newsService;
+
     public VoteServiceImpl(VoteRepository voteRepository, VoteMapper voteMapper,
-                           VoteContentTypeValidation voteContentTypeValidation, CommentServiceImpl commentService) {
+                           VoteContentTypeValidation voteContentTypeValidation, CommentServiceImpl commentService, NewsServiceImpl newsService) {
 
         this.voteRepository = voteRepository;
         this.voteMapper = voteMapper;
         this.voteContentTypeValidation = voteContentTypeValidation;
         this.commentService = commentService;
+        this.newsService = newsService;
     }
 
     @Override
-    public void addNewVote(VoteDto voteDto) {
+    public int addNewVote(VoteDto voteDto) {
 
         isVotedContentTypeCorrect(voteDto.getVotedContentType());
 
@@ -41,46 +46,83 @@ public class VoteServiceImpl implements VoteService {
 
         if (pastVote == null) {
 
-            handleNewVote(voteDto);
+            return handleNewVote(voteDto);
 
         } else {
 
-            handleNotNewVote(pastVote, voteDto);
+            return handleNotNewVote(pastVote, voteDto);
         }
     }
 
-    private void handleNotNewVote(Vote pastVote, VoteDto voteDto) {
+    private int handleNotNewVote(Vote pastVote, VoteDto voteDto) {
 
         if (pastVote.isUpVote() == voteDto.isUpVote()) {
 
-            commentService.updateCommentVoteByRemovingVote(voteDto.getVotedContentID(), voteDto.isUpVote());
+            if (pastVote.getVotedContentType().equalsIgnoreCase("comment")) {
+
+                commentService.updateCommentVoteByRemovingVote(voteDto.getVotedContentID(), voteDto.isUpVote());
+
+            } else if (pastVote.getVotedContentType().equalsIgnoreCase("news")) {
+
+                newsService.updateNewsVoteByRemovingVote(voteDto.getVotedContentID(), voteDto.isUpVote());
+            }
 
             voteRepository.deleteById(pastVote.getVoteID());
 
         } else {
 
-            commentService.updateCommentVoteBySwappingVotes(voteDto.getVotedContentID(), voteDto.isUpVote());
+            if (pastVote.getVotedContentType().equalsIgnoreCase("comment")) {
+
+                commentService.updateCommentVoteBySwappingVotes(voteDto.getVotedContentID(), voteDto.isUpVote());
+
+
+            } else if (pastVote.getVotedContentType().equalsIgnoreCase("news")) {
+
+                newsService.updateNewsVoteBySwappingVotes(voteDto.getVotedContentID(), voteDto.isUpVote());
+            }
 
             voteRepository.deleteById(pastVote.getVoteID());
 
             voteRepository.save(voteMapper.mapVoteDtoToVote(voteDto));
+
+            return voteDto.getVoteID();
         }
+
+        return 0;
     }
 
-    private void handleNewVote(VoteDto voteDto) {
+    private int handleNewVote(VoteDto voteDto) {
 
         Vote newVote = voteMapper.mapVoteDtoToVote(voteDto);
 
-        voteRepository.save(newVote);
-
         if (voteDto.isUpVote()) {
 
-            commentService.addCommentUpVote(voteDto.getVotedContentID());
+            if (voteDto.getVotedContentType().equalsIgnoreCase("comment")) {
+
+                commentService.addCommentUpVote(voteDto.getVotedContentID());
+
+            } else if (voteDto.getVotedContentType().equalsIgnoreCase("news")) {
+
+                newsService.addNewsNewUpVote(voteDto.getVotedContentID());
+            }
 
         } else {
 
-            commentService.addCommentDownVote(voteDto.getVotedContentID());
+            if (voteDto.getVotedContentType().equalsIgnoreCase("comment")) {
+
+                commentService.addCommentDownVote(voteDto.getVotedContentID());
+
+            } else if (voteDto.getVotedContentType().equalsIgnoreCase("news")) {
+
+                newsService.addNewsNewDownVote(voteDto.getVotedContentID());
+            }
+
+
         }
+
+        voteRepository.save(newVote);
+
+        return newVote.getVoteID();
     }
 
     @Override
@@ -157,7 +199,7 @@ public class VoteServiceImpl implements VoteService {
 
     private void isVotedContentTypeCorrect(String votedContentType) {
 
-        if (voteContentTypeValidation.isContentTypeValid(votedContentType)) {
+        if (!voteContentTypeValidation.isContentTypeValid(votedContentType)) {
             throw new InvalidInputException("Invalid, content type. Not Voted a comment or news!");
         }
     }

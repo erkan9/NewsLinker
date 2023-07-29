@@ -1,19 +1,14 @@
 package erkamber.services.implementations;
 
 import erkamber.dtos.*;
-import erkamber.entities.News;
-import erkamber.entities.NewsTag;
-import erkamber.entities.User;
-import erkamber.entities.View;
+import erkamber.entities.*;
 import erkamber.enums.VoteTypeNews;
 import erkamber.exceptions.InvalidInputException;
 import erkamber.exceptions.ResourceNotFoundException;
 import erkamber.exceptions.TextInjectionException;
 import erkamber.mappers.NewsMapper;
-import erkamber.repositories.NewsRepository;
-import erkamber.repositories.NewsTagRepository;
-import erkamber.repositories.UserRepository;
-import erkamber.repositories.ViewRepository;
+import erkamber.mappers.VoteMapper;
+import erkamber.repositories.*;
 import erkamber.services.interfaces.*;
 import erkamber.validations.InjectionValidation;
 import erkamber.validations.NewsValidation;
@@ -42,7 +37,9 @@ public class NewsServiceImpl implements NewsService {
 
     private final CommentService commentService;
 
-    private final VoteService voteService;
+    private final VoteRepository voteRepository;
+
+    private final VoteMapper voteMapper;
 
     private final TagService tagService;
 
@@ -58,7 +55,7 @@ public class NewsServiceImpl implements NewsService {
 
     public NewsServiceImpl(NewsRepository newsRepository, NewsMapper newsMapper, NewsValidation newsValidation,
                            UserService userService, NewsTagRepository newsTagRepository, MediaService mediaService,
-                           CommentService commentService, VoteService voteService, TagService tagService, UserValidation userValidation,
+                           CommentService commentService, VoteRepository voteRepository, VoteMapper voteMapper, TagService tagService, UserValidation userValidation,
                            UserRepository userRepository, ViewService viewService, ViewRepository viewRepository, InjectionValidation injectionValidation) {
 
         this.newsRepository = newsRepository;
@@ -68,7 +65,8 @@ public class NewsServiceImpl implements NewsService {
         this.newsTagRepository = newsTagRepository;
         this.mediaService = mediaService;
         this.commentService = commentService;
-        this.voteService = voteService;
+        this.voteRepository = voteRepository;
+        this.voteMapper = voteMapper;
         this.tagService = tagService;
         this.userValidation = userValidation;
         this.userRepository = userRepository;
@@ -257,14 +255,18 @@ public class NewsServiceImpl implements NewsService {
 
         List<CommentDetailedDto> listOfCommentsForNews = commentService.getCommentsByNewsID(newsID);
 
-        List<VoteDto> listOfUpVotesForNews = voteService.getAllUpVotesByContentIDAndType(newsID, VoteTypeNews.NEWS.getType());
+        List<Vote> listOfUpVotesForNews = voteRepository.getVoteByIsUpVoteAndVotedContentIDAndVotedContentType(true, newsID, VoteTypeNews.NEWS.getType());
 
-        List<VoteDto> listOfDownVotesForNews = voteService.getAllDownVotesByContentIDAndType(newsID, VoteTypeNews.NEWS.getType());
+        List<VoteDto> listOfUpVotesDto = voteMapper.mapListOfVoteToMVoteDto(listOfUpVotesForNews);
+
+        List<Vote> listOfDownVotesForNews = voteRepository.getVoteByIsUpVoteAndVotedContentIDAndVotedContentType(false, newsID, VoteTypeNews.NEWS.getType());
+
+        List<VoteDto> listOfDownVotesDto = voteMapper.mapListOfVoteToMVoteDto(listOfDownVotesForNews);
 
         int numberOfViews = viewService.getNumberOfViewsOfNews(newsID);
 
         return newsMapper.mapToNewsDtoDetailed(newsMapper.mapNewsToNewsDto(searchedNews), userDto, numberOfViews, listOfTags,
-                listOfMediasForNews, listOfCommentsForNews, listOfUpVotesForNews, listOfDownVotesForNews);
+                listOfMediasForNews, listOfCommentsForNews, listOfUpVotesDto, listOfDownVotesDto);
     }
 
     private List<TagDto> getTagsOfNews(int newsID) {
@@ -305,6 +307,83 @@ public class NewsServiceImpl implements NewsService {
 
             throw new TextInjectionException("Invalid News Content. Text might contain Injection!!");
         }
+    }
+
+    protected void updateNewsVoteBySwappingVotes(int newsID, boolean isUpVote) {
+
+        Optional<News> searchedNewsOptional = newsRepository.findById(newsID);
+
+        News searchedNews = searchedNewsOptional.orElseThrow(() ->
+                new ResourceNotFoundException("News not Found: " + newsID, "News"));
+
+        int numberOfUpVotes = searchedNews.getNewsUpVotes();
+
+        int numberOfDownVotes = searchedNews.getNewsDownVotes();
+
+        if (isUpVote) {
+
+            searchedNews.setNewsUpVotes(numberOfUpVotes + 1);
+
+            searchedNews.setNewsDownVotes(numberOfDownVotes - 1);
+
+        } else {
+
+            searchedNews.setNewsUpVotes(numberOfUpVotes - 1);
+
+            searchedNews.setNewsDownVotes(numberOfDownVotes + 1);
+        }
+        newsRepository.save(searchedNews);
+    }
+
+    protected void addNewsNewUpVote(int newsID) {
+
+        Optional<News> searchedNewsOptional = newsRepository.findById(newsID);
+
+        News searchedNews = searchedNewsOptional.orElseThrow(() ->
+                new ResourceNotFoundException("News not Found: " + newsID, "News"));
+
+        int numberOfUpVotes = searchedNews.getNewsUpVotes();
+
+        searchedNews.setNewsUpVotes(numberOfUpVotes + 1);
+
+        newsRepository.save(searchedNews);
+    }
+
+    protected void addNewsNewDownVote(int newsID) {
+
+        Optional<News> searchedNewsOptional = newsRepository.findById(newsID);
+
+        News searchedNews = searchedNewsOptional.orElseThrow(() ->
+                new ResourceNotFoundException("News not Found: " + newsID, "News"));
+
+        int numberOfDownVotes = searchedNews.getNewsDownVotes();
+
+        searchedNews.setNewsDownVotes(numberOfDownVotes + 1);
+
+        newsRepository.save(searchedNews);
+    }
+
+    protected void updateNewsVoteByRemovingVote(int newsID, boolean isUpVote) {
+
+        Optional<News> searchedNewsOptional = newsRepository.findById(newsID);
+
+        News searchedNews = searchedNewsOptional.orElseThrow(() ->
+                new ResourceNotFoundException("News not Found: " + newsID, "News"));
+
+        if (isUpVote) {
+
+            int numberOfUpVotes = searchedNews.getNewsUpVotes();
+
+            searchedNews.setNewsUpVotes(numberOfUpVotes - 1);
+
+        } else {
+
+            int numberOfDownVotes = searchedNews.getNewsDownVotes();
+
+            searchedNews.setNewsDownVotes(numberOfDownVotes - 1);
+        }
+
+        newsRepository.save(searchedNews);
     }
 
     private void validateNewsTitle(String title) {

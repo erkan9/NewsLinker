@@ -8,6 +8,7 @@ import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 @Service
 public class EmailServiceImpl implements EmailService {
@@ -25,7 +26,6 @@ public class EmailServiceImpl implements EmailService {
     public void sendEmail(String newsAuthorName, String commentAuthorName, String comment, String authorEmail, String postTitle) throws MessagingException {
 
         Context context = new Context();
-
         context.setVariable("newsAuthorName", newsAuthorName);
         context.setVariable("commentAuthorName", commentAuthorName);
         context.setVariable("comment", comment);
@@ -33,12 +33,14 @@ public class EmailServiceImpl implements EmailService {
 
         String process = templateEngine.process("/email", context);
 
-        MimeMessageHelper helper = new MimeMessageHelper(javaMailSender.createMimeMessage(), true);
 
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper;
+        helper = new MimeMessageHelper(message, true);
         helper.setTo(authorEmail);
         helper.setSubject("New Comment Left");
         helper.setText(process, true);
 
-        javaMailSender.send(helper.getMimeMessage());
+        javaMailSender.send(message);
     }
 }

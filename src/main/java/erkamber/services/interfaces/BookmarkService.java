@@ -7,11 +7,13 @@ import java.util.List;
 
 public interface BookmarkService {
 
-    BookmarkDto addBookmark(BookmarkDto bookmarkDto);
+    int addBookmark(BookmarkDto bookmarkDto);
 
     List<BookmarkDetailedDto> getBookmarksByUserID(int userID);
 
     List<BookmarkDetailedDto> getBookmarksByNewsID(int newsID);
+
+    BookmarkDetailedDto getBookmarkByUserIDAndNewsID(int userID, int newsID);
 
     BookmarkDto deleteBookmarkByIDAndUserID(int userId, int bookmarkID);
 

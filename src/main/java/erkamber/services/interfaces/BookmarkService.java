@@ -1,6 +1,5 @@
 package erkamber.services.interfaces;
 
-import erkamber.dtos.BookmarkDetailedDto;
 import erkamber.dtos.BookmarkDto;
 
 import java.util.List;
@@ -9,11 +8,11 @@ public interface BookmarkService {
 
     int addBookmark(BookmarkDto bookmarkDto);
 
-    List<BookmarkDetailedDto> getBookmarksByUserID(int userID);
+    List<BookmarkDto> getBookmarksByUserID(int userID);
 
-    List<BookmarkDetailedDto> getBookmarksByNewsID(int newsID);
+    List<BookmarkDto> getBookmarksByNewsID(int newsID);
 
-    BookmarkDetailedDto getBookmarkByUserIDAndNewsID(int userID, int newsID);
+    BookmarkDto getBookmarkByUserIDAndNewsID(int userID, int newsID);
 
     BookmarkDto deleteBookmarkByIDAndUserID(int userId, int bookmarkID);
 

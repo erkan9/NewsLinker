@@ -36,7 +36,7 @@ public class NewsTagServiceImpl implements NewsTagService {
     }
 
     @Override
-    public int addNewTag(NewsTagDto newsTagDto) {
+    public int addNewsTag(NewsTagDto newsTagDto) {
 
         NewsTag newsTag = newsTagMapper.mapNewsTagToNewsTagDto(newsTagDto);
 
@@ -74,6 +74,17 @@ public class NewsTagServiceImpl implements NewsTagService {
                 new ResourceNotFoundException("NewsTag not Found", "NewsTag"));
 
         newsTagRepository.delete(newsTag);
+    }
+
+    @Override
+    public NewsTagDto getNewsTagByID(int newsTagID) {
+
+        Optional<NewsTag> newsTagOptional = newsTagRepository.findById(newsTagID);
+
+        NewsTag newsTag = newsTagOptional.orElseThrow(() ->
+                new ResourceNotFoundException("NewsTag not Found", "NewsTag"));
+
+        return newsTagMapper.mapNewsTagToNewsTagDto(newsTag);
     }
 
     @Override

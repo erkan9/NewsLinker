@@ -5,13 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class NewsTagDto {
 
-    @Positive
+    @PositiveOrZero
     private int newsTagID;
 
     @Positive

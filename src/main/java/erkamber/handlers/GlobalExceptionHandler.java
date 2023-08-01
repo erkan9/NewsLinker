@@ -70,7 +70,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException exception) {
         logger.error("Caught exception: ", exception);
-        return new ResponseEntity<>("Resource not found. Please try again", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(TextInjectionException.class)
@@ -86,8 +86,14 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NotReporterException.class)
-    public ResponseEntity<String> authorNotReporterException(NotReporterException exception) {
+    public ResponseEntity<String> handleAuthorNotReporterException(NotReporterException exception) {
         logger.error("Caught exception: ", exception);
         return new ResponseEntity<>("The User is not Reporter. Cannot subscribe", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ForbiddenActionException.class)
+    public ResponseEntity<String> handleForbiddenActionException(ForbiddenActionException exception) {
+        logger.error("Caught exception: ", exception);
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
     }
 }

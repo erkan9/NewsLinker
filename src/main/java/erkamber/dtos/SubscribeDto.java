@@ -1,27 +1,34 @@
 package erkamber.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class SubscribeDto {
 
-    @Positive(message = "Subscribe ID must be Positive number")
+    @PositiveOrZero(message = "Subscribe ID must be Positive number")
     private int subscribeID;
 
     @Positive(message = "Subscriber ID must be Positive number")
     private int subscriberID;
 
     @Positive(message = "Subscribe to person's ID must be Positive number")
-    private int subscribedToID;
+    private int reporterID;
 
-    public SubscribeDto(int subscriberID, int subscribedToID) {
+    public SubscribeDto() {
+    }
+
+    public SubscribeDto(int subscriberID, int reporterID) {
         this.subscriberID = subscriberID;
-        this.subscribedToID = subscribedToID;
+        this.reporterID = reporterID;
+    }
+
+    public SubscribeDto(int subscribeID, int subscriberID, int reporterID) {
+        this.subscribeID = subscribeID;
+        this.subscriberID = subscriberID;
+        this.reporterID = reporterID;
     }
 }

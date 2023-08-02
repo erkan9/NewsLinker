@@ -44,13 +44,13 @@ public class UserDto {
 
     private String userPhoto;
 
-    private boolean isUserReporter;
+    private boolean userReporter;
 
     public UserDto() {
     }
 
     public UserDto(String userFirstName, String userLastName, String userName, String userEmail, String userPassword,
-                   String userPhoto, boolean isUserReporter) {
+                   String userPhoto, boolean userReporter) {
 
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;
@@ -58,22 +58,22 @@ public class UserDto {
         this.userEmail = userEmail;
         this.userPassword = userPassword;
         this.userPhoto = userPhoto;
-        this.isUserReporter = isUserReporter;
+        this.userReporter = userReporter;
     }
 
     public UserDto(String userFirstName, String userLastName, String userName, String userEmail, String userPassword,
-                   boolean isUserReporter) {
+                   boolean userReporter) {
 
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
-        this.isUserReporter = isUserReporter;
+        this.userReporter = userReporter;
     }
 
     public UserDto(int userID, String userFirstName, String userLastName, String userName, String userEmail,
-                   String userPassword, String userPhoto, boolean isUserReporter) {
+                   String userPassword, String userPhoto, boolean userReporter) {
 
         this.userID = userID;
         this.userFirstName = userFirstName;
@@ -82,6 +82,6 @@ public class UserDto {
         this.userEmail = userEmail;
         this.userPassword = userPassword;
         this.userPhoto = userPhoto;
-        this.isUserReporter = isUserReporter;
+        this.userReporter = userReporter;
     }
 }

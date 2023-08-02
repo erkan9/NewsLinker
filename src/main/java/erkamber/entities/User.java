@@ -36,13 +36,13 @@ public class User {
     private String userPhoto;
 
     @Column(name = "user_is_reporter", unique = false, updatable = false, insertable = true, nullable = false)
-    private boolean isUserReporter = false;
+    private boolean userReporter = false;
 
     public User() {
     }
 
     public User(int userID, String userFirstName, String userLastName, String userName, String userEmail,
-                String userPassword, boolean isUserReporter) {
+                String userPassword, boolean userReporter) {
 
         this.userID = userID;
         this.userFirstName = userFirstName;
@@ -50,11 +50,11 @@ public class User {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
-        this.isUserReporter = isUserReporter;
+        this.userReporter = userReporter;
     }
 
     public User(int userID, String userFirstName, String userLastName, String userName, String userEmail,
-                String userPassword, String userPhoto, boolean isUserReporter) {
+                String userPassword, String userPhoto, boolean userReporter) {
 
         this.userID = userID;
         this.userFirstName = userFirstName;
@@ -63,7 +63,7 @@ public class User {
         this.userEmail = userEmail;
         this.userPassword = userPassword;
         this.userPhoto = userPhoto;
-        this.isUserReporter = isUserReporter;
+        this.userReporter = userReporter;
     }
 
     @Override

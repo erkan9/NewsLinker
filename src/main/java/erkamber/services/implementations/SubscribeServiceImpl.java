@@ -40,7 +40,7 @@ public class SubscribeServiceImpl implements SubscribeService {
     @Override
     public int addNewSubscription(SubscribeDto newSubscribeDto) {
 
-        isSubscribedToUserReporter(newSubscribeDto.getSubscribedToID());
+        isSubscribedToUserReporter(newSubscribeDto.getReporterID());
 
         Subscribe subscribe = subscribeMapper.mapSubscribeDtoToSubscribe(newSubscribeDto);
 
@@ -54,7 +54,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 
         isSubscribedToUserReporter(reporterID);
 
-        List<Subscribe> subscribersOfReporter = subscribeRepository.findSubscribeBySubscribedToID(reporterID);
+        List<Subscribe> subscribersOfReporter = subscribeRepository.findSubscribeByReporterID(reporterID);
 
         return subscribersOfReporter.size();
     }
@@ -72,7 +72,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 
         isSubscribedToUserReporter(subscribedToID);
 
-        Optional<Subscribe> searchedSubscribeOptional = subscribeRepository.findSubscribeBySubscriberIDAndSubscribedToID(subscriberID, subscribedToID);
+        Optional<Subscribe> searchedSubscribeOptional = subscribeRepository.findSubscribeBySubscriberIDAndReporterID(subscriberID, subscribedToID);
 
         Subscribe searchedSubscription = searchedSubscribeOptional.orElseThrow(() ->
                 new ResourceNotFoundException("Subscription not Found", "Subscription"));
@@ -105,7 +105,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 
         isSubscribedToUserReporter(subscribedToID);
 
-        List<Subscribe> subscribersOfReporter = subscribeRepository.findSubscribeBySubscribedToID(subscribedToID);
+        List<Subscribe> subscribersOfReporter = subscribeRepository.findSubscribeByReporterID(subscribedToID);
 
         return convertListOfSubscribeToSubscribeDetailedDto(subscribersOfReporter);
     }
@@ -125,7 +125,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 
         isSubscribedToUserReporter(subscribedToID);
 
-        List<Subscribe> subscribersOfReporter = subscribeRepository.findSubscribeBySubscribedToID(subscribedToID);
+        List<Subscribe> subscribersOfReporter = subscribeRepository.findSubscribeByReporterID(subscribedToID);
 
         subscribeRepository.deleteAll(subscribersOfReporter);
 
@@ -137,7 +137,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 
         isSubscribedToUserReporter(subscribedToID);
 
-        Optional<Subscribe> searchedSubscribeOptional = subscribeRepository.findSubscribeBySubscriberIDAndSubscribedToID(subscriberID, subscribedToID);
+        Optional<Subscribe> searchedSubscribeOptional = subscribeRepository.findSubscribeBySubscriberIDAndReporterID(subscriberID, subscribedToID);
 
         Subscribe searchedSubscription = searchedSubscribeOptional.orElseThrow(() ->
                 new ResourceNotFoundException("Subscription not Found", "Subscription"));
@@ -173,7 +173,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 
             UserDto subscriberUser = getUserDtoObjectFromUserID(subscribe.getSubscriberID());
 
-            UserDto subscribedToUser = getUserDtoObjectFromUserID(subscribe.getSubscribedToID());
+            UserDto subscribedToUser = getUserDtoObjectFromUserID(subscribe.getReporterID());
 
             SubscribeDetailedDto subscribeDetailedDto = new SubscribeDetailedDto(subscribe.getSubscribeID(), subscriberUser, subscribedToUser);
 

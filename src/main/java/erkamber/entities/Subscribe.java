@@ -20,14 +20,14 @@ public class Subscribe {
     private int subscriberID;
 
     @Column(name = "subscribed_to_id", unique = false, updatable = false, insertable = true, nullable = false)
-    private int subscribedToID;
+    private int reporterID;
 
     public Subscribe() {
     }
 
-    public Subscribe(int subscribeID, int subscriberID, int subscribedToID) {
+    public Subscribe(int subscribeID, int subscriberID, int reporterID) {
         this.subscribeID = subscribeID;
         this.subscriberID = subscriberID;
-        this.subscribedToID = subscribedToID;
+        this.reporterID = reporterID;
     }
 }

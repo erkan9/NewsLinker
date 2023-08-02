@@ -11,12 +11,12 @@ public class SubscribeMapper {
 
     public SubscribeDto mapSubscribeToSubscribeDto(Subscribe subscribe) {
 
-        return new SubscribeDto(subscribe.getSubscribeID(), subscribe.getSubscriberID(), subscribe.getSubscribedToID());
+        return new SubscribeDto(subscribe.getSubscribeID(), subscribe.getSubscriberID(), subscribe.getReporterID());
     }
 
     public Subscribe mapSubscribeDtoToSubscribe(SubscribeDto subscribeDto) {
 
-        return new Subscribe(subscribeDto.getSubscribeID(), subscribeDto.getSubscriberID(), subscribeDto.getSubscribedToID());
+        return new Subscribe(subscribeDto.getSubscribeID(), subscribeDto.getSubscriberID(), subscribeDto.getReporterID());
     }
 
     public SubscribeDetailedDto mapToSubscribeDetailedDto(int subscribeID, UserDto subscriberDto, UserDto subscribedToDto) {

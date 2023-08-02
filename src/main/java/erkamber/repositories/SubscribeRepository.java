@@ -8,9 +8,9 @@ import java.util.Optional;
 
 public interface SubscribeRepository extends JpaRepository<Subscribe, Integer> {
 
-    Optional<Subscribe> findSubscribeBySubscriberIDAndSubscribedToID(int subscriberID, int subscribedToID);
+    Optional<Subscribe> findSubscribeBySubscriberIDAndReporterID(int subscriberID, int reporterID);
 
     List<Subscribe> findSubscribeBySubscriberID(int subscriberID);
 
-    List<Subscribe> findSubscribeBySubscribedToID(int subscribedToID);
+    List<Subscribe> findSubscribeByReporterID(int reporterID);
 }

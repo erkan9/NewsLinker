@@ -88,7 +88,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotReporterException.class)
     public ResponseEntity<String> handleAuthorNotReporterException(NotReporterException exception) {
         logger.error("Caught exception: ", exception);
-        return new ResponseEntity<>("The User is not Reporter. Cannot subscribe", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ForbiddenActionException.class)

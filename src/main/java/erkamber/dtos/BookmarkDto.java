@@ -13,10 +13,10 @@ public class BookmarkDto {
 
     private int bookmarkID;
 
-    @Positive
+    @Positive(message = "UserID must be a Positive number!")
     private int userID;
 
-    @Positive
+    @Positive(message = "NewsID must be a Positive number!")
     private int newsID;
 
 }

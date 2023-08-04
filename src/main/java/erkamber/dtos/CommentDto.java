@@ -1,24 +1,21 @@
 package erkamber.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class CommentDto {
 
-    @Positive
+    @PositiveOrZero
     private int commentID;
 
-    @Positive
+    @Positive(message = "Comment Author ID must be a positive number!")
     private int commentAuthorID;
 
-    @Positive
+    @Positive(message = "Comment News ID must be a positive number!")
     private int commentNewsID;
 
     @NotBlank(message = "Comment cannot be Blank")
@@ -28,14 +25,33 @@ public class CommentDto {
     private String commentContent;
 
     @PositiveOrZero(message = "Up votes must be Positive number or Zero")
-    private int commentUpVotes;
+    private int commentUpVotes = 0;
 
     @PositiveOrZero(message = "Down votes must be Positive number or Zero")
-    private int commentDownVotes;
+    private int commentDownVotes = 0;
 
     private LocalDate creationDate;
 
+    public CommentDto() {
+    }
+
+    public CommentDto(int commentAuthorID, int commentNewsID, String commentContent) {
+        this.commentAuthorID = commentAuthorID;
+        this.commentNewsID = commentNewsID;
+        this.commentContent = commentContent;
+    }
+
     public CommentDto(int commentAuthorID, int commentNewsID, String commentContent, int commentUpVotes, int commentDownVotes, LocalDate creationDate) {
+        this.commentAuthorID = commentAuthorID;
+        this.commentNewsID = commentNewsID;
+        this.commentContent = commentContent;
+        this.commentUpVotes = commentUpVotes;
+        this.commentDownVotes = commentDownVotes;
+        this.creationDate = creationDate;
+    }
+
+    public CommentDto(int commentID, int commentAuthorID, int commentNewsID, String commentContent, int commentUpVotes, int commentDownVotes, LocalDate creationDate) {
+        this.commentID = commentID;
         this.commentAuthorID = commentAuthorID;
         this.commentNewsID = commentNewsID;
         this.commentContent = commentContent;

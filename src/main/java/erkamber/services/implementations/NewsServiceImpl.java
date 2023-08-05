@@ -112,6 +112,8 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public int addNews(NewsDto newsDto) {
 
+        newsDto.setNewsCreationDate(LocalDate.now());
+
         isUserExists(newsDto.getUserID());
 
         validateNewsTitle(newsDto.getNewsTitle());

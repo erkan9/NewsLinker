@@ -18,7 +18,7 @@ public class News {
     @Column(name = "news_id", unique = true, updatable = false, insertable = false, nullable = false)
     private int newsID;
 
-    @Column(name = "user_id", unique = true, updatable = false, insertable = false, nullable = false)
+    @Column(name = "user_id", unique = false, updatable = false, insertable = true, nullable = false)
     private int userID;
 
     @Column(name = "news_topic", length = 30, unique = false, updatable = true, insertable = true, nullable = false)

@@ -4,7 +4,6 @@ import erkamber.dtos.CommentDetailedDto;
 import erkamber.dtos.CommentDto;
 import erkamber.dtos.UserDto;
 import erkamber.entities.Comment;
-import erkamber.entities.User;
 import org.springframework.stereotype.Component;
 
 @Component

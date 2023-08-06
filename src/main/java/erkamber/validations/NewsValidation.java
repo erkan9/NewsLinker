@@ -1,6 +1,6 @@
 package erkamber.validations;
 
-import erkamber.configurations.CharAndNumberPatternConfiguration;
+import erkamber.configurations.NewsTitlePatternConfiguration;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Pattern;
@@ -8,15 +8,15 @@ import java.util.regex.Pattern;
 @Component
 public class NewsValidation {
 
-    private final CharAndNumberPatternConfiguration charAndNumberPatternConfiguration;
+    private final NewsTitlePatternConfiguration newsTitlePatternConfiguration;
 
-    public NewsValidation(CharAndNumberPatternConfiguration charAndNumberPatternConfiguration) {
-        this.charAndNumberPatternConfiguration = charAndNumberPatternConfiguration;
+    public NewsValidation(NewsTitlePatternConfiguration newsTitlePatternConfiguration) {
+        this.newsTitlePatternConfiguration = newsTitlePatternConfiguration;
     }
 
     public boolean isNewsTitleValid(String newsTitle) {
 
-        String charAndNumberPattern = charAndNumberPatternConfiguration.getCharAndNumberPattern();
+        String charAndNumberPattern = newsTitlePatternConfiguration.getNewsTitlePattern();
 
         return Pattern.compile(charAndNumberPattern).matcher(newsTitle).matches();
     }

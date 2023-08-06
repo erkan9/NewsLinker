@@ -7,16 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
@@ -52,9 +47,16 @@ public class NewsController {
         return ResponseEntity.ok(allNews);
     }
 
-    @GetMapping("/news/{newsId}")
-    public ResponseEntity<NewsDetailedDto> getNewsByNewsID(@PathVariable int newsId) {
+    @GetMapping("/news/detailed/{newsId}")
+    public ResponseEntity<NewsDetailedDto> getNewsDetailedByNewsID(@PathVariable int newsId) {
         NewsDetailedDto newsDetailedByNewsID = this.newsService.getNewsDetailedByNewsID(newsId);
+
+        return ResponseEntity.ok(newsDetailedByNewsID);
+    }
+
+    @GetMapping("/news/{newsId}")
+    public ResponseEntity<NewsDto> getNewsByNewsID(@PathVariable int newsId) {
+        NewsDto newsDetailedByNewsID = this.newsService.getNewsByNewsID(newsId);
 
         return ResponseEntity.ok(newsDetailedByNewsID);
     }
@@ -90,8 +92,6 @@ public class NewsController {
         return ResponseEntity.ok(newsByCreationDateBefore);
     }
 
-
-
     @GetMapping(value = "/news", params = {"creationDateAfter"})
     public ResponseEntity<List<NewsDetailedDto>> getNewsByCreationDateAfter(
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -102,5 +102,30 @@ public class NewsController {
         return ResponseEntity.ok(newsByCreationDateBefore);
     }
 
+    @PatchMapping(value = "/news/update/content", params = {"newsId", "userId"})
+    public void updateNewsContent(
+            @RequestParam("newsId")
+            @Positive(message = "Comment ID must be a Positive number!")
+            int newsID,
+            @RequestParam("userId")
+            @Positive(message = "User ID must be a Positive number!")
+            int userID,
+            @RequestBody String content) {
 
+        newsService.updateNewsContent(content, newsID, userID);
+    }
+
+
+    @PatchMapping(value = "/news/update/title", params = {"newsId", "userId"})
+    public void updateNewsTitle(
+            @RequestParam("newsId")
+            @Positive(message = "Comment ID must be a Positive number!")
+            int newsID,
+            @RequestParam("userId")
+            @Positive(message = "User ID must be a Positive number!")
+            int userID,
+            @RequestBody String title) {
+
+        newsService.updateNewsTitle(title, newsID, userID);
+    }
 }

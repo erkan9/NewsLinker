@@ -1,5 +1,6 @@
 package erkamber.services.implementations;
 
+import erkamber.configurations.JsonObjectConfiguration;
 import erkamber.dtos.*;
 import erkamber.entities.*;
 import erkamber.enums.VoteTypeNews;
@@ -13,6 +14,7 @@ import erkamber.services.interfaces.*;
 import erkamber.validations.InjectionValidation;
 import erkamber.validations.NewsValidation;
 import erkamber.validations.UserValidation;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -53,10 +55,12 @@ public class NewsServiceImpl implements NewsService {
 
     private final InjectionValidation injectionValidation;
 
+    private final JsonObjectConfiguration jsonObjectConfiguration;
+
     public NewsServiceImpl(NewsRepository newsRepository, NewsMapper newsMapper, NewsValidation newsValidation,
                            UserService userService, NewsTagRepository newsTagRepository, MediaService mediaService,
                            CommentService commentService, VoteRepository voteRepository, VoteMapper voteMapper, TagService tagService, UserValidation userValidation,
-                           UserRepository userRepository, ViewService viewService, ViewRepository viewRepository, InjectionValidation injectionValidation) {
+                           UserRepository userRepository, ViewService viewService, ViewRepository viewRepository, InjectionValidation injectionValidation, JsonObjectConfiguration jsonObjectConfiguration) {
 
         this.newsRepository = newsRepository;
         this.newsMapper = newsMapper;
@@ -73,6 +77,7 @@ public class NewsServiceImpl implements NewsService {
         this.viewService = viewService;
         this.viewRepository = viewRepository;
         this.injectionValidation = injectionValidation;
+        this.jsonObjectConfiguration = jsonObjectConfiguration;
     }
 
     @Override
@@ -112,6 +117,8 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public int addNews(NewsDto newsDto) {
 
+        newsDto.setNewsCreationDate(LocalDate.now());
+
         isUserExists(newsDto.getUserID());
 
         validateNewsTitle(newsDto.getNewsTitle());
@@ -137,9 +144,11 @@ public class NewsServiceImpl implements NewsService {
 
         isUserTheAuthorOfNews(searchedNews, userID);
 
-        validateTextForInjection(content);
+        JSONObject jsonObject = jsonObjectConfiguration.getJsonObjectConfiguration(content);
 
-        searchedNews.setNewsContent(content);
+        validateTextForInjection(jsonObject.getString("content"));
+
+        searchedNews.setNewsContent(jsonObject.getString("content"));
 
         newsRepository.save(searchedNews);
 
@@ -157,9 +166,11 @@ public class NewsServiceImpl implements NewsService {
 
         isUserTheAuthorOfNews(searchedNews, userID);
 
-        validateNewsTitle(title);
+        JSONObject jsonObject = jsonObjectConfiguration.getJsonObjectConfiguration(title);
 
-        searchedNews.setNewsTitle(title);
+        validateNewsTitle(jsonObject.getString("title"));
+
+        searchedNews.setNewsTitle(jsonObject.getString("title"));
 
         newsRepository.save(searchedNews);
     }
@@ -234,9 +245,9 @@ public class NewsServiceImpl implements NewsService {
 
     private void isUserTheAuthorOfNews(News news, int userID) {
 
-        if (newsValidation.isUserTheAuthorOfNews(news.getUserID(), userID)) {
+        if (!newsValidation.isUserTheAuthorOfNews(news.getUserID(), userID)) {
 
-            throw new InvalidInputException("Provided User with ID" + userID + "is not the Author");
+            throw new InvalidInputException("Provided User with ID" + userID + " is not the Author");
         }
     }
 

@@ -1,18 +1,21 @@
 package erkamber.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class NewsDto {
 
-    @Positive(message = "News ID must be Positive number ")
+    @PositiveOrZero(message = "News ID must be Positive number ")
     private int newsID;
 
     @Positive(message = "User ID must be Positive number ")
@@ -36,10 +39,40 @@ public class NewsDto {
     @PositiveOrZero(message = "Down votes must be Positive number or Zero")
     private int newsDownVotes;
 
-    @NotNull(message = "News Creation Date cannot be Null")
     private LocalDate newsCreationDate;
 
-    public NewsDto(int userID, String newsTitle, String newsContent, int newsUpVotes, int newsDownVotes, LocalDate newsCreationDate) {
+    public NewsDto() {
+    }
+
+    public NewsDto(
+            int userID, String newsTitle, String newsContent, int newsUpVotes, int newsDownVotes,
+            LocalDate newsCreationDate) {
+        this.userID = userID;
+        this.newsTitle = newsTitle;
+        this.newsContent = newsContent;
+        this.newsUpVotes = newsUpVotes;
+        this.newsDownVotes = newsDownVotes;
+        this.newsCreationDate = newsCreationDate;
+    }
+
+    public NewsDto(int userID, String newsTitle, String newsContent, int newsUpVotes, int newsDownVotes) {
+        this.userID = userID;
+        this.newsTitle = newsTitle;
+        this.newsContent = newsContent;
+        this.newsUpVotes = newsUpVotes;
+        this.newsDownVotes = newsDownVotes;
+    }
+
+    public NewsDto(int userID, String newsTitle, String newsContent) {
+        this.userID = userID;
+        this.newsTitle = newsTitle;
+        this.newsContent = newsContent;
+    }
+
+    public NewsDto(
+            int newsID, int userID, String newsTitle, String newsContent, int newsUpVotes, int newsDownVotes,
+            LocalDate newsCreationDate) {
+        this.newsID = newsID;
         this.userID = userID;
         this.newsTitle = newsTitle;
         this.newsContent = newsContent;

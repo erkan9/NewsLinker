@@ -58,6 +58,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public int addNewComment(CommentDto commentDto) throws MessagingException {
 
+        commentDto.setCreationDate(LocalDate.now());
+
         isCommentContentValid(commentDto.getCommentContent());
 
         Comment newComment = commentMapper.mapCommentDtoToComment(commentDto);

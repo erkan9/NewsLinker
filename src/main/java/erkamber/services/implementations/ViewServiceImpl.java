@@ -71,6 +71,8 @@ public class ViewServiceImpl implements ViewService {
     @Override
     public int addNewView(ViewDto viewDto) {
 
+        viewDto.setViewCreationDate(LocalDate.now());
+
         View newView = viewMapper.mapViewDtoToView(viewDto);
 
         viewRepository.save(newView);

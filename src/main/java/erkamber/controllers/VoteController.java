@@ -70,7 +70,7 @@ public class VoteController {
 
     @GetMapping(value = "/upVotes", params = {"contentID", "votedContentType"})
     public ResponseEntity<List<VoteDto>> getAllUpVotesByUserIDAndVotedContentType(@RequestParam("contentID")
-                                                                                  @Positive(message = "User ID must be a Positive number!")
+                                                                                  @Positive(message = "Content ID must be a Positive number!")
                                                                                   int contentID,
                                                                                   @RequestParam("votedContentType")
                                                                                   @NotBlank(message = "Content Type cannot be Blank!")
@@ -83,7 +83,7 @@ public class VoteController {
 
     @GetMapping(value = "/downVotes", params = {"contentID", "votedContentType"})
     public ResponseEntity<List<VoteDto>> getAllDownVotesByUserIDAndVotedContentType(@RequestParam("contentID")
-                                                                                    @Positive(message = "User ID must be a Positive number!")
+                                                                                    @Positive(message = "Content ID must be a Positive number!")
                                                                                     int contentID,
                                                                                     @RequestParam("votedContentType")
                                                                                     @NotBlank(message = "Content Type cannot be Blank!")
@@ -92,5 +92,40 @@ public class VoteController {
                                                                                     String votedContentType) {
 
         return ResponseEntity.ok(voteService.getAllDownVotesByContentIDAndType(contentID, votedContentType));
+    }
+
+
+    @DeleteMapping(value = "/votes", params = {"votedContentType", "contentId"})
+    public void deleteVotesByContentTypeAndContentID(
+            @RequestParam("votedContentType")
+            @NotBlank(message = "Content Type cannot be Blank!")
+            @NotEmpty(message = "Content Type cannot be Empty!")
+            @NotNull(message = "Content Type cannot be null!")
+            String votedContentType,
+            @RequestParam("contentId")
+            @Positive(message = "Content ID must be a Positive number!")
+            int contentID) {
+
+        voteService.deleteAllVotesByContentTypeAndVotedContentID(votedContentType, contentID);
+    }
+
+    @DeleteMapping(value = "/votes", params = {"votedContentType", "userId"})
+    public void deleteVotesByContentTypeAndUserID(
+            @RequestParam("votedContentType")
+            @NotBlank(message = "Content Type cannot be Blank!")
+            @NotEmpty(message = "Content Type cannot be Empty!")
+            @NotNull(message = "Content Type cannot be null!")
+            String votedContentType,
+            @RequestParam("userId")
+            @Positive(message = "User ID must be a Positive number!")
+            int userID) {
+
+        voteService.deleteAllVotesByContentTypeAndUserID(votedContentType, userID);
+    }
+
+    @DeleteMapping("/vote")
+    public void deleteVotesByUserID(@RequestParam @Positive(message = "User ID must be a positive number!") int userID) {
+
+        voteService.deleteVotesUserID(userID);
     }
 }

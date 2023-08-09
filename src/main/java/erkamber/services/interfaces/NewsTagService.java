@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface NewsTagService {
 
-
     int addNewsTag(NewsTagDto newsTagDto);
 
     int deleteAllTagsByNewsID(int newsID);

@@ -13,6 +13,12 @@ public interface SubscribeService {
 
     int getNumberOfSubscriptionsOfUser(int userID);
 
+    int deleteSubscriptionsOfSubscriberID(int subscriberID);
+
+    int deleteSubscriptionsByReporterID(int reporterID);
+
+    void deleteSpecificSubscription(int subscriberID, int subscribedToID);
+
     SubscribeDetailedDto getSubscriptionBySubscriberIDAndReporterID(int subscriberID, int reporterID);
 
     List<SubscribeDetailedDto> getAllSubscriptions();
@@ -20,10 +26,4 @@ public interface SubscribeService {
     List<SubscribeDetailedDto> getSubscriptionsBySubscriberID(int subscriberID);
 
     List<SubscribeDetailedDto> getSubscriptionsByReporterID(int reporterID);
-
-    int deleteSubscriptionsOfSubscriberID(int subscriberID);
-
-    int deleteSubscriptionsByReporterID(int reporterID);
-
-    void deleteSpecificSubscription(int subscriberID, int subscribedToID);
 }

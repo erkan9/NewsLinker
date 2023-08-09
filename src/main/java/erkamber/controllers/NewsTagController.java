@@ -64,24 +64,24 @@ public class NewsTagController {
     }
 
     @DeleteMapping(value = "/newsTags", params = {"tagId"})
-    public void deleteNewsTagByTagID(@RequestParam("tagId")
-                                     @Positive(message = "Tag ID must be a Positive number!")
-                                     int tagId) {
+    public ResponseEntity<Integer> deleteNewsTagByTagID(@RequestParam("tagId")
+                                                        @Positive(message = "Tag ID must be a Positive number!")
+                                                        int tagId) {
 
-        newsTagService.deleteNewsTagByTagID(tagId);
+        return ResponseEntity.ok(newsTagService.deleteNewsTagByTagID(tagId));
     }
 
     @DeleteMapping(value = "/newsTags", params = {"newsId"})
-    public void deleteNewsTagByNewsID(@RequestParam("newsId")
-                                      @Positive(message = "News ID must be a Positive number!")
-                                      int newsID) {
+    public ResponseEntity<Integer> deleteNewsTagByNewsID(@RequestParam("newsId")
+                                                         @Positive(message = "News ID must be a Positive number!")
+                                                         int newsID) {
 
-        newsTagService.deleteAllTagsByNewsID(newsID);
+        return ResponseEntity.ok(newsTagService.deleteAllTagsByNewsID(newsID));
     }
 
     @DeleteMapping(value = "/newsTags", params = {"tagId", "newsId"})
     public void deleteNewsTagByTagIDAndNewsID(@RequestParam("tagId")
-                                              @Positive(message = "News ID must be a Positive number!")
+                                              @Positive(message = "Tag ID must be a Positive number!")
                                               int tagID,
                                               @RequestParam("newsId")
                                               @Positive(message = "News ID must be a Positive number!")

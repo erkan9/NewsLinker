@@ -50,7 +50,7 @@ public class SubscribeController {
                                                                                       @Positive(message = "Reporter ID must be a Positive number!")
                                                                                       int reporterID) {
 
-        return ResponseEntity.ok(subscribeService.getSubscriptionsBySubscribedToID(reporterID));
+        return ResponseEntity.ok(subscribeService.getSubscriptionsByReporterID(reporterID));
     }
 
     @GetMapping(value = "/subscribers", params = {"reporterId"})
@@ -77,27 +77,23 @@ public class SubscribeController {
                                                                                                @Positive(message = "Reporter ID must be a Positive number!")
                                                                                                int reporterID) {
 
-        return ResponseEntity.ok(subscribeService.getSubscriptionBySubscriberIDAndSubscribedToID(subscriberID, reporterID));
+        return ResponseEntity.ok(subscribeService.getSubscriptionBySubscriberIDAndReporterID(subscriberID, reporterID));
     }
 
     @DeleteMapping(value = "/subscribe", params = {"subscriberId"})
-    public ResponseEntity<Void> deleteSubscriptionsOfSubscriberID(@RequestParam("subscriberId")
-                                                                  @Positive(message = "Subscriber ID must be a Positive number!")
-                                                                  int userID) {
+    public ResponseEntity<Integer> deleteSubscriptionsOfSubscriberID(@RequestParam("subscriberId")
+                                                                     @Positive(message = "Subscriber ID must be a Positive number!")
+                                                                     int subscriberID) {
 
-        int deletedNumberOfSubscriptions = subscribeService.deleteSubscriptionsOfSubscriberID(userID);
-
-        return ResponseEntity.created(URI.create("api/v1/subscribe/" + deletedNumberOfSubscriptions)).build();
+        return ResponseEntity.ok(subscribeService.deleteSubscriptionsOfSubscriberID(subscriberID));
     }
 
     @DeleteMapping(value = "/subscribe", params = {"reporterId"})
-    public ResponseEntity<Void> deleteSubscriptionsBySubscribedToID(@RequestParam("reporterId")
-                                                                    @Positive(message = "Reporter ID must be a Positive number!")
-                                                                    int reporterID) {
+    public ResponseEntity<Integer> deleteSubscriptionsBySubscribedToID(@RequestParam("reporterId")
+                                                                       @Positive(message = "Reporter ID must be a Positive number!")
+                                                                       int reporterID) {
 
-        int deletedNumberOfSubscriptions = subscribeService.deleteSubscriptionsBySubscribedToID(reporterID);
-
-        return ResponseEntity.created(URI.create("api/v1/subscribe/" + deletedNumberOfSubscriptions)).build();
+        return ResponseEntity.ok(subscribeService.deleteSubscriptionsByReporterID(reporterID));
     }
 
     @DeleteMapping(value = "/subscribe", params = {"subscriberId", "reporterId"})

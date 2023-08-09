@@ -68,18 +68,18 @@ public class SubscribeServiceImpl implements SubscribeService {
     }
 
     @Override
-    public SubscribeDetailedDto getSubscriptionBySubscriberIDAndSubscribedToID(int subscriberID, int subscribedToID) {
+    public SubscribeDetailedDto getSubscriptionBySubscriberIDAndReporterID(int subscriberID, int reporterID) {
 
-        isSubscribedToUserReporter(subscribedToID);
+        isSubscribedToUserReporter(reporterID);
 
-        Optional<Subscribe> searchedSubscribeOptional = subscribeRepository.findSubscribeBySubscriberIDAndReporterID(subscriberID, subscribedToID);
+        Optional<Subscribe> searchedSubscribeOptional = subscribeRepository.findSubscribeBySubscriberIDAndReporterID(subscriberID, reporterID);
 
         Subscribe searchedSubscription = searchedSubscribeOptional.orElseThrow(() ->
                 new ResourceNotFoundException("Subscription not Found", "Subscription"));
 
         UserDto subscriberUser = getUserDtoObjectFromUserID(subscriberID);
 
-        UserDto subscribedToUser = getUserDtoObjectFromUserID(subscribedToID);
+        UserDto subscribedToUser = getUserDtoObjectFromUserID(reporterID);
 
         return subscribeMapper.mapToSubscribeDetailedDto(searchedSubscription.getSubscribeID(), subscriberUser, subscribedToUser);
     }
@@ -101,11 +101,11 @@ public class SubscribeServiceImpl implements SubscribeService {
     }
 
     @Override
-    public List<SubscribeDetailedDto> getSubscriptionsBySubscribedToID(int subscribedToID) {
+    public List<SubscribeDetailedDto> getSubscriptionsByReporterID(int reporterID) {
 
-        isSubscribedToUserReporter(subscribedToID);
+        isSubscribedToUserReporter(reporterID);
 
-        List<Subscribe> subscribersOfReporter = subscribeRepository.findSubscribeByReporterID(subscribedToID);
+        List<Subscribe> subscribersOfReporter = subscribeRepository.findSubscribeByReporterID(reporterID);
 
         return convertListOfSubscribeToSubscribeDetailedDto(subscribersOfReporter);
     }
@@ -121,11 +121,11 @@ public class SubscribeServiceImpl implements SubscribeService {
     }
 
     @Override
-    public int deleteSubscriptionsBySubscribedToID(int subscribedToID) {
+    public int deleteSubscriptionsByReporterID(int reporterID) {
 
-        isSubscribedToUserReporter(subscribedToID);
+        isSubscribedToUserReporter(reporterID);
 
-        List<Subscribe> subscribersOfReporter = subscribeRepository.findSubscribeByReporterID(subscribedToID);
+        List<Subscribe> subscribersOfReporter = subscribeRepository.findSubscribeByReporterID(reporterID);
 
         subscribeRepository.deleteAll(subscribersOfReporter);
 

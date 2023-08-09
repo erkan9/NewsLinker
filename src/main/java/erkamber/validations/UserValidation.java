@@ -54,4 +54,9 @@ public class UserValidation {
 
         return allUsers.stream().anyMatch(user -> user.getUserID() == searchedUserID);
     }
+
+    public boolean isListEmpty(List<User> listOfNews) {
+
+        return listOfNews == null || listOfNews.isEmpty();
+    }
 }

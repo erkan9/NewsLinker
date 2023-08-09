@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
 
@@ -75,15 +76,15 @@ public class UserController {
 
     @GetMapping(value = "/users", params = {"firstName", "lastName"})
     public ResponseEntity<List<UserDto>> getUserByFirstAndLastName(@RequestParam("firstName")
-                                                             @NotBlank(message = "User First Name cannot be Blank!")
-                                                             @NotEmpty(message = "User First Name be Empty!")
-                                                             @NotNull(message = "User First Name be null!")
-                                                             String firstName,
-                                                             @RequestParam("lastName")
-                                                             @NotBlank(message = "User First Name be Blank!")
-                                                             @NotEmpty(message = "User First Name be Empty!")
-                                                             @NotNull(message = "User First Name be null!")
-                                                             String lastName) {
+                                                                   @NotBlank(message = "User First Name cannot be Blank!")
+                                                                   @NotEmpty(message = "User First Name be Empty!")
+                                                                   @NotNull(message = "User First Name be null!")
+                                                                   String firstName,
+                                                                   @RequestParam("lastName")
+                                                                   @NotBlank(message = "User First Name be Blank!")
+                                                                   @NotEmpty(message = "User First Name be Empty!")
+                                                                   @NotNull(message = "User First Name be null!")
+                                                                   String lastName) {
 
         return ResponseEntity.ok(userService.getUserByFirstAndLastName(firstName, lastName));
     }
@@ -106,5 +107,23 @@ public class UserController {
                                                                String lastName) {
 
         return ResponseEntity.ok(userService.getUsersByLastName(lastName));
+    }
+
+    @DeleteMapping(value = "/users", params = {"userName"})
+    public void deleteUserByUserName(@RequestParam("userName")
+                                     @NotBlank(message = "UserName cannot be Blank!")
+                                     @NotEmpty(message = "UserName cannot be Empty!")
+                                     @NotNull(message = "UserName cannot be null!")
+                                     String userName) {
+
+        userService.deleteUserByUserName(userName);
+    }
+
+    @DeleteMapping(value = "/users", params = {"userId"})
+    public void deleteUserByUserID(@RequestParam("userId")
+                                   @Positive(message = "User ID must be a Positive number!")
+                                   int userID) {
+
+        userService.deleteUserByID(userID);
     }
 }

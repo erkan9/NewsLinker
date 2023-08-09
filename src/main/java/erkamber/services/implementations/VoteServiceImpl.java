@@ -3,10 +3,11 @@ package erkamber.services.implementations;
 import erkamber.dtos.VoteDto;
 import erkamber.entities.Vote;
 import erkamber.exceptions.InvalidInputException;
+import erkamber.exceptions.ResourceNotFoundException;
 import erkamber.mappers.VoteMapper;
 import erkamber.repositories.VoteRepository;
 import erkamber.services.interfaces.VoteService;
-import erkamber.validations.VoteContentTypeValidation;
+import erkamber.validations.VoteValidation;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class VoteServiceImpl implements VoteService {
 
     private final VoteMapper voteMapper;
 
-    private final VoteContentTypeValidation voteContentTypeValidation;
+    private final VoteValidation voteValidation;
 
     private final CommentServiceImpl commentService;
 
@@ -28,11 +29,11 @@ public class VoteServiceImpl implements VoteService {
     private final NewsServiceImpl newsService;
 
     public VoteServiceImpl(VoteRepository voteRepository, VoteMapper voteMapper,
-                           VoteContentTypeValidation voteContentTypeValidation, CommentServiceImpl commentService, NewsServiceImpl newsService) {
+                           VoteValidation voteValidation, CommentServiceImpl commentService, NewsServiceImpl newsService) {
 
         this.voteRepository = voteRepository;
         this.voteMapper = voteMapper;
-        this.voteContentTypeValidation = voteContentTypeValidation;
+        this.voteValidation = voteValidation;
         this.commentService = commentService;
         this.newsService = newsService;
     }
@@ -52,6 +53,44 @@ public class VoteServiceImpl implements VoteService {
 
             return handleNotNewVote(pastVote, voteDto);
         }
+    }
+
+    @Override
+    public void deleteVotesUserID(int userID) {
+
+        List<Vote> voteListByUserID = voteRepository.getVoteByUserID(userID);
+
+        validateVoteList(voteListByUserID);
+
+        voteRepository.deleteAll(voteListByUserID);
+    }
+
+    @Override
+    public void deleteAllVotesByContentTypeAndUserID(String votedContentType, int userID) {
+
+        isVotedContentTypeCorrect(votedContentType);
+
+        List<Vote> voteListByUserID = voteRepository.getVoteByUserID(userID);
+
+        voteListByUserID.removeIf(vote -> !vote.getVotedContentType().equalsIgnoreCase(votedContentType));
+
+        validateVoteList(voteListByUserID);
+
+        voteRepository.deleteAll(voteListByUserID);
+    }
+
+    @Override
+    public void deleteAllVotesByContentTypeAndVotedContentID(String votedContentType, int votedContentID) {
+
+        isVotedContentTypeCorrect(votedContentType);
+
+        List<Vote> voteListByUserID = voteRepository.getVoteByVotedContentID(votedContentID);
+
+        voteListByUserID.removeIf(vote -> !vote.getVotedContentType().equalsIgnoreCase(votedContentType));
+
+        validateVoteList(voteListByUserID);
+
+        voteRepository.deleteAll(voteListByUserID);
     }
 
     private int handleNotNewVote(Vote pastVote, VoteDto voteDto) {
@@ -130,6 +169,8 @@ public class VoteServiceImpl implements VoteService {
 
         List<Vote> listOfAllUpVotesByContentID = voteRepository.getVoteByVotedContentID(votedContentID);
 
+        validateVoteList(listOfAllUpVotesByContentID);
+
         listOfAllUpVotesByContentID.removeIf(vote -> !vote.getVotedContentType().equalsIgnoreCase(votedContentType));
 
         listOfAllUpVotesByContentID.removeIf(vote -> !vote.isUpVote());
@@ -141,6 +182,8 @@ public class VoteServiceImpl implements VoteService {
     public List<VoteDto> getAllDownVotesByContentIDAndType(int votedContentID, String votedContentType) {
 
         List<Vote> listOfAllDownVotesByContentID = voteRepository.getVoteByVotedContentID(votedContentID);
+
+        validateVoteList(listOfAllDownVotesByContentID);
 
         listOfAllDownVotesByContentID.removeIf(vote -> !vote.getVotedContentType().equalsIgnoreCase(votedContentType));
 
@@ -154,6 +197,8 @@ public class VoteServiceImpl implements VoteService {
 
         List<Vote> listOfAllVotesByUserID = voteRepository.getVoteByUserID(userID);
 
+        validateVoteList(listOfAllVotesByUserID);
+
         listOfAllVotesByUserID.removeIf(vote -> !vote.isUpVote());
 
         return voteMapper.mapListOfVoteToMVoteDto(listOfAllVotesByUserID);
@@ -163,6 +208,8 @@ public class VoteServiceImpl implements VoteService {
     public List<VoteDto> getAllDownVotesByUserID(int userID) {
 
         List<Vote> listOfAllVotesByUserID = voteRepository.getVoteByUserID(userID);
+
+        validateVoteList(listOfAllVotesByUserID);
 
         listOfAllVotesByUserID.removeIf(Vote::isUpVote);
 
@@ -174,6 +221,8 @@ public class VoteServiceImpl implements VoteService {
 
         List<Vote> listOfAllVotes = voteRepository.findAll();
 
+        validateVoteList(listOfAllVotes);
+
         return voteMapper.mapListOfVoteToMVoteDto(listOfAllVotes);
     }
 
@@ -181,6 +230,8 @@ public class VoteServiceImpl implements VoteService {
     public List<VoteDto> getAllUpVotes() {
 
         List<Vote> listOfAllUpVotes = voteRepository.findAll();
+
+        validateVoteList(listOfAllUpVotes);
 
         listOfAllUpVotes.removeIf(vote -> !vote.isUpVote());
 
@@ -192,6 +243,8 @@ public class VoteServiceImpl implements VoteService {
 
         List<Vote> listOfAllDownVotes = voteRepository.findAll();
 
+        validateVoteList(listOfAllDownVotes);
+
         listOfAllDownVotes.removeIf(Vote::isUpVote);
 
         return voteMapper.mapListOfVoteToMVoteDto(listOfAllDownVotes);
@@ -199,10 +252,19 @@ public class VoteServiceImpl implements VoteService {
 
     private void isVotedContentTypeCorrect(String votedContentType) {
 
-        if (!voteContentTypeValidation.isContentTypeValid(votedContentType)) {
+        if (!voteValidation.isContentTypeValid(votedContentType)) {
             throw new InvalidInputException("Invalid, content type. Not Voted a comment or news!");
         }
     }
+
+    private void validateVoteList(List<Vote> userList) {
+
+        if (voteValidation.isVoteListEmpty(userList)) {
+
+            throw new ResourceNotFoundException("Votes not Found", "Vote");
+        }
+    }
+
 
     private Vote hasVotedBefore(int userID, int votedContentID, String contentType) {
 

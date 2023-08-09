@@ -13,17 +13,17 @@ public interface SubscribeService {
 
     int getNumberOfSubscriptionsOfUser(int userID);
 
-    SubscribeDetailedDto getSubscriptionBySubscriberIDAndSubscribedToID(int subscriberID, int subscribedToID);
+    int deleteSubscriptionsOfSubscriberID(int subscriberID);
+
+    int deleteSubscriptionsByReporterID(int reporterID);
+
+    void deleteSpecificSubscription(int subscriberID, int subscribedToID);
+
+    SubscribeDetailedDto getSubscriptionBySubscriberIDAndReporterID(int subscriberID, int reporterID);
 
     List<SubscribeDetailedDto> getAllSubscriptions();
 
     List<SubscribeDetailedDto> getSubscriptionsBySubscriberID(int subscriberID);
 
-    List<SubscribeDetailedDto> getSubscriptionsBySubscribedToID(int subscribedToID);
-
-    int deleteSubscriptionsOfSubscriberID(int subscriberID);
-
-    int deleteSubscriptionsBySubscribedToID(int subscribedToID);
-
-    void deleteSpecificSubscription(int subscriberID, int subscribedToID);
+    List<SubscribeDetailedDto> getSubscriptionsByReporterID(int reporterID);
 }

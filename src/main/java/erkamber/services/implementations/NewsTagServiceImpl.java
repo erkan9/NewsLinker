@@ -11,6 +11,7 @@ import erkamber.repositories.NewsTagRepository;
 import erkamber.services.interfaces.NewsService;
 import erkamber.services.interfaces.NewsTagService;
 import erkamber.services.interfaces.TagService;
+import erkamber.validations.NewsTagValidation;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,11 +29,16 @@ public class NewsTagServiceImpl implements NewsTagService {
 
     private final TagService tagService;
 
-    public NewsTagServiceImpl(NewsTagRepository newsTagRepository, NewsTagMapper newsTagMapper, NewsService newsService, TagService tagService) {
+    private final NewsTagValidation newsTagValidation;
+
+    public NewsTagServiceImpl(NewsTagRepository newsTagRepository, NewsTagMapper newsTagMapper, NewsService newsService,
+                              TagService tagService, NewsTagValidation newsTagValidation) {
+
         this.newsTagRepository = newsTagRepository;
         this.newsTagMapper = newsTagMapper;
         this.newsService = newsService;
         this.tagService = tagService;
+        this.newsTagValidation = newsTagValidation;
     }
 
     @Override
@@ -48,21 +54,25 @@ public class NewsTagServiceImpl implements NewsTagService {
     @Override
     public int deleteAllTagsByNewsID(int newsID) {
 
-        List<NewsTag> listOfNewsTags = newsTagRepository.findNewsTagsByNewsID(newsID);
+        List<NewsTag> listOfNewsTagsByNewsID = newsTagRepository.findNewsTagsByNewsID(newsID);
 
-        newsTagRepository.deleteAll(listOfNewsTags);
+        isNewsTagListEmpty(listOfNewsTagsByNewsID);
 
-        return listOfNewsTags.size();
+        newsTagRepository.deleteAll(listOfNewsTagsByNewsID);
+
+        return listOfNewsTagsByNewsID.size();
     }
 
     @Override
     public int deleteNewsTagByTagID(int tagID) {
 
-        List<NewsTag> listOfNewsTags = newsTagRepository.findNewsTagsByTagID(tagID);
+        List<NewsTag> listOfNewsTagsByTagID = newsTagRepository.findNewsTagsByTagID(tagID);
 
-        newsTagRepository.deleteAll(listOfNewsTags);
+        isNewsTagListEmpty(listOfNewsTagsByTagID);
 
-        return listOfNewsTags.size();
+        newsTagRepository.deleteAll(listOfNewsTagsByTagID);
+
+        return listOfNewsTagsByTagID.size();
     }
 
     @Override
@@ -90,25 +100,31 @@ public class NewsTagServiceImpl implements NewsTagService {
     @Override
     public List<NewsTagDetailedDto> getTagsOfNewsDetailed(int newsID) {
 
-        List<NewsTag> listOfNewsTag = newsTagRepository.findNewsTagsByNewsID(newsID);
+        List<NewsTag> listOfNewsTagByNewsID = newsTagRepository.findNewsTagsByNewsID(newsID);
 
-        return convertListToListOfNewsTagDetailedDto(listOfNewsTag);
+        isNewsTagListEmpty(listOfNewsTagByNewsID);
+
+        return convertListToListOfNewsTagDetailedDto(listOfNewsTagByNewsID);
     }
 
     @Override
     public List<NewsTagDto> getTagsOfNews(int newsID) {
 
-        List<NewsTag> listOfNewsTag = newsTagRepository.findNewsTagsByNewsID(newsID);
+        List<NewsTag> listOfNewsTagByNewsID = newsTagRepository.findNewsTagsByNewsID(newsID);
 
-        return newsTagMapper.mapListToNewsTagDto(listOfNewsTag);
+        isNewsTagListEmpty(listOfNewsTagByNewsID);
+
+        return newsTagMapper.mapListToNewsTagDto(listOfNewsTagByNewsID);
     }
 
     @Override
     public List<NewsTagDetailedDto> getNewsOfTag(int tagID) {
 
-        List<NewsTag> listOfNewsTag = newsTagRepository.findNewsTagsByTagID(tagID);
+        List<NewsTag> listOfNewsTagByTagID = newsTagRepository.findNewsTagsByTagID(tagID);
 
-        return convertListToListOfNewsTagDetailedDto(listOfNewsTag);
+        isNewsTagListEmpty(listOfNewsTagByTagID);
+
+        return convertListToListOfNewsTagDetailedDto(listOfNewsTagByTagID);
     }
 
     @Override
@@ -116,7 +132,17 @@ public class NewsTagServiceImpl implements NewsTagService {
 
         List<NewsTag> listOfNewsTag = newsTagRepository.findAll();
 
+        isNewsTagListEmpty(listOfNewsTag);
+
         return convertListToListOfNewsTagDetailedDto(listOfNewsTag);
+    }
+
+    private void isNewsTagListEmpty(List<NewsTag> newsTagList) {
+
+        if (newsTagValidation.isListEmpty(newsTagList)) {
+
+            throw new ResourceNotFoundException("Tags for News not Found", "NewsTag");
+        }
     }
 
     private List<NewsTagDetailedDto> convertListToListOfNewsTagDetailedDto(List<NewsTag> listOfTags) {

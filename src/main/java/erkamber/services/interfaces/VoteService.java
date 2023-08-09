@@ -8,6 +8,12 @@ public interface VoteService {
 
     int addNewVote(VoteDto voteDto);
 
+    void deleteVotesUserID(int userID);
+
+    void deleteAllVotesByContentTypeAndUserID(String votedContentType, int userID);
+
+    void deleteAllVotesByContentTypeAndVotedContentID(String votedContentType, int votedContentID);
+
     List<VoteDto> getAllUpVotesByContentIDAndType(int votedContentID, String votedContentType);
 
     List<VoteDto> getAllDownVotesByContentIDAndType(int votedContentID, String votedContentType);

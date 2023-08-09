@@ -15,7 +15,9 @@ public interface CommentService {
 
     void deleteCommentByCommentID(int commentID);
 
-    int deleteAllCommentsOfUser(int userID);
+    void deleteAllCommentsOfUser(int userID);
+
+    void deleteAllCommentsOfNewsID(int newsID);
 
     CommentDetailedDto getCommentByID(int commentID);
 

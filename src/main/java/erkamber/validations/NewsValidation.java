@@ -1,8 +1,10 @@
 package erkamber.validations;
 
 import erkamber.configurations.NewsTitlePatternConfiguration;
+import erkamber.entities.News;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Component
@@ -24,5 +26,10 @@ public class NewsValidation {
     public boolean isUserTheAuthorOfNews(int authorID, int userID) {
 
         return authorID == userID;
+    }
+
+    public boolean isListEmpty(List<News> listOfNews) {
+
+        return listOfNews == null || listOfNews.isEmpty();
     }
 }

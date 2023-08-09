@@ -59,6 +59,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void deleteUserByID(int userID) {
+
+        Optional<User> searchedUser = userRepository.findById(userID);
+
+        User userToDelete = searchedUser.orElseThrow(() ->
+                new ResourceNotFoundException("User ID not Found:" + userID, "User"));
+
+        userRepository.delete(userToDelete);
+    }
+
+    @Override
+    public void deleteUserByUserName(String userName) {
+
+        Optional<User> searchedUser = userRepository.findUserByUserName(userName);
+
+        User userToDelete = searchedUser.orElseThrow(() ->
+                new ResourceNotFoundException("User ID not Found:" + userName, "User"));
+
+        userRepository.delete(userToDelete);
+    }
+
+    @Override
     public UserDto getUserByID(int userID) {
 
         Optional<User> searchedUser = userRepository.findById(userID);
@@ -102,6 +124,8 @@ public class UserServiceImpl implements UserService {
 
         List<User> searchedUsers = userRepository.findUserByUserFirstNameAndUserLastName(firstName, lastName);
 
+        isUserListEmpty(searchedUsers);
+
         return userMapper.mapUserListToUserDto(searchedUsers);
     }
 
@@ -112,6 +136,8 @@ public class UserServiceImpl implements UserService {
 
         List<User> searchedUsersByFirstName = userRepository.findUserByUserFirstName(userFirstName);
 
+        isUserListEmpty(searchedUsersByFirstName);
+
         return userMapper.mapUserListToUserDto(searchedUsersByFirstName);
     }
 
@@ -121,6 +147,8 @@ public class UserServiceImpl implements UserService {
         isUserFirstOrLastNameValid(userLastName);
 
         List<User> searchedUsersByLastName = userRepository.findUserByUserLastName(userLastName);
+
+        isUserListEmpty(searchedUsersByLastName);
 
         return userMapper.mapUserListToUserDto(searchedUsersByLastName);
     }
@@ -147,6 +175,14 @@ public class UserServiceImpl implements UserService {
         if (!userValidation.isUserFirstOrLastNameValid(userFirstOrLastName)) {
 
             throw new InvalidInputException("Invalid Name");
+        }
+    }
+
+    private void isUserListEmpty(List<User> userList) {
+
+        if (userValidation.isListEmpty(userList)) {
+
+            throw new ResourceNotFoundException("Users not Found", "User");
         }
     }
 

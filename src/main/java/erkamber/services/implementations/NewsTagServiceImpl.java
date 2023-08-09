@@ -141,7 +141,7 @@ public class NewsTagServiceImpl implements NewsTagService {
 
         if (newsTagValidation.isListEmpty(newsTagList)) {
 
-            throw new ResourceNotFoundException("Tags for News not Found", "News");
+            throw new ResourceNotFoundException("Tags for News not Found", "NewsTag");
         }
     }
 

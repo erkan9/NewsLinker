@@ -10,6 +10,10 @@ public interface UserService {
 
     int loginUser(String userName, String userPassword);
 
+    void deleteUserByID(int userID);
+
+    void deleteUserByUserName(String userName);
+
     UserDto getUserByID(int userID);
 
     UserDto getUserByUserName(String userName);

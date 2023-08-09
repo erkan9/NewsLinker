@@ -1,10 +1,8 @@
 package erkamber.controllers;
 
-import erkamber.configurations.HttpHeadersConfiguration;
 import erkamber.dtos.UserDto;
 import erkamber.dtos.UserLoginDto;
 import erkamber.services.interfaces.UserService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +11,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -22,11 +21,8 @@ public class UserController {
 
     private final UserService userService;
 
-    private final HttpHeadersConfiguration httpHeadersConfiguration;
-
-    public UserController(UserService userService, HttpHeadersConfiguration httpHeadersConfiguration) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.httpHeadersConfiguration = httpHeadersConfiguration;
     }
 
     @PostMapping("/users/register")
@@ -34,9 +30,7 @@ public class UserController {
 
         int newUserID = userService.registerUser(userDto);
 
-        httpHeadersConfiguration.getHeaders().set("RegisteredUserID", String.valueOf(newUserID));
-
-        return new ResponseEntity<>(httpHeadersConfiguration.getHeaders(), HttpStatus.CREATED);
+        return ResponseEntity.created(URI.create("api/v1/users/register" + newUserID)).build();
     }
 
     @PostMapping(value = "/users/login")
@@ -44,9 +38,7 @@ public class UserController {
 
         int newUserID = userService.loginUser(loginDTO.getUserName(), loginDTO.getUserPassword());
 
-        httpHeadersConfiguration.getHeaders().set("LoggedUserID", String.valueOf(newUserID));
-
-        return new ResponseEntity<>(httpHeadersConfiguration.getHeaders(), HttpStatus.FOUND);
+        return ResponseEntity.created(URI.create("api/v1/users/login" + newUserID)).build();
     }
 
     @GetMapping("/users/{userId}")

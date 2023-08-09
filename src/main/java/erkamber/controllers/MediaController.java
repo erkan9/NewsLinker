@@ -1,9 +1,7 @@
 package erkamber.controllers;
 
-import erkamber.configurations.HttpHeadersConfiguration;
 import erkamber.dtos.MediaDto;
 import erkamber.services.interfaces.MediaService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -22,11 +21,8 @@ public class MediaController {
 
     private final MediaService mediaService;
 
-    private final HttpHeadersConfiguration headers;
-
-    public MediaController(MediaService mediaService, HttpHeadersConfiguration headers) {
+    public MediaController(MediaService mediaService) {
         this.mediaService = mediaService;
-        this.headers = headers;
     }
 
     @PostMapping("/medias")
@@ -34,9 +30,7 @@ public class MediaController {
 
         int newMediaDtoID = mediaService.addNewMedia(newMediaDto);
 
-        headers.getHeaders().set("NewMediaID", String.valueOf(newMediaDtoID));
-
-        return new ResponseEntity<>(headers.getHeaders(), HttpStatus.CREATED);
+        return ResponseEntity.created(URI.create("api/v1/medias/" + newMediaDtoID)).build();
     }
 
     @GetMapping("/medias")

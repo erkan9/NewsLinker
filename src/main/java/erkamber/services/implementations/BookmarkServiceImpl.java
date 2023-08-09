@@ -70,7 +70,7 @@ public class BookmarkServiceImpl implements BookmarkService {
         if (bookmarkByID.getUserID() != userId) {
             throw new ForbiddenActionException(
                     "User with ID: " + userId + " does not have permission to delete bookmark with ID: " +
-                    bookmarkByID);
+                            bookmarkByID);
         }
 
         this.bookmarkRepository.deleteById(bookmarkID);
@@ -83,5 +83,21 @@ public class BookmarkServiceImpl implements BookmarkService {
 
         this.bookmarkRepository.deleteById(bookmarkID);
         return bookmarkByID;
+    }
+
+    @Override
+    public void deleteBookmarkByUserID(int userID) {
+
+        List<Bookmark> bookmarksByUserID = bookmarkRepository.getBookmarksByUserID(userID);
+
+        bookmarkRepository.deleteAll(bookmarksByUserID);
+    }
+
+    @Override
+    public void deleteBookmarkByNewsID(int newsID) {
+
+        List<Bookmark> bookmarksByNewsID = bookmarkRepository.getBookmarksByNewsID(newsID);
+
+        bookmarkRepository.deleteAll(bookmarksByNewsID);
     }
 }

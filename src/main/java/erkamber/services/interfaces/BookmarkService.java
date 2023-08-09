@@ -17,4 +17,8 @@ public interface BookmarkService {
     BookmarkDto deleteBookmarkByIDAndUserID(int userId, int bookmarkID);
 
     BookmarkDto deleteBookmarkByID(int bookmarkID);
+
+    void deleteBookmarkByUserID(int userID);
+
+    void deleteBookmarkByNewsID(int newsID);
 }

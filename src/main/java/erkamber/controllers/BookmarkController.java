@@ -5,17 +5,11 @@ import erkamber.services.interfaces.BookmarkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
 
@@ -76,5 +70,21 @@ public class BookmarkController {
         BookmarkDto bookmarkDto = this.bookmarkService.deleteBookmarkByID(bookmarkId);
 
         return ResponseEntity.ok(bookmarkDto);
+    }
+
+    @DeleteMapping(value = "/bookmarks", params = {"newsId"})
+    public void deleteBookmarkByNewsID(@RequestParam("newsId")
+                                      @Positive(message = "News ID must be a Positive number!")
+                                      int newsID) {
+
+        this.bookmarkService.deleteBookmarkByNewsID(newsID);
+    }
+
+    @DeleteMapping(value = "/bookmarks", params = {"userId"})
+    public void deleteBookmarkByUserID(@RequestParam("userId")
+                                      @Positive(message = "User ID must be a Positive number!")
+                                      int userID) {
+
+        this.bookmarkService.deleteBookmarkByUserID(userID);
     }
 }

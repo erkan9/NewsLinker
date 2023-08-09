@@ -1,9 +1,7 @@
 package erkamber.controllers;
 
-import erkamber.configurations.HttpHeadersConfiguration;
 import erkamber.dtos.VoteDto;
 import erkamber.services.interfaces.VoteService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -22,21 +21,17 @@ public class VoteController {
 
     private final VoteService voteService;
 
-    private final HttpHeadersConfiguration httpHeadersConfiguration;
-
-    public VoteController(VoteService voteService, HttpHeadersConfiguration httpHeadersConfiguration) {
+    public VoteController(VoteService voteService) {
         this.voteService = voteService;
-        this.httpHeadersConfiguration = httpHeadersConfiguration;
     }
+
 
     @PostMapping("/votes")
     public ResponseEntity<Void> addNewVote(@Valid @RequestBody VoteDto newVoteDto) {
 
         int newVoteDtoId = voteService.addNewVote(newVoteDto);
 
-        httpHeadersConfiguration.getHeaders().set("NewVoteID", String.valueOf(newVoteDtoId));
-
-        return new ResponseEntity<>(httpHeadersConfiguration.getHeaders(), HttpStatus.OK);
+        return ResponseEntity.created(URI.create("api/v1/votes/" + newVoteDtoId)).build();
     }
 
     @GetMapping("/votes")

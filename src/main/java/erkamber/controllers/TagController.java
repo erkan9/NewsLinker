@@ -1,16 +1,15 @@
 package erkamber.controllers;
 
 
-import erkamber.configurations.HttpHeadersConfiguration;
 import erkamber.dtos.TagDto;
 import erkamber.services.interfaces.TagService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -20,11 +19,8 @@ public class TagController {
 
     private final TagService tagService;
 
-    private final HttpHeadersConfiguration httpHeadersConfiguration;
-
-    public TagController(TagService tagService, HttpHeadersConfiguration httpHeadersConfiguration) {
+    public TagController(TagService tagService) {
         this.tagService = tagService;
-        this.httpHeadersConfiguration = httpHeadersConfiguration;
     }
 
     @PostMapping("/tags")
@@ -32,9 +28,7 @@ public class TagController {
 
         int newTagID = tagService.addNewTag(newTagDto);
 
-        httpHeadersConfiguration.getHeaders().set("TagID", String.valueOf(newTagID));
-
-        return new ResponseEntity<>(httpHeadersConfiguration.getHeaders(), HttpStatus.CREATED);
+        return ResponseEntity.created(URI.create("api/v1/tags/" + newTagID)).build();
     }
 
     @GetMapping("/tags")

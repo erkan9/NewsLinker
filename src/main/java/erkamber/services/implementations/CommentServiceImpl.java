@@ -179,20 +179,25 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public int deleteAllCommentsOfUser(int userID) {
-
-        int deletedCommentsCounter = 0;
+    public void deleteAllCommentsOfUser(int userID) {
 
         List<Comment> listOfCommentsByUser = commentRepository.findCommentsByCommentAuthorID(userID);
 
         for (Comment comment : listOfCommentsByUser) {
 
             commentRepository.deleteById(comment.getCommentID());
-
-            deletedCommentsCounter++;
         }
+    }
 
-        return deletedCommentsCounter;
+    @Override
+    public void deleteAllCommentsOfNewsID(int newsID) {
+
+        List<Comment> listOfCommentsByNews = commentRepository.findCommentsByCommentNewsID(newsID);
+
+        for (Comment comment : listOfCommentsByNews) {
+
+            commentRepository.deleteById(comment.getCommentID());
+        }
     }
 
     @Override

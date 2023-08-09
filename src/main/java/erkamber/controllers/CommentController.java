@@ -115,4 +115,12 @@ public class CommentController {
 
         commentService.deleteAllCommentsOfUser(UserID);
     }
+
+    @DeleteMapping(value = "/comments", params = {"newsId"})
+    public void deleteCommentByNewsID(@RequestParam("newsId")
+                                      @Positive(message = "News ID must be a Positive number!")
+                                      int newsID) {
+
+        commentService.deleteAllCommentsOfNewsID(newsID);
+    }
 }

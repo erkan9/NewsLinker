@@ -16,10 +16,6 @@ public interface NewsService {
 
     int addNews(NewsDto newsDto);
 
-    void updateNewsContent(String content, int newsID, int userID);
-
-    void updateNewsTitle(String title, int newsID, int userID);
-
     List<NewsDetailedDto> getAllNews();
 
     List<NewsDetailedDto> findNewsByUserID(int userID);
@@ -29,4 +25,12 @@ public interface NewsService {
     List<NewsDetailedDto> findNewsByCreationDateBefore(LocalDate beforeDate);
 
     List<NewsDetailedDto> findNewsByCreationDateAfter(LocalDate afterDate);
+
+    void updateNewsContent(String content, int newsID, int userID);
+
+    void updateNewsTitle(String title, int newsID, int userID);
+
+    void deleteNewsByID(int newsID);
+
+    void deleteNewsByAuthorID(int authorID);
 }

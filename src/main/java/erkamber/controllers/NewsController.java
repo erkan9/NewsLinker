@@ -128,4 +128,20 @@ public class NewsController {
 
         newsService.updateNewsTitle(title, newsID, userID);
     }
+
+    @DeleteMapping(value = "/news", params = {"userId"})
+    public void deleteNewsByAuthorID(@RequestParam("userId")
+                                     @Positive(message = "Author ID must be a Positive number!")
+                                     int authorID) {
+
+        newsService.deleteNewsByAuthorID(authorID);
+    }
+
+    @DeleteMapping(value = "/news", params = {"newsId"})
+    public void deleteNewsByNewsID(@RequestParam("newsId")
+                                   @Positive(message = "News ID must be a Positive number!")
+                                   int newsID) {
+
+        newsService.deleteNewsByID(newsID);
+    }
 }

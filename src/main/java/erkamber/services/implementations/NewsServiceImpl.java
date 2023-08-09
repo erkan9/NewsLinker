@@ -176,9 +176,34 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
+    public void deleteNewsByID(int newsID) {
+
+        Optional<News> searchedNewsOptional = newsRepository.findById(newsID);
+
+        News searchedNews = searchedNewsOptional.orElseThrow(() ->
+                new ResourceNotFoundException("News not Found: " + newsID, "News"));
+
+        newsRepository.delete(searchedNews);
+    }
+
+    @Override
+    public void deleteNewsByAuthorID(int authorID) {
+
+        isUserExists(authorID);
+
+        List<News> newsListOfAuthor = newsRepository.findNewsByUserID(authorID);
+
+        isListOfNewsEmpty(newsListOfAuthor);
+
+        newsRepository.deleteAll(newsListOfAuthor);
+    }
+
+    @Override
     public List<NewsDetailedDto> getAllNews() {
 
         List<News> listOfAllNews = newsRepository.findAll();
+
+        isListOfNewsEmpty(listOfAllNews);
 
         return convertListToNewsDetailedDto(listOfAllNews);
     }
@@ -189,6 +214,8 @@ public class NewsServiceImpl implements NewsService {
         isUserExists(userID);
 
         List<News> listOfNewsByUser = newsRepository.findNewsByUserID(userID);
+
+        isListOfNewsEmpty(listOfNewsByUser);
 
         return convertListToNewsDetailedDto(listOfNewsByUser);
     }
@@ -202,6 +229,8 @@ public class NewsServiceImpl implements NewsService {
 
         List<News> listOfNewsByTitle = newsRepository.findNewsByNewsTitle(newsTitle);
 
+        isListOfNewsEmpty(listOfNewsByTitle);
+
         return convertListToNewsDetailedDto(listOfNewsByTitle);
     }
 
@@ -210,6 +239,8 @@ public class NewsServiceImpl implements NewsService {
 
         List<News> listOfNewsByCreationDateBefore = newsRepository.findNewsByNewsCreationDateBefore(beforeDate);
 
+        isListOfNewsEmpty(listOfNewsByCreationDateBefore);
+
         return convertListToNewsDetailedDto(listOfNewsByCreationDateBefore);
     }
 
@@ -217,6 +248,8 @@ public class NewsServiceImpl implements NewsService {
     public List<NewsDetailedDto> findNewsByCreationDateAfter(LocalDate afterDate) {
 
         List<News> listOfNewsByCreationDateAfter = newsRepository.findNewsByNewsCreationDateAfter(afterDate);
+
+        isListOfNewsEmpty(listOfNewsByCreationDateAfter);
 
         return convertListToNewsDetailedDto(listOfNewsByCreationDateAfter);
     }
@@ -241,6 +274,14 @@ public class NewsServiceImpl implements NewsService {
 
         return newsOfComment.orElseThrow(() ->
                 new ResourceNotFoundException("News not Found:" + newsID, "News"));
+    }
+
+    private void isListOfNewsEmpty(List<News> listOfNews) {
+
+        if (newsValidation.isListEmpty(listOfNews)) {
+
+            throw new ResourceNotFoundException("No News Found", "News");
+        }
     }
 
     private void isUserTheAuthorOfNews(News news, int userID) {

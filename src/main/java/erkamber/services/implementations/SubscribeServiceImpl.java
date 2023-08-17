@@ -37,6 +37,13 @@ public class SubscribeServiceImpl implements SubscribeService {
         this.userMapper = userMapper;
     }
 
+    /**
+     * Adds a new subscription to a user reporter.
+     *
+     * @param newSubscribeDto The {@link SubscribeDto} containing subscription details.
+     * @return The ID of the newly added subscription.
+     * @throws NotReporterException If the user being subscribed to is not a reporter.
+     */
     @Override
     public int addNewSubscription(SubscribeDto newSubscribeDto) {
 
@@ -49,6 +56,13 @@ public class SubscribeServiceImpl implements SubscribeService {
         return subscribe.getSubscribeID();
     }
 
+    /**
+     * Retrieves the number of subscribers for a user reporter.
+     *
+     * @param reporterID The ID of the user reporter.
+     * @return The number of subscribers.
+     * @throws NotReporterException If the user being subscribed to is not a reporter.
+     */
     @Override
     public int getNumberOfSubscribersOfReporter(int reporterID) {
 
@@ -59,6 +73,12 @@ public class SubscribeServiceImpl implements SubscribeService {
         return subscribersOfReporter.size();
     }
 
+    /**
+     * Retrieves the number of subscriptions for a user.
+     *
+     * @param userID The ID of the user.
+     * @return The number of subscriptions.
+     */
     @Override
     public int getNumberOfSubscriptionsOfUser(int userID) {
 
@@ -67,6 +87,15 @@ public class SubscribeServiceImpl implements SubscribeService {
         return subscriptionsOfUser.size();
     }
 
+    /**
+     * Retrieves a detailed subscription by subscriber ID and reporter ID.
+     *
+     * @param subscriberID The ID of the subscriber.
+     * @param reporterID   The ID of the reporter.
+     * @return The detailed subscription DTO.
+     * @throws ResourceNotFoundException If the subscription is not found.
+     * @throws NotReporterException      If the user being subscribed to is not a reporter.
+     */
     @Override
     public SubscribeDetailedDto getSubscriptionBySubscriberIDAndReporterID(int subscriberID, int reporterID) {
 
@@ -84,6 +113,12 @@ public class SubscribeServiceImpl implements SubscribeService {
         return subscribeMapper.mapToSubscribeDetailedDto(searchedSubscription.getSubscribeID(), subscriberUser, subscribedToUser);
     }
 
+    /**
+     * Retrieves a list of all detailed subscriptions.
+     *
+     * @return A list of {@link SubscribeDetailedDto} objects representing the detailed subscriptions.
+     * @throws NotReporterException If a user being subscribed to is not a reporter.
+     */
     @Override
     public List<SubscribeDetailedDto> getAllSubscriptions() {
 
@@ -92,6 +127,12 @@ public class SubscribeServiceImpl implements SubscribeService {
         return convertListOfSubscribeToSubscribeDetailedDto(listOfAllSubscriptions);
     }
 
+    /**
+     * Retrieves a list of detailed subscriptions for a subscriber user.
+     *
+     * @param subscriberID The ID of the subscriber user.
+     * @return A list of {@link SubscribeDetailedDto} objects representing the detailed subscriptions.
+     */
     @Override
     public List<SubscribeDetailedDto> getSubscriptionsBySubscriberID(int subscriberID) {
 
@@ -100,6 +141,13 @@ public class SubscribeServiceImpl implements SubscribeService {
         return convertListOfSubscribeToSubscribeDetailedDto(subscriptionsOfUser);
     }
 
+    /**
+     * Retrieves a list of detailed subscriptions for a reporter user.
+     *
+     * @param reporterID The ID of the reporter user.
+     * @return A list of {@link SubscribeDetailedDto} objects representing the detailed subscriptions.
+     * @throws NotReporterException If the reporter user is not a reporter.
+     */
     @Override
     public List<SubscribeDetailedDto> getSubscriptionsByReporterID(int reporterID) {
 
@@ -110,6 +158,12 @@ public class SubscribeServiceImpl implements SubscribeService {
         return convertListOfSubscribeToSubscribeDetailedDto(subscribersOfReporter);
     }
 
+    /**
+     * Deletes all subscriptions of a subscriber user.
+     *
+     * @param subscriberID The ID of the subscriber user.
+     * @return The number of subscriptions deleted.
+     */
     @Override
     public int deleteSubscriptionsOfSubscriberID(int subscriberID) {
 
@@ -120,6 +174,13 @@ public class SubscribeServiceImpl implements SubscribeService {
         return subscriptionsOfUser.size();
     }
 
+    /**
+     * Deletes all subscriptions of a reporter
+     *
+     * @param reporterID The ID of the reporter user.
+     * @return The number of subscriptions deleted.
+     * @throws NotReporterException If the reporter user is not a reporter.
+     */
     @Override
     public int deleteSubscriptionsByReporterID(int reporterID) {
 
@@ -132,6 +193,14 @@ public class SubscribeServiceImpl implements SubscribeService {
         return subscribersOfReporter.size();
     }
 
+    /**
+     * Deletes a specific subscription.
+     *
+     * @param subscriberID   The ID of the subscriber.
+     * @param subscribedToID The ID of the user being subscribed to.
+     * @throws NotReporterException      If the user being subscribed to is not a reporter.
+     * @throws ResourceNotFoundException If the subscription is not found.
+     */
     @Override
     public void deleteSpecificSubscription(int subscriberID, int subscribedToID) {
 
@@ -155,6 +224,13 @@ public class SubscribeServiceImpl implements SubscribeService {
         }
     }
 
+    /**
+     * Retrieves a {@link UserDto} object from a given user ID.
+     *
+     * @param userID The ID of the user.
+     * @return The {@link UserDto} representing the user.
+     * @throws ResourceNotFoundException If the user with the given ID is not found.
+     */
     private UserDto getUserDtoObjectFromUserID(int userID) {
 
         Optional<User> user = userRepository.findById(userID);
@@ -165,6 +241,12 @@ public class SubscribeServiceImpl implements SubscribeService {
         return userMapper.mapUserToUserDto(searchedUser);
     }
 
+    /**
+     * Converts a list of {@link Subscribe} objects to a list of {@link SubscribeDetailedDto} objects.
+     *
+     * @param listOfSubscriptions The list of {@link Subscribe} objects to convert.
+     * @return The list of {@link SubscribeDetailedDto} objects.
+     */
     private List<SubscribeDetailedDto> convertListOfSubscribeToSubscribeDetailedDto(List<Subscribe> listOfSubscriptions) {
 
         List<SubscribeDetailedDto> listOfAllSubscribeDetailedDto = new ArrayList<>();

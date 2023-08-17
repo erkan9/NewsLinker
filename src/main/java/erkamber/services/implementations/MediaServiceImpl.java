@@ -23,7 +23,12 @@ public class MediaServiceImpl implements MediaService {
         this.mediaMapper = mediaMapper;
     }
 
-
+    /**
+     * Adds a new media resource based on the provided MediaDto.
+     *
+     * @param mediaDto The MediaDto containing information about the new media resource.
+     * @return The ID of the newly added media resource.
+     */
     @Override
     public int addNewMedia(MediaDto mediaDto) {
 
@@ -35,6 +40,12 @@ public class MediaServiceImpl implements MediaService {
 
     }
 
+    /**
+     * Deletes a media resource based on the specified media ID.
+     *
+     * @param mediaID The ID of the media resource to be deleted.
+     * @throws ResourceNotFoundException If the media resource with the provided ID is not found.
+     */
     @Override
     public void deleteMediaByMediaID(int mediaID) {
 
@@ -46,6 +57,11 @@ public class MediaServiceImpl implements MediaService {
         mediaRepository.delete(searchedMediaObject);
     }
 
+    /**
+     * Deletes all media resources associated with a specific news article based on the provided news article ID.
+     *
+     * @param newsID The ID of the news article whose associated media resources are to be deleted.
+     */
     @Override
     public void deleteMediasByNewsID(int newsID) {
 
@@ -54,6 +70,13 @@ public class MediaServiceImpl implements MediaService {
         mediaRepository.deleteAll(mediasOfNews);
     }
 
+    /**
+     * Retrieves a media resource based on the specified media string.
+     *
+     * @param mediaString The media string to search for.
+     * @return A {@link MediaDto} object representing the media resource.
+     * @throws ResourceNotFoundException If the media resource with the provided string is not found.
+     */
     @Override
     public MediaDto findMediaByString(String mediaString) {
 
@@ -65,6 +88,13 @@ public class MediaServiceImpl implements MediaService {
         return mediaMapper.mapMediaToMediaDto(searchedMediaObject);
     }
 
+    /**
+     * Retrieves a media resource based on the specified media ID.
+     *
+     * @param mediaID The ID of the media resource to be retrieved.
+     * @return A {@link MediaDto} object representing the media resource.
+     * @throws ResourceNotFoundException If the media resource with the provided ID is not found.
+     */
     @Override
     public MediaDto findMediaByMediaID(int mediaID) {
 
@@ -76,6 +106,12 @@ public class MediaServiceImpl implements MediaService {
         return mediaMapper.mapMediaToMediaDto(searchedMediaObject);
     }
 
+    /**
+     * Retrieves a list of media resources associated with a specific news article based on the provided news article ID.
+     *
+     * @param newsID The ID of the news article whose associated media resources are to be retrieved.
+     * @return A list of {@link MediaDto} objects representing the media resources associated with the news article.
+     */
     @Override
     public List<MediaDto> findMediaByNewsID(int newsID) {
 
@@ -84,6 +120,11 @@ public class MediaServiceImpl implements MediaService {
         return mediaMapper.mapListOfMediaToMediaDto(searchedMediaByNewsID);
     }
 
+    /**
+     * Retrieves a list of all media resources.
+     *
+     * @return A list of {@link MediaDto} objects representing all media resources.
+     */
     @Override
     public List<MediaDto> getAllMedias() {
 

@@ -59,8 +59,10 @@ public class NewsServiceImpl implements NewsService {
 
     public NewsServiceImpl(NewsRepository newsRepository, NewsMapper newsMapper, NewsValidation newsValidation,
                            UserService userService, NewsTagRepository newsTagRepository, MediaService mediaService,
-                           CommentService commentService, VoteRepository voteRepository, VoteMapper voteMapper, TagService tagService, UserValidation userValidation,
-                           UserRepository userRepository, ViewService viewService, ViewRepository viewRepository, InjectionValidation injectionValidation, JsonObjectConfiguration jsonObjectConfiguration) {
+                           CommentService commentService, VoteRepository voteRepository, VoteMapper voteMapper,
+                           TagService tagService, UserValidation userValidation, UserRepository userRepository,
+                           ViewService viewService, ViewRepository viewRepository, InjectionValidation injectionValidation,
+                           JsonObjectConfiguration jsonObjectConfiguration) {
 
         this.newsRepository = newsRepository;
         this.newsMapper = newsMapper;
@@ -80,6 +82,13 @@ public class NewsServiceImpl implements NewsService {
         this.jsonObjectConfiguration = jsonObjectConfiguration;
     }
 
+    /**
+     * Retrieves basic information about a news article by its ID.
+     *
+     * @param newsID The ID of the news article to retrieve information for.
+     * @return A DTO containing basic information about the requested news article.
+     * @throws ResourceNotFoundException If the news article with the specified ID is not found.
+     */
     @Override
     public NewsDto getNewsByNewsID(int newsID) {
 
@@ -91,12 +100,27 @@ public class NewsServiceImpl implements NewsService {
         return newsMapper.mapNewsToNewsDto(searchedNews);
     }
 
+    /**
+     * Retrieves detailed information about a news article by its ID.
+     *
+     * @param newsID The ID of the news article to retrieve detailed information for.
+     * @return A detailed DTO containing information about the requested news article.
+     * @throws ResourceNotFoundException If the news article with the specified ID is not found.
+     */
     @Override
     public NewsDetailedDto getNewsDetailedByNewsID(int newsID) {
 
         return gatherDataForNewsDetailedDtoByNewsID(newsID);
     }
 
+    /**
+     * Retrieves detailed information about a news article for a logged-in user.
+     *
+     * @param newsID The ID of the news article to retrieve.
+     * @param userID The ID of the logged-in user.
+     * @return A detailed DTO containing information about the requested news article.
+     * @throws ResourceNotFoundException If the news article with the specified ID is not found, or if the user does not exist.
+     */
     @Override
     public NewsDetailedDto getNewsAsLoggedUser(int newsID, int userID) {
 
@@ -114,6 +138,15 @@ public class NewsServiceImpl implements NewsService {
         return gatherDataForNewsDetailedDtoByNewsID(newsID);
     }
 
+    /**
+     * Adds a new news article.
+     *
+     * @param newsDto The data transfer object containing information about the news article.
+     * @return The ID of the newly added news article.
+     * @throws InvalidInputException     If the provided news title or content is invalid.
+     * @throws ResourceNotFoundException If the user with the specified ID does not exist.
+     * @throws TextInjectionException    If the provided content contains potential SQL or general code injection.
+     */
     @Override
     public int addNews(NewsDto newsDto) {
 
@@ -132,6 +165,17 @@ public class NewsServiceImpl implements NewsService {
         return news.getNewsID();
     }
 
+    /**
+     * Updates the content of a news article.
+     *
+     * @param content The new content to be set for the news article.
+     * @param newsID  The ID of the news article to be updated.
+     * @param userID  The ID of the user requesting the update.
+     * @throws InvalidInputException     If the provided content is invalid.
+     * @throws ResourceNotFoundException If the news article with the specified ID is not found, or if the user does not exist.
+     * @throws InvalidInputException     If the requesting user is not the author of the news article.
+     * @throws TextInjectionException    If the provided content contains potential SQL or general code injection.
+     */
     @Override
     public void updateNewsContent(String content, int newsID, int userID) {
 
@@ -154,6 +198,15 @@ public class NewsServiceImpl implements NewsService {
 
     }
 
+    /**
+     * Updates the title of a news article.
+     *
+     * @param title  The new title for the news article.
+     * @param newsID The ID of the news article to be updated.
+     * @param userID The ID of the user requesting the update.
+     * @throws ResourceNotFoundException If the news article or user is not found.
+     * @throws InvalidInputException     If the provided title is invalid.
+     */
     @Override
     public void updateNewsTitle(String title, int newsID, int userID) {
 
@@ -175,6 +228,12 @@ public class NewsServiceImpl implements NewsService {
         newsRepository.save(searchedNews);
     }
 
+    /**
+     * Deletes a news article by its ID.
+     *
+     * @param newsID The ID of the news article to be deleted.
+     * @throws ResourceNotFoundException If the news article is not found.
+     */
     @Override
     public void deleteNewsByID(int newsID) {
 
@@ -186,6 +245,12 @@ public class NewsServiceImpl implements NewsService {
         newsRepository.delete(searchedNews);
     }
 
+    /**
+     * Deletes all news articles authored by a specific user.
+     *
+     * @param authorID The ID of the author whose news articles will be deleted.
+     * @throws ResourceNotFoundException If the user or their news articles are not found.
+     */
     @Override
     public void deleteNewsByAuthorID(int authorID) {
 
@@ -198,6 +263,12 @@ public class NewsServiceImpl implements NewsService {
         newsRepository.deleteAll(newsListOfAuthor);
     }
 
+    /**
+     * Retrieves a list of detailed NewsDtos representing all news articles.
+     *
+     * @return A list of NewsDetailedDtos representing all news articles.
+     * @throws ResourceNotFoundException If there are no news articles.
+     */
     @Override
     public List<NewsDetailedDto> getAllNews() {
 
@@ -208,6 +279,13 @@ public class NewsServiceImpl implements NewsService {
         return convertListToNewsDetailedDto(listOfAllNews);
     }
 
+    /**
+     * Retrieves a list of detailed NewsDtos representing news articles authored by a specific user.
+     *
+     * @param userID The ID of the user whose authored news articles will be retrieved.
+     * @return A list of NewsDetailedDtos representing news articles authored by the specified user.
+     * @throws ResourceNotFoundException If the user or their news articles are not found.
+     */
     @Override
     public List<NewsDetailedDto> findNewsByUserID(int userID) {
 
@@ -220,6 +298,14 @@ public class NewsServiceImpl implements NewsService {
         return convertListToNewsDetailedDto(listOfNewsByUser);
     }
 
+    /**
+     * Retrieves a list of detailed NewsDtos representing news articles with a specific title.
+     *
+     * @param newsTitle The title of the news articles to be retrieved.
+     * @return A list of NewsDetailedDtos representing news articles with the specified title.
+     * @throws ResourceNotFoundException If news articles with the specified title are not found.
+     * @throws InvalidInputException     If the provided news title is invalid.
+     */
     @Override
     public List<NewsDetailedDto> findNewsByNewsTitle(String newsTitle) {
 
@@ -234,6 +320,13 @@ public class NewsServiceImpl implements NewsService {
         return convertListToNewsDetailedDto(listOfNewsByTitle);
     }
 
+    /**
+     * Retrieves a list of detailed NewsDtos representing news articles created before a specified date.
+     *
+     * @param beforeDate The date before which the news articles were created.
+     * @return A list of NewsDetailedDtos representing news articles created before the specified date.
+     * @throws ResourceNotFoundException If news articles created before the specified date are not found.
+     */
     @Override
     public List<NewsDetailedDto> findNewsByCreationDateBefore(LocalDate beforeDate) {
 
@@ -244,6 +337,13 @@ public class NewsServiceImpl implements NewsService {
         return convertListToNewsDetailedDto(listOfNewsByCreationDateBefore);
     }
 
+    /**
+     * Retrieves a list of detailed NewsDtos representing news articles created after a specified date.
+     *
+     * @param afterDate The date after which the news articles were created.
+     * @return A list of NewsDetailedDtos representing news articles created after the specified date.
+     * @throws ResourceNotFoundException If news articles created after the specified date are not found.
+     */
     @Override
     public List<NewsDetailedDto> findNewsByCreationDateAfter(LocalDate afterDate) {
 
@@ -254,6 +354,12 @@ public class NewsServiceImpl implements NewsService {
         return convertListToNewsDetailedDto(listOfNewsByCreationDateAfter);
     }
 
+    /**
+     * Converts a list of News objects to a list of detailed NewsDetailedDto objects.
+     *
+     * @param listOfNews The list of News objects to be converted.
+     * @return A list of NewsDetailedDto objects representing the detailed information of news articles.
+     */
     private List<NewsDetailedDto> convertListToNewsDetailedDto(List<News> listOfNews) {
 
         List<NewsDetailedDto> listOfNewsDetailedDtoList = new ArrayList<>();
@@ -276,6 +382,12 @@ public class NewsServiceImpl implements NewsService {
                 new ResourceNotFoundException("News not Found:" + newsID, "News"));
     }
 
+    /**
+     * Validates whether a list of news articles is empty or not.
+     *
+     * @param listOfNews The list of news articles to be validated.
+     * @throws ResourceNotFoundException If the list of news articles is empty.
+     */
     private void isListOfNewsEmpty(List<News> listOfNews) {
 
         if (newsValidation.isListEmpty(listOfNews)) {
@@ -284,6 +396,13 @@ public class NewsServiceImpl implements NewsService {
         }
     }
 
+    /**
+     * Validates whether a user is the author of a specific news article.
+     *
+     * @param news   The news article for which the authorship will be validated.
+     * @param userID The ID of the user to be validated as the author.
+     * @throws InvalidInputException If the provided user is not the author of the news article.
+     */
     private void isUserTheAuthorOfNews(News news, int userID) {
 
         if (!newsValidation.isUserTheAuthorOfNews(news.getUserID(), userID)) {
@@ -292,35 +411,53 @@ public class NewsServiceImpl implements NewsService {
         }
     }
 
+    /**
+     * Gathers data to create a detailed NewsDetailedDto for a specific news article by its ID.
+     *
+     * @param newsID The ID of the news article for which detailed data will be gathered.
+     * @return A NewsDetailedDto containing detailed information about the specified news article.
+     * @throws ResourceNotFoundException If the news article or related data is not found.
+     */
     private NewsDetailedDto gatherDataForNewsDetailedDtoByNewsID(int newsID) {
 
+        // Retrieve the news article by its ID
         Optional<News> searchedNewsOptional = newsRepository.findById(newsID);
-
         News searchedNews = searchedNewsOptional.orElseThrow(() ->
                 new ResourceNotFoundException("News not Found: " + newsID, "News"));
 
+        // Retrieve the user data of the news article's author
         UserDto userDto = userService.getUserByID(searchedNews.getUserID());
 
+        // Retrieve the tags associated with the news article
         List<TagDto> listOfTags = getTagsOfNews(newsID);
 
+        // Retrieve the media files associated with the news article
         List<MediaDto> listOfMediasForNews = mediaService.findMediaByNewsID(newsID);
 
+        // Retrieve the comments associated with the news article
         List<CommentDetailedDto> listOfCommentsForNews = commentService.getCommentsByNewsID(newsID);
 
+        // Retrieve the upvotes and downvotes for the news article
         List<Vote> listOfUpVotesForNews = voteRepository.getVoteByIsUpVoteAndVotedContentIDAndVotedContentType(true, newsID, VoteTypeNews.NEWS.getType());
-
         List<VoteDto> listOfUpVotesDto = voteMapper.mapListOfVoteToMVoteDto(listOfUpVotesForNews);
 
         List<Vote> listOfDownVotesForNews = voteRepository.getVoteByIsUpVoteAndVotedContentIDAndVotedContentType(false, newsID, VoteTypeNews.NEWS.getType());
-
         List<VoteDto> listOfDownVotesDto = voteMapper.mapListOfVoteToMVoteDto(listOfDownVotesForNews);
 
+        // Retrieve the number of views for the news article
         int numberOfViews = viewService.getNumberOfViewsOfNews(newsID);
 
+        // Map the gathered data to create a detailed NewsDetailedDto
         return newsMapper.mapToNewsDtoDetailed(newsMapper.mapNewsToNewsDto(searchedNews), userDto, numberOfViews, listOfTags,
                 listOfMediasForNews, listOfCommentsForNews, listOfUpVotesDto, listOfDownVotesDto);
     }
 
+    /**
+     * Retrieves a list of TagDto objects representing the tags associated with a specific news article.
+     *
+     * @param newsID The ID of the news article for which tags will be retrieved.
+     * @return A list of TagDto objects representing the tags associated with the specified news article.
+     */
     private List<TagDto> getTagsOfNews(int newsID) {
 
         List<NewsTag> listOfTagsForNews = newsTagRepository.findNewsTagsByNewsID(newsID);
@@ -339,6 +476,12 @@ public class NewsServiceImpl implements NewsService {
         return listOfTags;
     }
 
+    /**
+     * Validates whether a user with the specified user ID exists.
+     *
+     * @param userID The ID of the user to be validated for existence.
+     * @throws InvalidInputException If the user with the specified user ID does not exist.
+     */
     private void isUserExists(int userID) {
 
         List<User> allUsers = userRepository.findAll();
@@ -349,6 +492,12 @@ public class NewsServiceImpl implements NewsService {
         }
     }
 
+    /**
+     * Validates whether the provided text contains potential SQL or general code injection.
+     *
+     * @param text The text to be validated for injection.
+     * @throws TextInjectionException If the text contains potential SQL or code injection.
+     */
     private void validateTextForInjection(String text) {
 
         if (injectionValidation.isTextContainingSqlInjection(text)) {
@@ -361,6 +510,13 @@ public class NewsServiceImpl implements NewsService {
         }
     }
 
+    /**
+     * Updates the vote count of a news article by swapping votes.
+     *
+     * @param newsID   The ID of the news article for which votes will be swapped.
+     * @param isUpVote A boolean indicating whether the vote to be swapped is an upvote or not.
+     * @throws ResourceNotFoundException If the news article with the specified ID is not found.
+     */
     protected void updateNewsVoteBySwappingVotes(int newsID, boolean isUpVote) {
 
         Optional<News> searchedNewsOptional = newsRepository.findById(newsID);
@@ -372,6 +528,7 @@ public class NewsServiceImpl implements NewsService {
 
         int numberOfDownVotes = searchedNews.getNewsDownVotes();
 
+        // Update the vote counts based on the vote being swapped
         if (isUpVote) {
 
             searchedNews.setNewsUpVotes(numberOfUpVotes + 1);
@@ -387,6 +544,12 @@ public class NewsServiceImpl implements NewsService {
         newsRepository.save(searchedNews);
     }
 
+    /**
+     * Adds a new upvote to a news article.
+     *
+     * @param newsID The ID of the news article to which a new upvote will be added.
+     * @throws ResourceNotFoundException If the news article with the specified ID is not found.
+     */
     protected void addNewsNewUpVote(int newsID) {
 
         Optional<News> searchedNewsOptional = newsRepository.findById(newsID);
@@ -401,6 +564,12 @@ public class NewsServiceImpl implements NewsService {
         newsRepository.save(searchedNews);
     }
 
+    /**
+     * Adds a new downvote to a news article.
+     *
+     * @param newsID The ID of the news article to which a new downvote will be added.
+     * @throws ResourceNotFoundException If the news article with the specified ID is not found.
+     */
     protected void addNewsNewDownVote(int newsID) {
 
         Optional<News> searchedNewsOptional = newsRepository.findById(newsID);
@@ -415,6 +584,13 @@ public class NewsServiceImpl implements NewsService {
         newsRepository.save(searchedNews);
     }
 
+    /**
+     * Updates the vote count of a news article by removing a vote.
+     *
+     * @param newsID   The ID of the news article for which a vote will be removed.
+     * @param isUpVote A boolean indicating whether the vote to be removed is an upvote or not.
+     * @throws ResourceNotFoundException If the news article with the specified ID is not found.
+     */
     protected void updateNewsVoteByRemovingVote(int newsID, boolean isUpVote) {
 
         Optional<News> searchedNewsOptional = newsRepository.findById(newsID);
@@ -438,6 +614,12 @@ public class NewsServiceImpl implements NewsService {
         newsRepository.save(searchedNews);
     }
 
+    /**
+     * Validates whether the provided news title is valid.
+     *
+     * @param title The news title to be validated.
+     * @throws InvalidInputException If the provided news title is invalid.
+     */
     private void validateNewsTitle(String title) {
 
         if (!newsValidation.isNewsTitleValid(title)) {

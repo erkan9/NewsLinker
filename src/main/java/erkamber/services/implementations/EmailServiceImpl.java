@@ -22,9 +22,21 @@ public class EmailServiceImpl implements EmailService {
         this.templateEngine = templateEngine;
     }
 
+    /**
+     * Sends an email notification to a specified recipient regarding a new comment left on a post.
+     *
+     * @param newsAuthorName   The name of the news article's author.
+     * @param commentAuthorName The name of the comment's author.
+     * @param comment          The content of the comment.
+     * @param authorEmail      The email address of the recipient.
+     * @param postTitle        The title of the news article or post.
+     * @throws MessagingException If an error occurs while sending the email.
+     */
     @Override
-    public void sendEmail(String newsAuthorName, String commentAuthorName, String comment, String authorEmail, String postTitle) throws MessagingException {
+    public void sendEmail(String newsAuthorName, String commentAuthorName, String comment, String authorEmail, String postTitle)
+            throws MessagingException {
 
+        // Prepare the email content using a template engine
         Context context = new Context();
         context.setVariable("newsAuthorName", newsAuthorName);
         context.setVariable("commentAuthorName", commentAuthorName);
@@ -33,7 +45,7 @@ public class EmailServiceImpl implements EmailService {
 
         String process = templateEngine.process("/email", context);
 
-
+        // Create and send the email message
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper;
         helper = new MimeMessageHelper(message, true);

@@ -43,6 +43,12 @@ public class ViewServiceImpl implements ViewService {
         this.newsMapper = newsMapper;
     }
 
+    /**
+     * Deletes a View based on its ID.
+     *
+     * @param viewID The ID of the View to be deleted.
+     * @throws ResourceNotFoundException If the View with the specified ID is not found.
+     */
     @Override
     public void deleteViewsByViewID(int viewID) {
 
@@ -52,6 +58,11 @@ public class ViewServiceImpl implements ViewService {
         viewRepository.deleteById(viewID);
     }
 
+    /**
+     * Deletes all Views associated with a specific user ID.
+     *
+     * @param userID The ID of the user whose Views will be deleted.
+     */
     @Override
     public void deleteViewsByUserID(int userID) {
 
@@ -60,6 +71,11 @@ public class ViewServiceImpl implements ViewService {
         viewRepository.deleteAll(viewsByUserID);
     }
 
+    /**
+     * Deletes all Views associated with a specific news article ID.
+     *
+     * @param newsID The ID of the news article whose associated Views will be deleted.
+     */
     @Override
     public void deleteViewsByNewsID(int newsID) {
 
@@ -68,6 +84,12 @@ public class ViewServiceImpl implements ViewService {
         viewRepository.deleteAll(viewsByNewsID);
     }
 
+    /**
+     * Adds a new View based on the information provided in the ViewDto.
+     *
+     * @param viewDto The ViewDto containing the information for the new View.
+     * @return The ID of the newly added View.
+     */
     @Override
     public int addNewView(ViewDto viewDto) {
 
@@ -80,6 +102,12 @@ public class ViewServiceImpl implements ViewService {
         return newView.getViewID();
     }
 
+    /**
+     * Retrieves the number of Views associated with a specific news article ID.
+     *
+     * @param newsID The ID of the news article for which the number of Views will be retrieved.
+     * @return The number of Views associated with the specified news article.
+     */
     @Override
     public int getNumberOfViewsOfNews(int newsID) {
 
@@ -88,6 +116,13 @@ public class ViewServiceImpl implements ViewService {
         return viewsByNewsID.size();
     }
 
+    /**
+     * Retrieves a detailed representation of a View based on its ID.
+     *
+     * @param viewID The ID of the View to be retrieved.
+     * @return A detailed DTO (Data Transfer Object) representation of the requested View.
+     * @throws ResourceNotFoundException If the View with the specified ID is not found.
+     */
     @Override
     public ViewDetailedDto getViewByID(int viewID) {
 
@@ -97,6 +132,11 @@ public class ViewServiceImpl implements ViewService {
         return fetchViewDetailedDtoData(view);
     }
 
+    /**
+     * Retrieves a list of detailed DTOs (Data Transfer Objects) representing all Views.
+     *
+     * @return A list of detailed DTOs representing all Views.
+     */
     @Override
     public List<ViewDetailedDto> getAllViews() {
 
@@ -105,6 +145,12 @@ public class ViewServiceImpl implements ViewService {
         return convertListOfViewToViewDetailedDto(listOfAllViews);
     }
 
+    /**
+     * Retrieves a list of detailed DTOs (Data Transfer Objects) representing Views associated with a specific news article ID.
+     *
+     * @param newsID The ID of the news article for which associated Views will be retrieved.
+     * @return A list of detailed DTOs representing Views associated with the specified news article.
+     */
     @Override
     public List<ViewDetailedDto> findViewByViewNewsID(int newsID) {
 
@@ -113,6 +159,13 @@ public class ViewServiceImpl implements ViewService {
         return convertListOfViewToViewDetailedDto(viewsByNewsID);
     }
 
+    /**
+     * Retrieves a list of detailed DTOs (Data Transfer Objects) representing Views associated with a specific news article ID and creation date.
+     *
+     * @param newsID       The ID of the news article for which associated Views will be retrieved.
+     * @param creationDate The creation date for which associated Views will be retrieved.
+     * @return A list of detailed DTOs representing Views associated with the specified news article and creation date.
+     */
     @Override
     public List<ViewDetailedDto> findViewByViewNewsIDAndViewCreationDate(int newsID, LocalDate creationDate) {
 
@@ -121,6 +174,13 @@ public class ViewServiceImpl implements ViewService {
         return convertListOfViewToViewDetailedDto(viewsByNewsIDAndCreationDate);
     }
 
+    /**
+     * Retrieves a list of detailed DTOs (Data Transfer Objects) representing Views associated with a specific news article ID and creation dates before a certain date.
+     *
+     * @param newsID             The ID of the news article for which associated Views will be retrieved.
+     * @param beforeCreationDate The upper bound of the creation date range for which associated Views will be retrieved.
+     * @return A list of detailed DTOs representing Views associated with the specified news article and creation dates before the provided date.
+     */
     @Override
     public List<ViewDetailedDto> findViewByViewNewsIDAndViewCreationDateBefore(int newsID, LocalDate beforeCreationDate) {
 
@@ -129,6 +189,13 @@ public class ViewServiceImpl implements ViewService {
         return convertListOfViewToViewDetailedDto(viewsByNewsIDAndCreationDate);
     }
 
+    /**
+     * Retrieves a list of detailed DTOs (Data Transfer Objects) representing Views associated with a specific news article ID and creation dates after a certain date.
+     *
+     * @param newsID            The ID of the news article for which associated Views will be retrieved.
+     * @param afterCreationDate The lower bound of the creation date range for which associated Views will be retrieved.
+     * @return A list of detailed DTOs representing Views associated with the specified news article and creation dates after the provided date.
+     */
     @Override
     public List<ViewDetailedDto> findViewByViewNewsIDAndViewCreationDateAfter(int newsID, LocalDate afterCreationDate) {
 
@@ -137,6 +204,12 @@ public class ViewServiceImpl implements ViewService {
         return convertListOfViewToViewDetailedDto(viewsByNewsIDAndCreationDate);
     }
 
+    /**
+     * Retrieves a list of detailed DTOs (Data Transfer Objects) representing Views associated with a specific user ID.
+     *
+     * @param userID The ID of the user for which associated Views will be retrieved.
+     * @return A list of detailed DTOs representing Views associated with the specified user.
+     */
     @Override
     public List<ViewDetailedDto> findViewByViewUserID(int userID) {
 
@@ -145,6 +218,12 @@ public class ViewServiceImpl implements ViewService {
         return convertListOfViewToViewDetailedDto(listOfViewsByUserID);
     }
 
+    /**
+     * Converts a list of View entities to a list of detailed DTOs (Data Transfer Objects).
+     *
+     * @param listOfViews The list of View entities to be converted.
+     * @return A list of detailed DTOs representing the given list of Views.
+     */
     private List<ViewDetailedDto> convertListOfViewToViewDetailedDto(List<View> listOfViews) {
 
         List<ViewDetailedDto> allViewsAsDetailedDto = new ArrayList<>();
@@ -157,6 +236,13 @@ public class ViewServiceImpl implements ViewService {
         return allViewsAsDetailedDto;
     }
 
+    /**
+     * Fetches detailed data for a View and constructs a ViewDetailedDto using the retrieved information.
+     *
+     * @param view The View entity for which detailed data will be fetched.
+     * @return A ViewDetailedDto containing detailed information about the provided View.
+     * @throws ResourceNotFoundException If the associated News or User for the View is not found.
+     */
     private ViewDetailedDto fetchViewDetailedDtoData(View view) {
 
         UserDto userDto = userService.getUserByID(view.getViewUserID());

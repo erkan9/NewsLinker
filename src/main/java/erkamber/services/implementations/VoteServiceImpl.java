@@ -38,6 +38,13 @@ public class VoteServiceImpl implements VoteService {
         this.newsService = newsService;
     }
 
+    /**
+     * Adds a new vote based on the provided VoteDto.
+     *
+     * @param voteDto The VoteDto containing information about the new vote.
+     * @return The result of handling the new vote, which may include updating an existing vote.
+     * @throws IllegalArgumentException If the voted content type is incorrect.
+     */
     @Override
     public int addNewVote(VoteDto voteDto) {
 
@@ -55,6 +62,12 @@ public class VoteServiceImpl implements VoteService {
         }
     }
 
+    /**
+     * Deletes all votes associated with a specific user ID.
+     *
+     * @param userID The ID of the user whose votes will be deleted.
+     * @throws ResourceNotFoundException If the user has no votes or does not exist.
+     */
     @Override
     public void deleteVotesUserID(int userID) {
 
@@ -65,6 +78,14 @@ public class VoteServiceImpl implements VoteService {
         voteRepository.deleteAll(voteListByUserID);
     }
 
+    /**
+     * Deletes all votes of a specific content type associated with a given user ID.
+     *
+     * @param votedContentType The type of content for which votes will be deleted.
+     * @param userID           The ID of the user whose votes will be deleted.
+     * @throws IllegalArgumentException  If the voted content type is incorrect.
+     * @throws ResourceNotFoundException If the user has no votes or does not exist.
+     */
     @Override
     public void deleteAllVotesByContentTypeAndUserID(String votedContentType, int userID) {
 
@@ -79,6 +100,14 @@ public class VoteServiceImpl implements VoteService {
         voteRepository.deleteAll(voteListByUserID);
     }
 
+    /**
+     * Deletes all votes of a specific content type associated with a given voted content ID.
+     *
+     * @param votedContentType The type of content for which votes will be deleted.
+     * @param votedContentID   The ID of the content for which votes will be deleted.
+     * @throws IllegalArgumentException  If the voted content type is incorrect.
+     * @throws ResourceNotFoundException If there are no votes for the specified content or the content does not exist.
+     */
     @Override
     public void deleteAllVotesByContentTypeAndVotedContentID(String votedContentType, int votedContentID) {
 
@@ -93,6 +122,13 @@ public class VoteServiceImpl implements VoteService {
         voteRepository.deleteAll(voteListByUserID);
     }
 
+    /**
+     * Handles updating an existing vote based on the provided pastVote and voteDto.
+     *
+     * @param pastVote The previous vote associated with the content.
+     * @param voteDto  The VoteDto containing information about the updated vote.
+     * @return The ID of the updated vote, if applicable.
+     */
     private int handleNotNewVote(Vote pastVote, VoteDto voteDto) {
 
         if (pastVote.isUpVote() == voteDto.isUpVote()) {
@@ -130,6 +166,12 @@ public class VoteServiceImpl implements VoteService {
         return 0;
     }
 
+    /**
+     * Handles adding a new vote based on the provided VoteDto.
+     *
+     * @param voteDto The VoteDto containing information about the new vote.
+     * @return The ID of the newly added vote.
+     */
     private int handleNewVote(VoteDto voteDto) {
 
         Vote newVote = voteMapper.mapVoteDtoToVote(voteDto);
@@ -164,6 +206,14 @@ public class VoteServiceImpl implements VoteService {
         return newVote.getVoteID();
     }
 
+    /**
+     * Retrieves a list of VoteDtos representing all upvotes for a specific content based on its ID and type.
+     *
+     * @param votedContentID   The ID of the content for which upvotes will be retrieved.
+     * @param votedContentType The type of content for which upvotes will be retrieved.
+     * @return A list of VoteDtos representing all upvotes for the specified content.
+     * @throws ResourceNotFoundException If there are no upvotes for the specified content or the content does not exist.
+     */
     @Override
     public List<VoteDto> getAllUpVotesByContentIDAndType(int votedContentID, String votedContentType) {
 
@@ -178,6 +228,14 @@ public class VoteServiceImpl implements VoteService {
         return voteMapper.mapListOfVoteToMVoteDto(listOfAllUpVotesByContentID);
     }
 
+    /**
+     * Retrieves a list of VoteDtos representing all downvotes for a specific content based on its ID and type.
+     *
+     * @param votedContentID   The ID of the content for which downvotes will be retrieved.
+     * @param votedContentType The type of content for which downvotes will be retrieved.
+     * @return A list of VoteDtos representing all downvotes for the specified content.
+     * @throws ResourceNotFoundException If there are no downvotes for the specified content or the content does not exist.
+     */
     @Override
     public List<VoteDto> getAllDownVotesByContentIDAndType(int votedContentID, String votedContentType) {
 
@@ -192,6 +250,13 @@ public class VoteServiceImpl implements VoteService {
         return voteMapper.mapListOfVoteToMVoteDto(listOfAllDownVotesByContentID);
     }
 
+    /**
+     * Retrieves a list of VoteDtos representing all upvotes given by a specific user.
+     *
+     * @param userID The ID of the user for which upvotes will be retrieved.
+     * @return A list of VoteDtos representing all upvotes given by the specified user.
+     * @throws ResourceNotFoundException If the user has not given any upvotes or the user does not exist.
+     */
     @Override
     public List<VoteDto> getAllUpVotesByUserID(int userID) {
 
@@ -204,6 +269,13 @@ public class VoteServiceImpl implements VoteService {
         return voteMapper.mapListOfVoteToMVoteDto(listOfAllVotesByUserID);
     }
 
+    /**
+     * Retrieves a list of VoteDtos representing all downvotes given by a specific user.
+     *
+     * @param userID The ID of the user for which downvotes will be retrieved.
+     * @return A list of VoteDtos representing all downvotes given by the specified user.
+     * @throws ResourceNotFoundException If the user has not given any downvotes or the user does not exist.
+     */
     @Override
     public List<VoteDto> getAllDownVotesByUserID(int userID) {
 
@@ -216,6 +288,12 @@ public class VoteServiceImpl implements VoteService {
         return voteMapper.mapListOfVoteToMVoteDto(listOfAllVotesByUserID);
     }
 
+    /**
+     * Retrieves a list of all VoteDtos representing all votes.
+     *
+     * @return A list of VoteDtos representing all votes.
+     * @throws ResourceNotFoundException If there are no votes.
+     */
     @Override
     public List<VoteDto> getAllVotes() {
 
@@ -226,6 +304,12 @@ public class VoteServiceImpl implements VoteService {
         return voteMapper.mapListOfVoteToMVoteDto(listOfAllVotes);
     }
 
+    /**
+     * Retrieves a list of VoteDtos representing all upvotes.
+     *
+     * @return A list of VoteDtos representing all upvotes.
+     * @throws ResourceNotFoundException If there are no upvotes.
+     */
     @Override
     public List<VoteDto> getAllUpVotes() {
 
@@ -238,6 +322,12 @@ public class VoteServiceImpl implements VoteService {
         return voteMapper.mapListOfVoteToMVoteDto(listOfAllUpVotes);
     }
 
+    /**
+     * Retrieves a list of VoteDtos representing all downvotes.
+     *
+     * @return A list of VoteDtos representing all downvotes.
+     * @throws ResourceNotFoundException If there are no downvotes.
+     */
     @Override
     public List<VoteDto> getAllDownVotes() {
 
@@ -250,6 +340,12 @@ public class VoteServiceImpl implements VoteService {
         return voteMapper.mapListOfVoteToMVoteDto(listOfAllDownVotes);
     }
 
+    /**
+     * Validates whether the voted content type is correct (i.e., "comment" or "news").
+     *
+     * @param votedContentType The content type to be validated.
+     * @throws InvalidInputException If the voted content type is invalid.
+     */
     private void isVotedContentTypeCorrect(String votedContentType) {
 
         if (!voteValidation.isContentTypeValid(votedContentType)) {
@@ -257,6 +353,12 @@ public class VoteServiceImpl implements VoteService {
         }
     }
 
+    /**
+     * Validates whether a list of votes is empty or not.
+     *
+     * @param userList The list of user to be validated.
+     * @throws ResourceNotFoundException If the list of votes is empty.
+     */
     private void validateVoteList(List<Vote> userList) {
 
         if (voteValidation.isVoteListEmpty(userList)) {
@@ -265,7 +367,14 @@ public class VoteServiceImpl implements VoteService {
         }
     }
 
-
+    /**
+     * Checks if a user has voted for a specific content before.
+     *
+     * @param userID         The ID of the user to check for previous votes.
+     * @param votedContentID The ID of the content to check for previous votes.
+     * @param contentType    The type of content to check for previous votes.
+     * @return The previous vote by the user for the specified content, if any; otherwise, null.
+     */
     private Vote hasVotedBefore(int userID, int votedContentID, String contentType) {
 
         List<Vote> votesByUser = voteRepository.getVoteByUserID(userID);

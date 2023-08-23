@@ -28,6 +28,13 @@ public class TagServiceImpl implements TagService {
         this.tagValidation = tagValidation;
     }
 
+    /**
+     * Adds a new tag using the provided {@link TagDto}.
+     *
+     * @param newTagDto The {@link TagDto} containing information for the new tag.
+     * @return The ID of the newly added tag.
+     * @throws InvalidInputException If the provided tag name is incorrect or invalid.
+     */
     @Override
     public int addNewTag(TagDto newTagDto) {
 
@@ -40,6 +47,13 @@ public class TagServiceImpl implements TagService {
         return newTag.getTagID();
     }
 
+    /**
+     * Deletes a tag by its tag name.
+     *
+     * @param tagName The name of the tag to be deleted.
+     * @throws InvalidInputException     If the provided tag name is incorrect or invalid.
+     * @throws ResourceNotFoundException If the tag with the given name is not found.
+     */
     @Override
     public void deleteTagByTagName(String tagName) {
 
@@ -51,9 +65,14 @@ public class TagServiceImpl implements TagService {
                 new ResourceNotFoundException("Tag not Found: " + tagName, "Tag"));
 
         tagRepository.delete(searchedTagObject);
-
     }
 
+    /**
+     * Deletes a tag by its ID.
+     *
+     * @param tagID The ID of the tag to be deleted.
+     * @throws ResourceNotFoundException If the tag with the given ID is not found.
+     */
     @Override
     public void deleteTagByTagID(int tagID) {
 
@@ -65,6 +84,13 @@ public class TagServiceImpl implements TagService {
         tagRepository.delete(searchedTagObject);
     }
 
+    /**
+     * Updates the name of a tag with the specified ID.
+     *
+     * @param searchedTagID The ID of the tag to be updated.
+     * @param updateTagDto  The TagDto object containing the updated tag information.
+     * @throws ResourceNotFoundException If the tag with the given ID is not found.
+     */
     @Override
     public void updateTag(int searchedTagID, TagDto updateTagDto) {
 
@@ -80,15 +106,22 @@ public class TagServiceImpl implements TagService {
         tagRepository.save(tagWithUpdates);
     }
 
+    /**
+     * Updates the name of a tag with the specified name.
+     *
+     * @param searchedTagName The current name of the tag to be updated.
+     * @param newTagName      The new name to update the tag with.
+     * @throws ResourceNotFoundException If the tag with the given current name is not found.
+     */
     @Override
     public void updateTagByTagName(String searchedTagName, String newTagName) {
 
+        // Validate the tag names
         isTagNameCorrect(searchedTagName);
-
         isTagNameCorrect(newTagName);
 
+        // Find the tag by its current name and update its name
         Optional<Tag> tagToUpdate = tagRepository.findTagByTagName(searchedTagName);
-
         Tag tagWithUpdates = tagToUpdate.orElseThrow(() ->
                 new ResourceNotFoundException("Tag not Found: " + searchedTagName, "Tag"));
 
@@ -97,6 +130,13 @@ public class TagServiceImpl implements TagService {
         tagRepository.save(tagWithUpdates);
     }
 
+    /**
+     * Finds and retrieves a tag by its ID.
+     *
+     * @param searchedTagID The ID of the tag to be retrieved.
+     * @return The TagDto representation of the found tag.
+     * @throws ResourceNotFoundException If the tag with the given ID is not found.
+     */
     @Override
     public TagDto findTagByTagID(int searchedTagID) {
 
@@ -108,6 +148,13 @@ public class TagServiceImpl implements TagService {
         return tagMapper.mapTagToTagDto(tagWithUpdates);
     }
 
+    /**
+     * Finds and retrieves a tag by its name.
+     *
+     * @param tagName The name of the tag to be retrieved.
+     * @return The TagDto representation of the found tag.
+     * @throws ResourceNotFoundException If the tag with the given name is not found.
+     */
     @Override
     public TagDto findTagByTagName(String tagName) {
 
@@ -121,6 +168,11 @@ public class TagServiceImpl implements TagService {
         return tagMapper.mapTagToTagDto(searchedTag);
     }
 
+    /**
+     * Retrieves a list of all tags.
+     *
+     * @return A list of TagDto representations of all tags.
+     */
     @Override
     public List<TagDto> getAllTags() {
 
@@ -129,6 +181,12 @@ public class TagServiceImpl implements TagService {
         return tagMapper.mapListOfTagToTagDto(listOfAllTags);
     }
 
+    /**
+     * Checks if the provided tag name is correct and valid.
+     *
+     * @param tagName The tag name to be validated.
+     * @throws InvalidInputException If the provided tag name is invalid.
+     */
     private void isTagNameCorrect(String tagName) {
 
         if (!tagValidation.isTagNameValid(tagName)) {

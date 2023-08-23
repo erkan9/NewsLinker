@@ -16,6 +16,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
+@CrossOrigin(origins = {"http://localhost:3000", "https://newslinker-backend.onrender.com"})
 @RestController
 @RequestMapping("/api/v1")
 @Validated

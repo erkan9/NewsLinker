@@ -14,6 +14,7 @@ import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
 
+@CrossOrigin(origins = {"http://localhost:3000", "https://newslinker-backend.onrender.com"})
 @RestController
 @RequestMapping("/api/v1")
 @Validated

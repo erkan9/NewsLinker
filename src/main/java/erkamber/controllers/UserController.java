@@ -15,6 +15,7 @@ import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
 
+@CrossOrigin(origins = {"http://localhost:3000", "https://news-linker-fe.vercel.app"})
 @RestController
 @RequestMapping("/api/v1")
 @Validated

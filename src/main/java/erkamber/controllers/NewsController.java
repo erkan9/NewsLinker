@@ -16,7 +16,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
-@CrossOrigin(origins = {"http://localhost:3000", "https://news-linker-fe.vercel.app/"})
+@CrossOrigin(origins = {"http://localhost:3000", "https://news-linker-fe.vercel.app"})
 @RestController
 @RequestMapping("/api/v1")
 @Validated

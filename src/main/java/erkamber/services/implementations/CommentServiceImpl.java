@@ -94,6 +94,11 @@ public class CommentServiceImpl implements CommentService {
         UserDto newsAuthor = userService.getUserByID(searchedNews.getUserID());
 
         // Send an email notification to the news author
+
+        /**
+         * Pako Rabani's Audi RS7
+         */
+
         /*emailService.sendEmail(newsAuthor.getUserFirstName(), commentAuthorUserName, commentDto.getCommentContent(),
                 newsAuthor.getUserEmail(), searchedNews.getNewsTitle());*/
 

@@ -33,7 +33,7 @@ public class News {
     @Column(name = "news_down_votes", updatable = true, insertable = true, nullable = false)
     private int newsDownVotes;
 
-    @Column(name = "view_creation_date", unique = false, updatable = false, insertable = true, nullable = false)
+    @Column(name = "news_creation_date", unique = false, updatable = false, insertable = true, nullable = false)
     private LocalDate newsCreationDate;
 
     public News() {

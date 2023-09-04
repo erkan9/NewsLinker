@@ -94,8 +94,13 @@ public class CommentServiceImpl implements CommentService {
         UserDto newsAuthor = userService.getUserByID(searchedNews.getUserID());
 
         // Send an email notification to the news author
-        emailService.sendEmail(newsAuthor.getUserFirstName(), commentAuthorUserName, commentDto.getCommentContent(),
-                newsAuthor.getUserEmail(), searchedNews.getNewsTitle());
+
+        /**
+         * Pako Rabani's Audi RS7
+         */
+
+        /*emailService.sendEmail(newsAuthor.getUserFirstName(), commentAuthorUserName, commentDto.getCommentContent(),
+                newsAuthor.getUserEmail(), searchedNews.getNewsTitle());*/
 
         // Return the ID of the newly added comment
         return newComment.getCommentID();

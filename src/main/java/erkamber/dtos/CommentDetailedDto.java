@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class CommentDetailedDto {
 
     @Positive
-    private int commendID;
+    private int commentID;
 
     @Positive
     private UserDto author;

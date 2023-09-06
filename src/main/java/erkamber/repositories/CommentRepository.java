@@ -6,12 +6,13 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     List<Comment> findCommentsByCommentAuthorID(int authorID);
+
+    List<Comment> findCommentsByCommentNewsIDOrderByCommentIDAsc(int newsID);
 
     List<Comment> findCommentsByCommentNewsID(int newsID);
 

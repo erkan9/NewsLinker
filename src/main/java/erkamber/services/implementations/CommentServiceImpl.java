@@ -319,7 +319,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDetailedDto> getCommentsByNewsID(int newsID) {
 
-        List<Comment> listOfCommentsByNewsID = commentRepository.findCommentsByCommentNewsID(newsID);
+        List<Comment> listOfCommentsByNewsID = commentRepository.findCommentsByCommentNewsIDOrderByCommentIDAsc(newsID);
 
         return convertListToDetailedDto(listOfCommentsByNewsID);
     }

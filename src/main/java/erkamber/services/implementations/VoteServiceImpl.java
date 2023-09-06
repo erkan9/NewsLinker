@@ -10,6 +10,7 @@ import erkamber.services.interfaces.VoteService;
 import erkamber.validations.VoteValidation;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,24 +42,25 @@ public class VoteServiceImpl implements VoteService {
     /**
      * Adds a new vote based on the provided VoteDto.
      *
-     * @param voteDto The VoteDto containing information about the new vote.
+     * @param newVoteDto The VoteDto containing information about the new vote.
      * @return The result of handling the new vote, which may include updating an existing vote.
      * @throws IllegalArgumentException If the voted content type is incorrect.
      */
     @Override
-    public int addNewVote(VoteDto voteDto) {
+    @Transactional
+    public int addNewVote(VoteDto newVoteDto) {
 
-        isVotedContentTypeCorrect(voteDto.getVotedContentType());
+        isVotedContentTypeCorrect(newVoteDto.getVotedContentType());
 
-        Vote pastVote = hasVotedBefore(voteDto.getUserID(), voteDto.getVotedContentID(), voteDto.getVotedContentType());
+        Vote pastVote = hasVotedBefore(newVoteDto.getUserID(), newVoteDto.getVotedContentID(), newVoteDto.getVotedContentType());
 
         if (pastVote == null) {
 
-            return handleNewVote(voteDto);
+            return handleNewVote(newVoteDto);
 
         } else {
 
-            return handleNotNewVote(pastVote, voteDto);
+            return handleNotNewVote(pastVote, newVoteDto);
         }
     }
 
@@ -125,21 +127,22 @@ public class VoteServiceImpl implements VoteService {
     /**
      * Handles updating an existing vote based on the provided pastVote and voteDto.
      *
-     * @param pastVote The previous vote associated with the content.
-     * @param voteDto  The VoteDto containing information about the updated vote.
+     * @param pastVote   The previous vote associated with the content.
+     * @param newVoteDto The VoteDto containing information about the updated vote.
      * @return The ID of the updated vote, if applicable.
      */
-    private int handleNotNewVote(Vote pastVote, VoteDto voteDto) {
+    @Transactional
+    int handleNotNewVote(Vote pastVote, VoteDto newVoteDto) {
 
-        if (pastVote.isUpVote() == voteDto.isUpVote()) {
+        if (pastVote.isUpVote() == newVoteDto.isUpVote()) {
 
             if (pastVote.getVotedContentType().equalsIgnoreCase("comment")) {
 
-                commentService.updateCommentVoteByRemovingVote(voteDto.getVotedContentID(), voteDto.isUpVote());
+                commentService.updateCommentVoteByRemovingVote(newVoteDto.getVotedContentID(), newVoteDto.isUpVote());
 
             } else if (pastVote.getVotedContentType().equalsIgnoreCase("news")) {
 
-                newsService.updateNewsVoteByRemovingVote(voteDto.getVotedContentID(), voteDto.isUpVote());
+                newsService.updateNewsVoteByRemovingVote(newVoteDto.getVotedContentID(), newVoteDto.isUpVote());
             }
 
             voteRepository.deleteById(pastVote.getVoteID());
@@ -148,19 +151,18 @@ public class VoteServiceImpl implements VoteService {
 
             if (pastVote.getVotedContentType().equalsIgnoreCase("comment")) {
 
-                commentService.updateCommentVoteBySwappingVotes(voteDto.getVotedContentID(), voteDto.isUpVote());
-
+                commentService.updateCommentVoteBySwappingVotes(newVoteDto.getVotedContentID(), newVoteDto.isUpVote());
 
             } else if (pastVote.getVotedContentType().equalsIgnoreCase("news")) {
 
-                newsService.updateNewsVoteBySwappingVotes(voteDto.getVotedContentID(), voteDto.isUpVote());
+                newsService.updateNewsVoteBySwappingVotes(newVoteDto.getVotedContentID(), newVoteDto.isUpVote());
             }
 
-            voteRepository.deleteById(pastVote.getVoteID());
+            pastVote.setUpVote(newVoteDto.isUpVote());
 
-            voteRepository.save(voteMapper.mapVoteDtoToVote(voteDto));
+            voteRepository.save(pastVote);
 
-            return voteDto.getVoteID();
+            return newVoteDto.getVoteID();
         }
 
         return 0;
@@ -172,7 +174,8 @@ public class VoteServiceImpl implements VoteService {
      * @param voteDto The VoteDto containing information about the new vote.
      * @return The ID of the newly added vote.
      */
-    private int handleNewVote(VoteDto voteDto) {
+    @Transactional
+    int handleNewVote(VoteDto voteDto) {
 
         Vote newVote = voteMapper.mapVoteDtoToVote(voteDto);
 

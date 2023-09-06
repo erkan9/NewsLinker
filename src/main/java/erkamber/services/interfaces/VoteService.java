@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface VoteService {
 
-    int addNewVote(VoteDto voteDto);
+    int addNewVote(VoteDto newVoteDto);
 
     void deleteVotesUserID(int userID);
 

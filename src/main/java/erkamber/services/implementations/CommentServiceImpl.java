@@ -16,6 +16,7 @@ import erkamber.services.interfaces.EmailService;
 import erkamber.validations.CommentValidation;
 import erkamber.validations.InjectionValidation;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import java.time.LocalDate;
@@ -133,6 +134,7 @@ public class CommentServiceImpl implements CommentService {
      * @param isUpvote  A flag indicating whether the removed vote is an upvote (true) or a downvote (false).
      * @throws ResourceNotFoundException If the comment with the provided ID is not found.
      */
+    @Transactional
     protected void updateCommentVoteByRemovingVote(int commentID, boolean isUpvote) {
 
         // Retrieve the comment by its ID
@@ -166,8 +168,8 @@ public class CommentServiceImpl implements CommentService {
      * @param isUpVote  A flag indicating whether the vote to be swapped is an upvote (true) or a downvote (false).
      * @throws ResourceNotFoundException If the comment with the provided ID is not found.
      */
+    @Transactional
     protected void updateCommentVoteBySwappingVotes(int commentID, boolean isUpVote) {
-
         // Retrieve the comment by its ID
         Optional<Comment> optionalComment = commentRepository.findById(commentID);
 
@@ -180,12 +182,9 @@ public class CommentServiceImpl implements CommentService {
 
         // Swap the vote from upvote to downvote or vice versa
         if (isUpVote) {
-
             searchedComment.setCommentUpVotes(numberOfUpVotes + 1);
             searchedComment.setCommentDownVotes(numberOfDownVotes - 1);
-
         } else {
-
             searchedComment.setCommentUpVotes(numberOfUpVotes - 1);
             searchedComment.setCommentDownVotes(numberOfDownVotes + 1);
         }

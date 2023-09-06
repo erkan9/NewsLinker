@@ -16,6 +16,7 @@ import erkamber.validations.NewsValidation;
 import erkamber.validations.UserValidation;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -517,6 +518,7 @@ public class NewsServiceImpl implements NewsService {
      * @param isUpVote A boolean indicating whether the vote to be swapped is an upvote or not.
      * @throws ResourceNotFoundException If the news article with the specified ID is not found.
      */
+    @Transactional
     protected void updateNewsVoteBySwappingVotes(int newsID, boolean isUpVote) {
 
         Optional<News> searchedNewsOptional = newsRepository.findById(newsID);
@@ -591,6 +593,7 @@ public class NewsServiceImpl implements NewsService {
      * @param isUpVote A boolean indicating whether the vote to be removed is an upvote or not.
      * @throws ResourceNotFoundException If the news article with the specified ID is not found.
      */
+    @Transactional
     protected void updateNewsVoteByRemovingVote(int newsID, boolean isUpVote) {
 
         Optional<News> searchedNewsOptional = newsRepository.findById(newsID);

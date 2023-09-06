@@ -15,6 +15,7 @@ import erkamber.services.interfaces.CommentService;
 import erkamber.services.interfaces.EmailService;
 import erkamber.validations.CommentValidation;
 import erkamber.validations.InjectionValidation;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -377,7 +378,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDetailedDto> getAllComments() {
 
-        List<Comment> listOfAllComments = commentRepository.findAll();
+        List<Comment> listOfAllComments = commentRepository.findAll((Sort.by(Sort.Direction.ASC, "commentID")));
 
         return convertListToDetailedDto(listOfAllComments);
     }

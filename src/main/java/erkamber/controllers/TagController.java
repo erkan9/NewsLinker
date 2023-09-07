@@ -38,6 +38,12 @@ public class TagController {
         return ResponseEntity.ok(tagService.getAllTags());
     }
 
+    @GetMapping("/tags/trending")
+    public ResponseEntity<List<TagDto>> getTrendingTags() {
+
+        return ResponseEntity.ok(tagService.getTrendingTags());
+    }
+
     @GetMapping("/tags/{tagId}")
     public ResponseEntity<TagDto> getTagByTagID(@PathVariable int tagId) {
 

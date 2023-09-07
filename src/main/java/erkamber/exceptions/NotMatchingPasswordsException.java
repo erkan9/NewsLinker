@@ -1,8 +1,8 @@
 package erkamber.exceptions;
 
-public class NotMatchingPasswords extends RuntimeException {
+public class NotMatchingPasswordsException extends RuntimeException {
 
-    public NotMatchingPasswords(String message) {
+    public NotMatchingPasswordsException(String message) {
         super(message);
     }
 }

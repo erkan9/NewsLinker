@@ -224,7 +224,7 @@ public class NewsTagServiceImpl implements NewsTagService {
 
         for (NewsTag newsTag : listOfTags) {
 
-            TagDto tagDto = tagService.findTagByTagID(newsTag.getNewsTagID());
+            TagDto tagDto = tagService.findTagByTagID(newsTag.getTagID());
 
             NewsDetailedDto newsDetailedDto = newsService.getNewsDetailedByNewsID(newsTag.getNewsID());
 

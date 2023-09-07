@@ -8,6 +8,7 @@ import erkamber.exceptions.ResourceNotFoundException;
 import erkamber.mappers.TagMapper;
 import erkamber.repositories.NewsTagRepository;
 import erkamber.repositories.TagRepository;
+import erkamber.services.interfaces.NewsTagService;
 import erkamber.services.interfaces.TagService;
 import erkamber.validations.TagValidation;
 import org.springframework.stereotype.Service;
@@ -191,28 +192,27 @@ public class TagServiceImpl implements TagService {
 
         List<NewsTag> listOfAllNewsTagRelations = newsTagRepository.findAll();
 
-        Map<Integer, Long> tagIdCounts = listOfAllNewsTagRelations.stream()
+        // Step 1: Create a map to count tag occurrences
+        Map<Integer, Long> tagCounts = listOfAllNewsTagRelations.stream()
                 .collect(Collectors.groupingBy(NewsTag::getTagID, Collectors.counting()));
 
-        Optional<Map.Entry<Integer, Long>> mostUsedTagEntry = tagIdCounts.entrySet().stream()
-                .max(Map.Entry.comparingByValue());
+        // Step 2: Sort the map entries by count in descending order
+        List<Map.Entry<Integer, Long>> sortedEntries = tagCounts.entrySet().stream()
+                .sorted(Map.Entry.<Integer, Long>comparingByValue().reversed())
+                .collect(Collectors.toList());
 
-        if (mostUsedTagEntry.isPresent()) {
-            Integer mostUsedTagID = mostUsedTagEntry.get().getKey();
+        // Step 3: Extract the sorted tag IDs
+        List<Integer> sortedTagIDs = sortedEntries.stream()
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
 
-            Optional<Tag> tagToUpdate = tagRepository.findById(mostUsedTagID);
+        // Step 4: Retrieve the corresponding Tag objects
+        List<Tag> sortedTags = sortedTagIDs.stream()
+                .map(tagID -> tagRepository.findById(tagID)
+                        .orElseThrow(() -> new ResourceNotFoundException("Tag not Found: " + tagID, "Tag")))
+                .collect(Collectors.toList());
 
-            Tag searchedTag = tagToUpdate.orElseThrow(() ->
-                    new ResourceNotFoundException("Tag not Found: " + mostUsedTagID, "Tag"));
-
-            TagDto mostUsedTagDto = tagMapper.mapTagToTagDto(searchedTag);
-
-            return Collections.singletonList(mostUsedTagDto);
-
-        } else {
-
-            return Collections.emptyList();
-        }
+        return tagMapper.mapListOfTagToTagDto(sortedTags);
     }
 
     /**

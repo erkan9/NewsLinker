@@ -3,6 +3,7 @@ package erkamber.validations;
 
 import erkamber.configurations.CharAndNumberPatternConfiguration;
 import erkamber.configurations.OnlyCharPatternConfiguration;
+import erkamber.configurations.PasswordEncoderConfiguration;
 import erkamber.configurations.PasswordPatternConfiguration;
 import erkamber.entities.User;
 import org.springframework.stereotype.Component;
@@ -19,13 +20,17 @@ public class UserValidation {
 
     private final PasswordPatternConfiguration passwordPatternConfiguration;
 
+    private final PasswordEncoderConfiguration passwordEncoderConfiguration;
+
     public UserValidation(OnlyCharPatternConfiguration onlyCharPatternConfiguration,
                           CharAndNumberPatternConfiguration charAndNumberPatternConfiguration,
-                          PasswordPatternConfiguration passwordPatternConfiguration) {
+                          PasswordPatternConfiguration passwordPatternConfiguration,
+                          PasswordEncoderConfiguration passwordEncoderConfiguration) {
 
         this.onlyCharPatternConfiguration = onlyCharPatternConfiguration;
         this.charAndNumberPatternConfiguration = charAndNumberPatternConfiguration;
         this.passwordPatternConfiguration = passwordPatternConfiguration;
+        this.passwordEncoderConfiguration = passwordEncoderConfiguration;
     }
 
     public boolean isUserNameValid(String userName) {
@@ -58,5 +63,15 @@ public class UserValidation {
     public boolean isListEmpty(List<User> listOfNews) {
 
         return listOfNews == null || listOfNews.isEmpty();
+    }
+
+    public boolean areOldPasswordMatching(String oldPassword, String oldPasswordEncoded) {
+
+        return  passwordEncoderConfiguration.passwordEncoder().matches(oldPassword, oldPasswordEncoded);
+    }
+
+    public boolean areNewPasswordsMatching(String newPassword, String newPasswordRepeat) {
+
+        return newPassword.equals(newPasswordRepeat);
     }
 }

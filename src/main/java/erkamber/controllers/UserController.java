@@ -1,7 +1,8 @@
 package erkamber.controllers;
 
 import erkamber.dtos.UserDto;
-import erkamber.dtos.UserLoginDto;
+import erkamber.requests.UserLoginDto;
+import erkamber.requests.UserPasswordUpdateRequestDto;
 import erkamber.services.interfaces.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -38,17 +39,25 @@ public class UserController {
     @PatchMapping("/users/update/")
     public ResponseEntity<String> updateUser(@RequestParam @Positive int userID, @RequestBody UserDto updatedUserDto) {
 
-            userService.updateUser(userID, updatedUserDto);
+        userService.updateUser(userID, updatedUserDto);
 
-            return ResponseEntity.ok("User updated successfully");
+        return ResponseEntity.ok("User updated successfully");
+    }
+
+    @PatchMapping("users/password/update")
+    public void updateUserPassword(@RequestParam @Positive int userID,
+                                   @Valid @RequestBody UserPasswordUpdateRequestDto request) {
+
+        userService.updateUserPassword(userID, request.getOldPassword(),
+                request.getNewPassword(), request.getNewPasswordRepeat());
     }
 
     @PostMapping(value = "/users/login")
     public ResponseEntity<Void> userLogIn(@Valid @RequestBody UserLoginDto loginDTO) {
 
-        int newUserID = userService.loginUser(loginDTO.getUserName(), loginDTO.getUserPassword());
+        int loggedUserID = userService.loginUser(loginDTO.getUserName(), loginDTO.getUserPassword());
 
-        return ResponseEntity.created(URI.create("api/v1/users/login" + newUserID)).build();
+        return ResponseEntity.created(URI.create("api/v1/users/login" + loggedUserID)).build();
     }
 
     @GetMapping("/users/{userId}")

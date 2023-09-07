@@ -18,7 +18,7 @@ public class CommentMapper {
 
     public Comment mapCommentDtoToComment(CommentDto commentDto) {
 
-        return new Comment(commentDto.getCommentID(), commentDto.getCommentNewsID(), commentDto.getCommentAuthorID(),
+        return new Comment(commentDto.getCommentID(), commentDto.getCommentAuthorID(), commentDto.getCommentNewsID(),
                 commentDto.getCommentContent(), commentDto.getCommentUpVotes(), commentDto.getCommentDownVotes(),
                 commentDto.getCreationDate());
     }

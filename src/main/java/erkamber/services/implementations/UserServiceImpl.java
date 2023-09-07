@@ -4,6 +4,7 @@ import erkamber.configurations.PasswordEncoderConfiguration;
 import erkamber.dtos.UserDto;
 import erkamber.entities.User;
 import erkamber.exceptions.InvalidInputException;
+import erkamber.exceptions.NotMatchingPasswordsException;
 import erkamber.exceptions.ResourceNotFoundException;
 import erkamber.mappers.UserMapper;
 import erkamber.repositories.UserRepository;
@@ -76,9 +77,8 @@ public class UserServiceImpl implements UserService {
     /**
      * Updates a user's information, such as First/Last name, password and photo based on the provided UserDto.
      *
-     * @param userID       The ID of the user to update.
-     * @param updatedUser  The UserDto containing the updated user information.
-     *
+     * @param userID      The ID of the user to update.
+     * @param updatedUser The UserDto containing the updated user information.
      * @throws ResourceNotFoundException If no user with the specified userID is found.
      */
     @Override
@@ -105,6 +105,77 @@ public class UserServiceImpl implements UserService {
         }
 
         userRepository.save(userToUpdate);
+    }
+
+    /**
+     * Updates the user's password.
+     * <p>
+     * This method allows a user to update their password by providing the old password
+     * for verification and specifying the new password.
+     *
+     * @param userID            The unique identifier of the user.
+     * @param oldPassword       The user's old password for verification.
+     * @param newPassword       The user's new password.
+     * @param newPasswordRepeat The repeated new password for confirmation.
+     * @throws ResourceNotFoundException If the user with the specified userID is not found.
+     * @throws NotMatchingPasswordsException      If the old password does not match the stored password or
+     *                                   if the new passwords provided do not match.
+     */
+    @Override
+    public void updateUserPassword(int userID, String oldPassword, String newPassword, String newPasswordRepeat) {
+
+        isUserPasswordValid(newPassword);
+
+        Optional<User> searchedUserOptional = userRepository.findById(userID);
+
+        User searchedUser = searchedUserOptional.orElseThrow(() ->
+                new ResourceNotFoundException("User ID not Found:" + userID, "User"));
+
+        String oldPasswordEncoded = searchedUser.getUserPassword();
+
+        areOldPasswordsMatching(oldPassword, oldPasswordEncoded);
+
+        areNewPasswordsMatching(newPassword, newPasswordRepeat);
+
+        searchedUser.setUserPassword(passwordEncoderConfiguration.passwordEncoder().encode(newPassword));
+
+        userRepository.save(searchedUser);
+    }
+
+    /**
+     * Checks if the provided old password matches the encoded old password from the DB.
+     * <p>
+     * This method is used to validate whether the provided old password matches
+     * the encoded old password stored in the user's data.
+     *
+     * @param oldPassword        The user's old password to be validated.
+     * @param oldPasswordEncoded The stored encoded old password to be compared with.
+     * @throws NotMatchingPasswordsException If the provided old password does not match the encoded old password.
+     */
+    private void areOldPasswordsMatching(String oldPassword, String oldPasswordEncoded) {
+
+        if (!userValidation.areOldPasswordMatching(oldPassword, oldPasswordEncoded)) {
+
+            throw new NotMatchingPasswordsException("Old User passwords are not Matching!");
+        }
+    }
+
+    /**
+     * Checks if two new passwords match.
+     * <p>
+     * This method is used to validate whether the provided new password and
+     * its repetition match each other.
+     *
+     * @param newPassword       The new password to be validated.
+     * @param newPasswordRepeat The repeated entry of the new password to be validated.
+     * @throws NotMatchingPasswordsException If the provided new passwords do not match.
+     */
+    private void areNewPasswordsMatching(String newPassword, String newPasswordRepeat) {
+
+        if (!userValidation.areNewPasswordsMatching(newPassword, newPasswordRepeat)) {
+
+            throw new NotMatchingPasswordsException("New User passwords are not Matching!");
+        }
     }
 
     /**
@@ -377,6 +448,6 @@ public class UserServiceImpl implements UserService {
                 .filter(user -> user.getUserName().equals(userName) &&
                         passwordEncoderConfiguration.passwordEncoder().matches(password, user.getUserPassword()))
                 .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("User not found: " + userName, "User"));
+                .orElseThrow(() -> new ResourceNotFoundException("Incorrect username or password!", "User"));
     }
 }

@@ -89,14 +89,6 @@ public class UserServiceImpl implements UserService {
         User userToUpdate = searchedUser.orElseThrow(() ->
                 new ResourceNotFoundException("User ID not Found:" + userID, "User"));
 
-        // Check and update the user's password
-        if (updatedUser.getUserPassword() != null) {
-
-            String encodedUserPassword = passwordEncoderConfiguration.passwordEncoder().encode(updatedUser.getUserPassword());
-
-            userToUpdate.setUserPassword(encodedUserPassword);
-        }
-
         // Check and update the user's first name
         if (updatedUser.getUserFirstName() != null) {
             userToUpdate.setUserFirstName(updatedUser.getUserFirstName());

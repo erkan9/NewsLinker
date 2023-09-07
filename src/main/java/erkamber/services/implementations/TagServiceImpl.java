@@ -1,17 +1,20 @@
 package erkamber.services.implementations;
 
 import erkamber.dtos.TagDto;
+import erkamber.entities.NewsTag;
 import erkamber.entities.Tag;
 import erkamber.exceptions.InvalidInputException;
 import erkamber.exceptions.ResourceNotFoundException;
 import erkamber.mappers.TagMapper;
+import erkamber.repositories.NewsTagRepository;
 import erkamber.repositories.TagRepository;
+import erkamber.services.interfaces.NewsTagService;
 import erkamber.services.interfaces.TagService;
 import erkamber.validations.TagValidation;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class TagServiceImpl implements TagService {
@@ -22,10 +25,13 @@ public class TagServiceImpl implements TagService {
 
     private final TagValidation tagValidation;
 
-    public TagServiceImpl(TagRepository tagRepository, TagMapper tagMapper, TagValidation tagValidation) {
+    private final NewsTagRepository newsTagRepository;
+
+    public TagServiceImpl(TagRepository tagRepository, TagMapper tagMapper, TagValidation tagValidation, NewsTagRepository newsTagRepository) {
         this.tagRepository = tagRepository;
         this.tagMapper = tagMapper;
         this.tagValidation = tagValidation;
+        this.newsTagRepository = newsTagRepository;
     }
 
     /**
@@ -179,6 +185,34 @@ public class TagServiceImpl implements TagService {
         List<Tag> listOfAllTags = tagRepository.findAll();
 
         return tagMapper.mapListOfTagToTagDto(listOfAllTags);
+    }
+
+    @Override
+    public List<TagDto> getTrendingTags() {
+
+        List<NewsTag> listOfAllNewsTagRelations = newsTagRepository.findAll();
+
+        // Step 1: Create a map to count tag occurrences
+        Map<Integer, Long> tagCounts = listOfAllNewsTagRelations.stream()
+                .collect(Collectors.groupingBy(NewsTag::getTagID, Collectors.counting()));
+
+        // Step 2: Sort the map entries by count in descending order
+        List<Map.Entry<Integer, Long>> sortedEntries = tagCounts.entrySet().stream()
+                .sorted(Map.Entry.<Integer, Long>comparingByValue().reversed())
+                .collect(Collectors.toList());
+
+        // Step 3: Extract the sorted tag IDs
+        List<Integer> sortedTagIDs = sortedEntries.stream()
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+
+        // Step 4: Retrieve the corresponding Tag objects
+        List<Tag> sortedTags = sortedTagIDs.stream()
+                .map(tagID -> tagRepository.findById(tagID)
+                        .orElseThrow(() -> new ResourceNotFoundException("Tag not Found: " + tagID, "Tag")))
+                .collect(Collectors.toList());
+
+        return tagMapper.mapListOfTagToTagDto(sortedTags);
     }
 
     /**

@@ -21,4 +21,6 @@ public interface TagService {
     TagDto findTagByTagName(String tagName);
 
     List<TagDto> getAllTags();
+
+    List<TagDto> getTrendingTags();
 }

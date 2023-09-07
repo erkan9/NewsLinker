@@ -103,4 +103,10 @@ public class GlobalExceptionHandler {
         logger.error("Caught exception: ", exception);
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(NotMatchingPasswordsException.class)
+    public ResponseEntity<String> handleNotMatchingPasswords(NotMatchingPasswordsException exception) {
+        logger.error("Caught exception: ", exception);
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

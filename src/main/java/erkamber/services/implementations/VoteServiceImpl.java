@@ -75,7 +75,7 @@ public class VoteServiceImpl implements VoteService {
 
         List<Vote> voteListByUserID = voteRepository.getVoteByUserID(userID);
 
-        validateVoteList(voteListByUserID);
+        // validateVoteList(voteListByUserID);
 
         voteRepository.deleteAll(voteListByUserID);
     }
@@ -97,7 +97,7 @@ public class VoteServiceImpl implements VoteService {
 
         voteListByUserID.removeIf(vote -> !vote.getVotedContentType().equalsIgnoreCase(votedContentType));
 
-        validateVoteList(voteListByUserID);
+        // validateVoteList(voteListByUserID);
 
         voteRepository.deleteAll(voteListByUserID);
     }
@@ -119,7 +119,7 @@ public class VoteServiceImpl implements VoteService {
 
         voteListByUserID.removeIf(vote -> !vote.getVotedContentType().equalsIgnoreCase(votedContentType));
 
-        validateVoteList(voteListByUserID);
+        // validateVoteList(voteListByUserID);
 
         voteRepository.deleteAll(voteListByUserID);
     }
@@ -222,7 +222,7 @@ public class VoteServiceImpl implements VoteService {
 
         List<Vote> listOfAllUpVotesByContentID = voteRepository.getVoteByVotedContentID(votedContentID);
 
-        validateVoteList(listOfAllUpVotesByContentID);
+        //   validateVoteList(listOfAllUpVotesByContentID);
 
         listOfAllUpVotesByContentID.removeIf(vote -> !vote.getVotedContentType().equalsIgnoreCase(votedContentType));
 
@@ -244,7 +244,7 @@ public class VoteServiceImpl implements VoteService {
 
         List<Vote> listOfAllDownVotesByContentID = voteRepository.getVoteByVotedContentID(votedContentID);
 
-        validateVoteList(listOfAllDownVotesByContentID);
+        // validateVoteList(listOfAllDownVotesByContentID);
 
         listOfAllDownVotesByContentID.removeIf(vote -> !vote.getVotedContentType().equalsIgnoreCase(votedContentType));
 
@@ -265,7 +265,7 @@ public class VoteServiceImpl implements VoteService {
 
         List<Vote> listOfAllVotesByUserID = voteRepository.getVoteByUserID(userID);
 
-        validateVoteList(listOfAllVotesByUserID);
+        // validateVoteList(listOfAllVotesByUserID);
 
         listOfAllVotesByUserID.removeIf(vote -> !vote.isUpVote());
 
@@ -284,7 +284,7 @@ public class VoteServiceImpl implements VoteService {
 
         List<Vote> listOfAllVotesByUserID = voteRepository.getVoteByUserID(userID);
 
-        validateVoteList(listOfAllVotesByUserID);
+        // validateVoteList(listOfAllVotesByUserID);
 
         listOfAllVotesByUserID.removeIf(Vote::isUpVote);
 
@@ -302,7 +302,7 @@ public class VoteServiceImpl implements VoteService {
 
         List<Vote> listOfAllVotes = voteRepository.findAll();
 
-        validateVoteList(listOfAllVotes);
+        // validateVoteList(listOfAllVotes);
 
         return voteMapper.mapListOfVoteToMVoteDto(listOfAllVotes);
     }
@@ -318,7 +318,7 @@ public class VoteServiceImpl implements VoteService {
 
         List<Vote> listOfAllUpVotes = voteRepository.findAll();
 
-        validateVoteList(listOfAllUpVotes);
+        // validateVoteList(listOfAllUpVotes);
 
         listOfAllUpVotes.removeIf(vote -> !vote.isUpVote());
 
@@ -336,7 +336,7 @@ public class VoteServiceImpl implements VoteService {
 
         List<Vote> listOfAllDownVotes = voteRepository.findAll();
 
-        validateVoteList(listOfAllDownVotes);
+        // validateVoteList(listOfAllDownVotes);
 
         listOfAllDownVotes.removeIf(Vote::isUpVote);
 

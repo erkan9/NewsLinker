@@ -74,6 +74,40 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * Updates a user's information, such as First/Last name, password and photo based on the provided UserDto.
+     *
+     * @param userID       The ID of the user to update.
+     * @param updatedUser  The UserDto containing the updated user information.
+     *
+     * @throws ResourceNotFoundException If no user with the specified userID is found.
+     */
+    @Override
+    public void updateUser(int userID, UserDto updatedUser) {
+
+        Optional<User> searchedUser = userRepository.findById(userID);
+
+        User userToUpdate = searchedUser.orElseThrow(() ->
+                new ResourceNotFoundException("User ID not Found:" + userID, "User"));
+
+        // Check and update the user's first name
+        if (updatedUser.getUserFirstName() != null) {
+            userToUpdate.setUserFirstName(updatedUser.getUserFirstName());
+        }
+
+        // Check and update the user's last name
+        if (updatedUser.getUserLastName() != null) {
+            userToUpdate.setUserLastName(updatedUser.getUserLastName());
+        }
+
+        // Check and update the user's photo
+        if (updatedUser.getUserPhoto() != null) {
+            userToUpdate.setUserPhoto(updatedUser.getUserPhoto());
+        }
+
+        userRepository.save(userToUpdate);
+    }
+
+    /**
      * Deletes a user by their user ID.
      *
      * @param userID The ID of the user to be deleted.

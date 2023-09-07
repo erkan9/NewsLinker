@@ -10,6 +10,8 @@ public interface UserService {
 
     int loginUser(String userName, String userPassword);
 
+    void updateUser(int userID, UserDto updatedUser);
+
     void deleteUserByID(int userID);
 
     void deleteUserByUserName(String userName);

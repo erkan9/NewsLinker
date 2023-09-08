@@ -10,17 +10,17 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
-    List<Comment> findCommentsByCommentAuthorID(int authorID);
+    List<Comment> findCommentsByCommentAuthorIDOrderByCommentIDAsc(int authorID);
 
     List<Comment> findCommentsByCommentNewsIDOrderByCommentIDAsc(int newsID);
 
     List<Comment> findCommentsByCommentNewsID(int newsID);
 
-    List<Comment> findCommentsByCreationDate(LocalDate creationDate);
+    List<Comment> findCommentsByCreationDateOrderByCommentIDAsc(LocalDate creationDate);
 
-    List<Comment> findCommentsByCreationDateBefore(LocalDate creationDate);
+    List<Comment> findCommentsByCreationDateBeforeOrderByCommentIDAsc(LocalDate creationDate);
 
-    List<Comment> findCommentsByCreationDateAfter(LocalDate creationDate);
+    List<Comment> findCommentsByCreationDateAfterOrderByCommentIDAsc(LocalDate creationDate);
 
     List<Comment> findCommentsByCommentContentContaining(String content);
 }

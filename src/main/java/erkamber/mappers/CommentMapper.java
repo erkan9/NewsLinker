@@ -11,14 +11,14 @@ public class CommentMapper {
 
     public CommentDto mapCommentToCommentDto(Comment comment) {
 
-        return new CommentDto(comment.getCommentID(), comment.getCommentNewsID(), comment.getCommentAuthorID(),
+        return new CommentDto(comment.getCommentID(), comment.getCommentAuthorID(), comment.getCommentNewsID(),
                 comment.getCommentContent(), comment.getCommentUpVotes(), comment.getCommentDownVotes(),
                 comment.getCreationDate());
     }
 
     public Comment mapCommentDtoToComment(CommentDto commentDto) {
 
-        return new Comment(commentDto.getCommentID(), commentDto.getCommentNewsID(), commentDto.getCommentAuthorID(),
+        return new Comment(commentDto.getCommentID(), commentDto.getCommentAuthorID(), commentDto.getCommentNewsID(),
                 commentDto.getCommentContent(), commentDto.getCommentUpVotes(), commentDto.getCommentDownVotes(),
                 commentDto.getCreationDate());
     }

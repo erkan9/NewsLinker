@@ -251,7 +251,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteAllCommentsOfUser(int userID) {
 
-        List<Comment> listOfCommentsByUser = commentRepository.findCommentsByCommentAuthorID(userID);
+        List<Comment> listOfCommentsByUser = commentRepository.findCommentsByCommentAuthorIDOrderByCommentIDAsc(userID);
 
         for (Comment comment : listOfCommentsByUser) {
 
@@ -305,7 +305,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDetailedDto> getCommentsByUserID(int userID) {
 
-        List<Comment> listOfCommentsByuserID = commentRepository.findCommentsByCommentAuthorID(userID);
+        List<Comment> listOfCommentsByuserID = commentRepository.findCommentsByCommentAuthorIDOrderByCommentIDAsc(userID);
 
         return convertListToDetailedDto(listOfCommentsByuserID);
     }
@@ -335,7 +335,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDetailedDto> getCommentsByCreationDate(LocalDate creationDate) {
 
-        List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCreationDate(creationDate);
+        List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCreationDateOrderByCommentIDAsc(creationDate);
 
         return convertListToDetailedDto(listOfCommentsByDate);
     }
@@ -350,7 +350,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDetailedDto> getCommentsByCreationDateBefore(LocalDate creationDate) {
 
-        List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCreationDateBefore(creationDate);
+        List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCreationDateBeforeOrderByCommentIDAsc(creationDate);
 
         return convertListToDetailedDto(listOfCommentsByDate);
     }
@@ -365,7 +365,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDetailedDto> getCommentsByCreationDateAfter(LocalDate creationDate) {
 
-        List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCreationDateAfter(creationDate);
+        List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCreationDateAfterOrderByCommentIDAsc(creationDate);
 
         return convertListToDetailedDto(listOfCommentsByDate);
     }

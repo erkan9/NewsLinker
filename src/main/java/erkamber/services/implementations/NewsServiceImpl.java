@@ -314,7 +314,7 @@ public class NewsServiceImpl implements NewsService {
 
         validateTextForInjection(newsTitle);
 
-        List<News> listOfNewsByTitle = newsRepository.findNewsByNewsTitle(newsTitle);
+        List<News> listOfNewsByTitle = newsRepository.findNewsByNewsTitleOrderByNewsIDAsc(newsTitle);
 
         isListOfNewsEmpty(listOfNewsByTitle);
 
@@ -331,7 +331,7 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public List<NewsDetailedDto> findNewsByCreationDateBefore(LocalDate beforeDate) {
 
-        List<News> listOfNewsByCreationDateBefore = newsRepository.findNewsByNewsCreationDateBefore(beforeDate);
+        List<News> listOfNewsByCreationDateBefore = newsRepository.findNewsByNewsCreationDateBeforeOrderByNewsIDAsc(beforeDate);
 
         isListOfNewsEmpty(listOfNewsByCreationDateBefore);
 
@@ -348,7 +348,7 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public List<NewsDetailedDto> findNewsByCreationDateAfter(LocalDate afterDate) {
 
-        List<News> listOfNewsByCreationDateAfter = newsRepository.findNewsByNewsCreationDateAfter(afterDate);
+        List<News> listOfNewsByCreationDateAfter = newsRepository.findNewsByNewsCreationDateAfterOrderByNewsIDAsc(afterDate);
 
         isListOfNewsEmpty(listOfNewsByCreationDateAfter);
 

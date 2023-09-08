@@ -136,7 +136,7 @@ public class NewsServiceImpl implements NewsService {
 
         viewRepository.save(view);
 
-        return gatherDataForNewsDetailedDtoByNewsID(newsID);
+        return gatherDataForNewsDetailedDtoByNewsID(searchedNews.getNewsID());
     }
 
     /**

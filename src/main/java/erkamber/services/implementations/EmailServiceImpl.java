@@ -49,7 +49,7 @@ public class EmailServiceImpl implements EmailService {
             context.setVariable("comment", comment);
             context.setVariable("postTitle", postTitle);
 
-            String process = templateEngine.process("/email", context);
+            String process = templateEngine.process("email", context);
 
             // Create and send the email message
             MimeMessage message = javaMailSender.createMimeMessage();

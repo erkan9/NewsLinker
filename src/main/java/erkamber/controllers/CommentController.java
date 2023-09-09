@@ -42,28 +42,37 @@ public class CommentController {
         return ResponseEntity.ok(commentService.getAllComments());
     }
 
-    @GetMapping(value = "/comments", params = {"beforeCreationDate"})
-    public ResponseEntity<List<CommentDetailedDto>> getCommentsByCreationDateBefore(@RequestParam("beforeCreationDate")
-                                                                                    @DateTimeFormat(pattern = "yyyy-MM-dd")
-                                                                                    LocalDate beforeCreationDate) {
+    @GetMapping(value = "/comments", params = {"newsId", "beforeCreationDate"})
+    public ResponseEntity<List<CommentDetailedDto>> getCommentsByNewsIDAndCreationDateBefore(@RequestParam("newsId")
+                                                                                             @Positive(message = "News ID must be a Positive number!")
+                                                                                             int newsID,
+                                                                                             @RequestParam("beforeCreationDate")
+                                                                                             @DateTimeFormat(pattern = "yyyy-MM-dd")
+                                                                                             LocalDate beforeCreationDate) {
 
-        return ResponseEntity.ok(commentService.getCommentsByCreationDateBefore(beforeCreationDate));
+        return ResponseEntity.ok(commentService.getCommentsByCreationDateBefore(newsID, beforeCreationDate));
     }
 
-    @GetMapping(value = "/comments", params = {"afterCreationDate"})
-    public ResponseEntity<List<CommentDetailedDto>> getCommentsByCreationDateAfter(@RequestParam("afterCreationDate")
-                                                                                   @DateTimeFormat(pattern = "yyyy-MM-dd")
-                                                                                   LocalDate afterCreationDate) {
+    @GetMapping(value = "/comments", params = {"newsId", "afterCreationDate"})
+    public ResponseEntity<List<CommentDetailedDto>> getCommentsByNewsIDAndCreationDateAfter(@RequestParam("newsId")
+                                                                                            @Positive(message = "News ID must be a Positive number!")
+                                                                                            int newsID,
+                                                                                            @RequestParam("afterCreationDate")
+                                                                                            @DateTimeFormat(pattern = "yyyy-MM-dd")
+                                                                                            LocalDate afterCreationDate) {
 
-        return ResponseEntity.ok(commentService.getCommentsByCreationDateAfter(afterCreationDate));
+        return ResponseEntity.ok(commentService.getCommentsByCreationDateAfter(newsID, afterCreationDate));
     }
 
-    @GetMapping(value = "/comments", params = {"creationDate"})
-    public ResponseEntity<List<CommentDetailedDto>> getCommentsByCreationDate(@RequestParam("creationDate")
-                                                                              @DateTimeFormat(pattern = "yyyy-MM-dd")
-                                                                              LocalDate creationDate) {
+    @GetMapping(value = "/comments", params = {"newsId", "creationDate"})
+    public ResponseEntity<List<CommentDetailedDto>> getCommentsByNewsIDAndCreationDate(@RequestParam("newsId")
+                                                                                       @Positive(message = "News ID must be a Positive number!")
+                                                                                       int newsID,
+                                                                                       @RequestParam("creationDate")
+                                                                                       @DateTimeFormat(pattern = "yyyy-MM-dd")
+                                                                                       LocalDate creationDate) {
 
-        return ResponseEntity.ok(commentService.getCommentsByCreationDate(creationDate));
+        return ResponseEntity.ok(commentService.getCommentsByCreationDate(newsID, creationDate));
     }
 
     @GetMapping(value = "/comments", params = {"newsId"})

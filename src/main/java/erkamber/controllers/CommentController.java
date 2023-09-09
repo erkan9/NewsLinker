@@ -50,7 +50,7 @@ public class CommentController {
                                                                                              @DateTimeFormat(pattern = "yyyy-MM-dd")
                                                                                              LocalDate beforeCreationDate) {
 
-        return ResponseEntity.ok(commentService.getCommentsByCreationDateBefore(newsID, beforeCreationDate));
+        return ResponseEntity.ok(commentService.getCommentsByNewsIDAndCreationDateBefore(newsID, beforeCreationDate));
     }
 
     @GetMapping(value = "/comments", params = {"newsId", "afterCreationDate"})
@@ -61,7 +61,7 @@ public class CommentController {
                                                                                             @DateTimeFormat(pattern = "yyyy-MM-dd")
                                                                                             LocalDate afterCreationDate) {
 
-        return ResponseEntity.ok(commentService.getCommentsByCreationDateAfter(newsID, afterCreationDate));
+        return ResponseEntity.ok(commentService.getCommentsByNewsIDAndCreationDateAfter(newsID, afterCreationDate));
     }
 
     @GetMapping(value = "/comments", params = {"newsId", "creationDate"})
@@ -72,7 +72,7 @@ public class CommentController {
                                                                                        @DateTimeFormat(pattern = "yyyy-MM-dd")
                                                                                        LocalDate creationDate) {
 
-        return ResponseEntity.ok(commentService.getCommentsByCreationDate(newsID, creationDate));
+        return ResponseEntity.ok(commentService.getCommentsByNewsIDAndIDCreationDate(newsID, creationDate));
     }
 
     @GetMapping(value = "/comments", params = {"newsId"})

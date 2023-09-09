@@ -334,7 +334,7 @@ public class CommentServiceImpl implements CommentService {
      * the specified date.
      */
     @Override
-    public List<CommentDetailedDto> getCommentsByCreationDate(int newsID, LocalDate creationDate) {
+    public List<CommentDetailedDto> getCommentsByNewsIDAndIDCreationDate(int newsID, LocalDate creationDate) {
 
         List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCommentNewsIDAndCreationDateOrderByCommentIDAsc(newsID, creationDate);
 
@@ -350,7 +350,7 @@ public class CommentServiceImpl implements CommentService {
      * before the specified date.
      */
     @Override
-    public List<CommentDetailedDto> getCommentsByCreationDateBefore(int newsID, LocalDate creationDate) {
+    public List<CommentDetailedDto> getCommentsByNewsIDAndCreationDateBefore(int newsID, LocalDate creationDate) {
 
         List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCommentNewsIDAndCreationDateBeforeOrderByCommentIDAsc(newsID, creationDate);
 
@@ -366,7 +366,7 @@ public class CommentServiceImpl implements CommentService {
      * after the specified date.
      */
     @Override
-    public List<CommentDetailedDto> getCommentsByCreationDateAfter(int newsID, LocalDate creationDate) {
+    public List<CommentDetailedDto> getCommentsByNewsIDAndCreationDateAfter(int newsID, LocalDate creationDate) {
 
         List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCommentNewsIDAndCreationDateAfterOrderByCommentIDAsc(newsID, creationDate);
 

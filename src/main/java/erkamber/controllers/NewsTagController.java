@@ -2,6 +2,7 @@ package erkamber.controllers;
 
 import erkamber.dtos.NewsTagDetailedDto;
 import erkamber.dtos.NewsTagDto;
+import erkamber.dtos.NewsTagDtoResponse;
 import erkamber.services.interfaces.NewsTagService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -41,7 +42,7 @@ public class NewsTagController {
     }
 
     @GetMapping(value = "/newsTags", params = {"newsId"})
-    public ResponseEntity<List<NewsTagDto>> getTagsOfNews(@RequestParam("newsId")
+    public ResponseEntity<List<NewsTagDtoResponse>> getTagsOfNews(@RequestParam("newsId")
                                                           @Positive(message = "News ID must be a Positive number!")
                                                           int newsID) {
 

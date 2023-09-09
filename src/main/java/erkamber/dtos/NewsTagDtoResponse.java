@@ -1,22 +1,21 @@
 package erkamber.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class NewsTagDetailedDto {
+public class NewsTagDtoResponse {
 
-    @Positive
+    @PositiveOrZero
     private int newsTagID;
 
     @Positive
-    private NewsDetailedDto newsDetailedDto;
+    private int newsID;
 
+    @Positive
     private TagDto tagDto;
-
 }

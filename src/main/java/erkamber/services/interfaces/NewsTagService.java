@@ -2,6 +2,7 @@ package erkamber.services.interfaces;
 
 import erkamber.dtos.NewsTagDetailedDto;
 import erkamber.dtos.NewsTagDto;
+import erkamber.dtos.NewsTagDtoResponse;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface NewsTagService {
 
     List<NewsTagDetailedDto> getTagsOfNewsDetailed(int newsID);
 
-    List<NewsTagDto> getTagsOfNews(int newsID);
+    List<NewsTagDtoResponse> getTagsOfNews(int newsID);
 
     List<NewsTagDetailedDto> getNewsOfTag(int tagID);
 

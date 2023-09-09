@@ -25,11 +25,11 @@ public interface CommentService {
 
     List<CommentDetailedDto> getCommentsByNewsID(int newsID);
 
-    List<CommentDetailedDto> getCommentsByCreationDate(LocalDate creationDate);
+    List<CommentDetailedDto> getCommentsByNewsIDAndIDCreationDate(int newsID, LocalDate creationDate);
 
-    List<CommentDetailedDto> getCommentsByCreationDateBefore(LocalDate creationDate);
+    List<CommentDetailedDto> getCommentsByNewsIDAndCreationDateBefore(int newsID, LocalDate creationDate);
 
-    List<CommentDetailedDto> getCommentsByCreationDateAfter(LocalDate creationDate);
+    List<CommentDetailedDto> getCommentsByNewsIDAndCreationDateAfter(int newsID, LocalDate creationDate);
 
     List<CommentDetailedDto> getAllComments();
 }

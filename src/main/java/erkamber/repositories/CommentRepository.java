@@ -16,11 +16,11 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     List<Comment> findCommentsByCommentNewsID(int newsID);
 
-    List<Comment> findCommentsByCreationDateOrderByCommentIDAsc(LocalDate creationDate);
+    List<Comment> findCommentsByCommentNewsIDAndCreationDateOrderByCommentIDAsc(int commentNewsID, LocalDate creationDate);
 
-    List<Comment> findCommentsByCreationDateBeforeOrderByCommentIDAsc(LocalDate creationDate);
+    List<Comment> findCommentsByCommentNewsIDAndCreationDateBeforeOrderByCommentIDAsc(int commentNewsID, LocalDate creationDate);
 
-    List<Comment> findCommentsByCreationDateAfterOrderByCommentIDAsc(LocalDate creationDate);
+    List<Comment> findCommentsByCommentNewsIDAndCreationDateAfterOrderByCommentIDAsc(int commentNewsID, LocalDate creationDate);
 
     List<Comment> findCommentsByCommentContentContaining(String content);
 }

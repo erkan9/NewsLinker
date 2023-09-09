@@ -326,46 +326,49 @@ public class CommentServiceImpl implements CommentService {
     }
 
     /**
-     * Retrieves a list of detailed comment representations created on the specified creation date.
+     * Retrieves a list of detailed comment by newsID representations created on the specified creation date.
      *
+     * @param newsID  newsID used to find its comments
      * @param creationDate The creation date for which comments are to be retrieved.
      * @return A list of {@link CommentDetailedDto} objects representing the detailed information of comments created on
      * the specified date.
      */
     @Override
-    public List<CommentDetailedDto> getCommentsByCreationDate(LocalDate creationDate) {
+    public List<CommentDetailedDto> getCommentsByNewsIDAndIDCreationDate(int newsID, LocalDate creationDate) {
 
-        List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCreationDateOrderByCommentIDAsc(creationDate);
+        List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCommentNewsIDAndCreationDateOrderByCommentIDAsc(newsID, creationDate);
 
         return convertListToDetailedDto(listOfCommentsByDate);
     }
 
     /**
-     * Retrieves a list of detailed comment representations created before the specified creation date.
+     * Retrieves a list of detailed comment by newsID representations created before the specified creation date.
      *
+     * @param newsID  newsID used to find its comments
      * @param creationDate The reference creation date for which comments created before are to be retrieved.
      * @return A list of {@link CommentDetailedDto} objects representing the detailed information of comments created
      * before the specified date.
      */
     @Override
-    public List<CommentDetailedDto> getCommentsByCreationDateBefore(LocalDate creationDate) {
+    public List<CommentDetailedDto> getCommentsByNewsIDAndCreationDateBefore(int newsID, LocalDate creationDate) {
 
-        List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCreationDateBeforeOrderByCommentIDAsc(creationDate);
+        List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCommentNewsIDAndCreationDateBeforeOrderByCommentIDAsc(newsID, creationDate);
 
         return convertListToDetailedDto(listOfCommentsByDate);
     }
 
     /**
-     * Retrieves a list of detailed comment representations created after the specified creation date.
+     * Retrieves a list of detailed comment by newsID representations created after the specified creation date.
      *
+     * @param newsID  newsID used to find its comments
      * @param creationDate The reference creation date for which comments created after are to be retrieved.
      * @return A list of {@link CommentDetailedDto} objects representing the detailed information of comments created
      * after the specified date.
      */
     @Override
-    public List<CommentDetailedDto> getCommentsByCreationDateAfter(LocalDate creationDate) {
+    public List<CommentDetailedDto> getCommentsByNewsIDAndCreationDateAfter(int newsID, LocalDate creationDate) {
 
-        List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCreationDateAfterOrderByCommentIDAsc(creationDate);
+        List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCommentNewsIDAndCreationDateAfterOrderByCommentIDAsc(newsID, creationDate);
 
         return convertListToDetailedDto(listOfCommentsByDate);
     }

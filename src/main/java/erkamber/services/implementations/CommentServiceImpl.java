@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -71,7 +72,7 @@ public class CommentServiceImpl implements CommentService {
     public int addNewComment(CommentDto commentDto) throws MessagingException {
 
         // Set the creation date of the comment to the current date
-        commentDto.setCreationDate(LocalDate.now());
+        commentDto.setCreationDate(LocalDateTime.now());
 
         // Validate the comment content
         isCommentContentValid(commentDto.getCommentContent());

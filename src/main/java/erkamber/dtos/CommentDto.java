@@ -1,9 +1,10 @@
 package erkamber.dtos;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -30,7 +31,7 @@ public class CommentDto {
     @PositiveOrZero(message = "Down votes must be Positive number or Zero")
     private int commentDownVotes = 0;
 
-    private LocalDate creationDate;
+    private LocalDateTime creationDate;
 
     public CommentDto() {
     }
@@ -41,7 +42,7 @@ public class CommentDto {
         this.commentContent = commentContent;
     }
 
-    public CommentDto(int commentAuthorID, int commentNewsID, String commentContent, int commentUpVotes, int commentDownVotes, LocalDate creationDate) {
+    public CommentDto(int commentAuthorID, int commentNewsID, String commentContent, int commentUpVotes, int commentDownVotes, LocalDateTime creationDate) {
         this.commentAuthorID = commentAuthorID;
         this.commentNewsID = commentNewsID;
         this.commentContent = commentContent;
@@ -50,7 +51,7 @@ public class CommentDto {
         this.creationDate = creationDate;
     }
 
-    public CommentDto(int commentID, int commentAuthorID, int commentNewsID, String commentContent, int commentUpVotes, int commentDownVotes, LocalDate creationDate) {
+    public CommentDto(int commentID, int commentAuthorID, int commentNewsID, String commentContent, int commentUpVotes, int commentDownVotes, LocalDateTime creationDate) {
         this.commentID = commentID;
         this.commentAuthorID = commentAuthorID;
         this.commentNewsID = commentNewsID;

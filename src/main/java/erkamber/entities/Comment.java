@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -34,13 +34,13 @@ public class Comment {
     private int commentDownVotes;
 
     @Column(name = "comment_creation_date", unique = false, updatable = false, insertable = true, nullable = false)
-    private LocalDate creationDate;
+    private LocalDateTime creationDate;
 
     public Comment() {
     }
 
     public Comment(int commentID, int commentAuthorID, int commentNewsID, String commentContent,
-                   int commentUpVotes, int commentDownVotes, LocalDate creationDate) {
+                   int commentUpVotes, int commentDownVotes, LocalDateTime creationDate) {
 
         this.commentID = commentID;
         this.commentAuthorID = commentAuthorID;

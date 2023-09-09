@@ -1,12 +1,11 @@
 package erkamber.dtos;
 
-import erkamber.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -34,5 +33,5 @@ public class CommentDetailedDto {
     @PositiveOrZero(message = "Down votes must be Positive number or Zero")
     private int commentDownVotes;
 
-    private LocalDate creationDate;
+    private LocalDateTime creationDate;
 }

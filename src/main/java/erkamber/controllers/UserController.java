@@ -55,7 +55,7 @@ public class UserController {
     @PostMapping(value = "/users/login")
     public ResponseEntity<Void> userLogIn(@Valid @RequestBody UserLoginDto loginDTO) {
 
-        int loggedUserID = userService.loginUser(loginDTO.getUserName(), loginDTO.getUserPassword());
+        int loggedUserID = userService.loginUser(loginDTO.getUserEmail(), loginDTO.getUserPassword());
 
         return ResponseEntity.created(URI.create("api/v1/users/login" + loggedUserID)).build();
     }
@@ -72,7 +72,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @GetMapping(value = "/users", params = {"userName"})
+    @GetMapping(value = "/users", params = {"userEmail"})
     public ResponseEntity<UserDto> getUserByUserName(@RequestParam("userName")
                                                      @NotBlank(message = "UserName cannot be Blank!")
                                                      @NotEmpty(message = "UserName cannot be Empty!")
@@ -127,7 +127,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getUsersByLastName(lastName));
     }
 
-    @DeleteMapping(value = "/users", params = {"userName"})
+    @DeleteMapping(value = "/users", params = {"userEmail"})
     public void deleteUserByUserName(@RequestParam("userName")
                                      @NotBlank(message = "UserName cannot be Blank!")
                                      @NotEmpty(message = "UserName cannot be Empty!")

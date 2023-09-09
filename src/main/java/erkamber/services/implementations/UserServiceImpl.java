@@ -59,17 +59,17 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Logs in a user with the provided username and password.
+     * Logs in a user with the provided user email and password.
      *
-     * @param userName     The username of the user.
+     * @param userEmail     The email of the user.
      * @param userPassword The password of the user.
      * @return The ID of the logged-in user.
      * @throws ResourceNotFoundException If the provided login credentials are invalid.
      */
     @Override
-    public int loginUser(String userName, String userPassword) {
+    public int loginUser(String userEmail, String userPassword) {
 
-        User searchedUser = getLoginUser(userName, userPassword);
+        User searchedUser = getLoginUser(userEmail, userPassword);
 
         return searchedUser.getUserID();
     }
@@ -389,9 +389,9 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Validates if user's userName is valid
+     * Validates if user's userEmail is valid
      *
-     * @param userName the userName of the user
+     * @param userName the userEmail of the user
      */
     private void isUserNameValid(String userName) {
 
@@ -434,20 +434,20 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Method used to find and return the user trying to log in by userName and password
+     * Method used to find and return the user trying to log in by userEmail and password
      *
-     * @param userName the userName of the user trying to log in
+     * @param userEmail the userEmail of the user trying to log in
      * @param password the password of the user trying to log in
      * @return the user as object trying to log in
      */
-    private User getLoginUser(String userName, String password) {
+    private User getLoginUser(String userEmail, String password) {
 
         List<User> allUsers = userRepository.findAll();
 
         return allUsers.stream()
-                .filter(user -> user.getUserName().equals(userName) &&
+                .filter(user -> user.getUserEmail().equals(userEmail) &&
                         passwordEncoderConfiguration.passwordEncoder().matches(password, user.getUserPassword()))
                 .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("Incorrect username or password!", "User"));
+                .orElseThrow(() -> new ResourceNotFoundException("Incorrect email or password!", "User"));
     }
 }

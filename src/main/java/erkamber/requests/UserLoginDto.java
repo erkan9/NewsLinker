@@ -10,9 +10,9 @@ import javax.validation.constraints.Size;
 @Setter
 public class UserLoginDto {
 
-    @NotBlank(message = "UserName cannot be Blank!")
-    @Size(min = 1, message = "UserName cannot be Empty!")
-    private String userName;
+    @NotBlank(message = "Email cannot be Blank!")
+    @Size(min = 1, message = "Email cannot be Empty!")
+    private String userEmail;
 
     @NotBlank(message = "User Password cannot be Blank!")
     @Size(min = 1, message = "User Password cannot be Empty!")
@@ -21,8 +21,8 @@ public class UserLoginDto {
     public UserLoginDto() {
     }
 
-    public UserLoginDto(String userName, String userPassword) {
-        this.userName = userName;
+    public UserLoginDto(String userEmail, String userPassword) {
+        this.userEmail = userEmail;
         this.userPassword = userPassword;
     }
 }

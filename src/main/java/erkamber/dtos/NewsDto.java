@@ -3,13 +3,8 @@ package erkamber.dtos;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
-import java.time.LocalDate;
+import javax.validation.constraints.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -39,14 +34,14 @@ public class NewsDto {
     @PositiveOrZero(message = "Down votes must be Positive number or Zero")
     private int newsDownVotes;
 
-    private LocalDate newsCreationDate;
+    private LocalDateTime newsCreationDate;
 
     public NewsDto() {
     }
 
     public NewsDto(
             int userID, String newsTitle, String newsContent, int newsUpVotes, int newsDownVotes,
-            LocalDate newsCreationDate) {
+            LocalDateTime newsCreationDate) {
         this.userID = userID;
         this.newsTitle = newsTitle;
         this.newsContent = newsContent;
@@ -71,7 +66,7 @@ public class NewsDto {
 
     public NewsDto(
             int newsID, int userID, String newsTitle, String newsContent, int newsUpVotes, int newsDownVotes,
-            LocalDate newsCreationDate) {
+            LocalDateTime newsCreationDate) {
         this.newsID = newsID;
         this.userID = userID;
         this.newsTitle = newsTitle;

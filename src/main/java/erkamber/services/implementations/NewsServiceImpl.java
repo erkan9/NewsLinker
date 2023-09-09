@@ -15,6 +15,7 @@ import erkamber.validations.InjectionValidation;
 import erkamber.validations.NewsValidation;
 import erkamber.validations.UserValidation;
 import org.json.JSONObject;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -260,7 +261,7 @@ public class NewsServiceImpl implements NewsService {
 
         isUserExists(authorID);
 
-        List<News> newsListOfAuthor = newsRepository.findNewsByUserID(authorID);
+        List<News> newsListOfAuthor = newsRepository.findNewsByUserIDOrderByNewsIDAsc(authorID);
 
         isListOfNewsEmpty(newsListOfAuthor);
 
@@ -276,7 +277,7 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public List<NewsDetailedDto> getAllNews() {
 
-        List<News> listOfAllNews = newsRepository.findAll();
+        List<News> listOfAllNews = newsRepository.findAll((Sort.by(Sort.Direction.ASC, "newsID")));
 
         isListOfNewsEmpty(listOfAllNews);
 
@@ -295,7 +296,7 @@ public class NewsServiceImpl implements NewsService {
 
         isUserExists(userID);
 
-        List<News> listOfNewsByUser = newsRepository.findNewsByUserID(userID);
+        List<News> listOfNewsByUser = newsRepository.findNewsByUserIDOrderByNewsIDAsc(userID);
 
         isListOfNewsEmpty(listOfNewsByUser);
 

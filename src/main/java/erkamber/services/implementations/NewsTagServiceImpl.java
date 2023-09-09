@@ -1,9 +1,6 @@
 package erkamber.services.implementations;
 
-import erkamber.dtos.NewsDetailedDto;
-import erkamber.dtos.NewsTagDetailedDto;
-import erkamber.dtos.NewsTagDto;
-import erkamber.dtos.TagDto;
+import erkamber.dtos.*;
 import erkamber.entities.NewsTag;
 import erkamber.exceptions.ResourceNotFoundException;
 import erkamber.mappers.NewsTagMapper;
@@ -156,13 +153,24 @@ public class NewsTagServiceImpl implements NewsTagService {
      * @throws ResourceNotFoundException If no news tags are found for the specified news article.
      */
     @Override
-    public List<NewsTagDto> getTagsOfNews(int newsID) {
+    public List<NewsTagDtoResponse> getTagsOfNews(int newsID) {
 
         List<NewsTag> listOfNewsTagByNewsID = newsTagRepository.findNewsTagsByNewsID(newsID);
 
         isNewsTagListEmpty(listOfNewsTagByNewsID);
 
-        return newsTagMapper.mapListToNewsTagDto(listOfNewsTagByNewsID);
+        List<NewsTagDtoResponse> responseList = new ArrayList<>();
+
+        for (NewsTag newsTag : listOfNewsTagByNewsID) {
+
+            TagDto tagDto = tagService.findTagByTagID(newsTag.getTagID());
+
+            NewsTagDtoResponse newsTagDtoResponse = new NewsTagDtoResponse(newsTag.getNewsTagID(), newsTag.getNewsID(), tagDto);
+
+            responseList.add(newsTagDtoResponse);
+        }
+
+        return responseList;
     }
 
     /**

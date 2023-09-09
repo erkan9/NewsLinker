@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -40,7 +40,7 @@ public class NewsDetailedDto {
     private int numberOfViews;
 
     @NotNull(message = "News Creation Date cannot be Null")
-    private LocalDate newsCreationDate;
+    private LocalDateTime newsCreationDate;
 
     private List<TagDto> listOfNewsTags;
 

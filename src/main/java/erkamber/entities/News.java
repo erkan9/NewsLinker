@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -34,13 +35,13 @@ public class News {
     private int newsDownVotes;
 
     @Column(name = "news_creation_date", unique = false, updatable = false, insertable = true, nullable = false)
-    private LocalDate newsCreationDate;
+    private LocalDateTime newsCreationDate;
 
     public News() {
     }
 
     public News(int newsID, int userID, String newsTitle, String newsContent, int newsUpVotes, int newsDownVotes,
-                LocalDate newsCreationDate) {
+                LocalDateTime newsCreationDate) {
 
         this.newsID = newsID;
         this.userID = userID;

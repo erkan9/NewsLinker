@@ -8,7 +8,7 @@ public interface UserService {
 
     int registerUser(UserDto userDto);
 
-    int loginUser(String userName, String userPassword);
+    int loginUser(String userEmail, String userPassword);
 
     void updateUser(int userID, UserDto updatedUser);
 

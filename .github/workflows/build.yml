@@ -1,4 +1,4 @@
-name: Build
+name: Build and Deploy
 
 on:
   pull_request:
@@ -6,8 +6,8 @@ on:
       - develop
 
 jobs:
-  build:
-    name: Build and Test Project
+  build-and-deploy:
+    name: Build and Deploy Project
     runs-on: ubuntu-latest
 
     steps:
@@ -16,3 +16,9 @@ jobs:
 
       - name: Build Project
         run: mvn clean install
+
+      - name: Deploy to Render
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{}' "$RENDER_DEPLOY_URL"
+        env:
+          RENDER_DEPLOY_URL: ${{ secrets.RENDER_DEPLOY_URL }}

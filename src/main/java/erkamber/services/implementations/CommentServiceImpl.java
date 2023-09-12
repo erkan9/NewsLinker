@@ -97,8 +97,8 @@ public class CommentServiceImpl implements CommentService {
         UserDto newsAuthor = userService.getUserByID(searchedNews.getUserID());
 
         // Send an email notification to the news author
-       // emailService.sendEmail(newsAuthor.getUserFirstName(), commentAuthorUserName, commentDto.getCommentContent(),
-       //         newsAuthor.getUserEmail(), searchedNews.getNewsTitle());
+        // emailService.sendEmail(newsAuthor.getUserFirstName(), commentAuthorUserName, commentDto.getCommentContent(),
+        //         newsAuthor.getUserEmail(), searchedNews.getNewsTitle());
 
         // Return the ID of the newly added comment
         return newComment.getCommentID();
@@ -329,7 +329,7 @@ public class CommentServiceImpl implements CommentService {
     /**
      * Retrieves a list of detailed comment by newsID representations created on the specified creation date.
      *
-     * @param newsID  newsID used to find its comments
+     * @param newsID       newsID used to find its comments
      * @param creationDate The creation date for which comments are to be retrieved.
      * @return A list of {@link CommentDetailedDto} objects representing the detailed information of comments created on
      * the specified date.
@@ -345,7 +345,7 @@ public class CommentServiceImpl implements CommentService {
     /**
      * Retrieves a list of detailed comment by newsID representations created before the specified creation date.
      *
-     * @param newsID  newsID used to find its comments
+     * @param newsID       newsID used to find its comments
      * @param creationDate The reference creation date for which comments created before are to be retrieved.
      * @return A list of {@link CommentDetailedDto} objects representing the detailed information of comments created
      * before the specified date.
@@ -361,7 +361,7 @@ public class CommentServiceImpl implements CommentService {
     /**
      * Retrieves a list of detailed comment by newsID representations created after the specified creation date.
      *
-     * @param newsID  newsID used to find its comments
+     * @param newsID       newsID used to find its comments
      * @param creationDate The reference creation date for which comments created after are to be retrieved.
      * @return A list of {@link CommentDetailedDto} objects representing the detailed information of comments created
      * after the specified date.

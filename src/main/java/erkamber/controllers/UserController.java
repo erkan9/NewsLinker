@@ -36,7 +36,7 @@ public class UserController {
         return ResponseEntity.created(URI.create("api/v1/users/register" + newUserID)).build();
     }
 
-    @PatchMapping("/users/update/")
+    @PatchMapping("/users/update")
     public ResponseEntity<String> updateUser(@RequestParam @Positive int userID, @RequestBody UserDto updatedUserDto) {
 
         userService.updateUser(userID, updatedUserDto);

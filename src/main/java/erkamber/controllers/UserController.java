@@ -37,11 +37,9 @@ public class UserController {
     }
 
     @PatchMapping("/users/update")
-    public ResponseEntity<String> updateUser(@RequestParam @Positive int userID, @RequestBody UserDto updatedUserDto) {
+    public void updateUser(@RequestParam @Positive int userID, @RequestBody UserDto updatedUserDto) {
 
         userService.updateUser(userID, updatedUserDto);
-
-        return ResponseEntity.ok("User updated successfully");
     }
 
     @PatchMapping("users/password/update")

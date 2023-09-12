@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
     /**
      * Logs in a user with the provided user email and password.
      *
-     * @param userEmail     The email of the user.
+     * @param userEmail    The email of the user.
      * @param userPassword The password of the user.
      * @return The ID of the logged-in user.
      * @throws ResourceNotFoundException If the provided login credentials are invalid.
@@ -117,9 +117,9 @@ public class UserServiceImpl implements UserService {
      * @param oldPassword       The user's old password for verification.
      * @param newPassword       The user's new password.
      * @param newPasswordRepeat The repeated new password for confirmation.
-     * @throws ResourceNotFoundException If the user with the specified userID is not found.
-     * @throws NotMatchingPasswordsException      If the old password does not match the stored password or
-     *                                   if the new passwords provided do not match.
+     * @throws ResourceNotFoundException     If the user with the specified userID is not found.
+     * @throws NotMatchingPasswordsException If the old password does not match the stored password or
+     *                                       if the new passwords provided do not match.
      */
     @Override
     public void updateUserPassword(int userID, String oldPassword, String newPassword, String newPasswordRepeat) {
@@ -437,7 +437,7 @@ public class UserServiceImpl implements UserService {
      * Method used to find and return the user trying to log in by userEmail and password
      *
      * @param userEmail the userEmail of the user trying to log in
-     * @param password the password of the user trying to log in
+     * @param password  the password of the user trying to log in
      * @return the user as object trying to log in
      */
     private User getLoginUser(String userEmail, String password) {

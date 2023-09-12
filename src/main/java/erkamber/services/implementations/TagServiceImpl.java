@@ -8,12 +8,13 @@ import erkamber.exceptions.ResourceNotFoundException;
 import erkamber.mappers.TagMapper;
 import erkamber.repositories.NewsTagRepository;
 import erkamber.repositories.TagRepository;
-import erkamber.services.interfaces.NewsTagService;
 import erkamber.services.interfaces.TagService;
 import erkamber.validations.TagValidation;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

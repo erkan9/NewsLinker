@@ -161,7 +161,7 @@ public class NewsServiceImpl implements NewsService {
 
         validateNewsTitle(newsDto.getNewsTitle());
 
-        validateTextForInjection(newsDto.getNewsContent());
+       //validateTextForInjection(newsDto.getNewsContent());
 
         News news = newsMapper.mapNewsDtoToNews(newsDto);
 
@@ -195,7 +195,7 @@ public class NewsServiceImpl implements NewsService {
 
         JSONObject jsonObject = jsonObjectConfiguration.getJsonObjectConfiguration(content);
 
-        validateTextForInjection(jsonObject.getString("content"));
+        //validateTextForInjection(jsonObject.getString("content"));
 
         searchedNews.setNewsContent(jsonObject.getString("content"));
 
@@ -316,7 +316,7 @@ public class NewsServiceImpl implements NewsService {
 
         validateNewsTitle(newsTitle);
 
-        validateTextForInjection(newsTitle);
+        //validateTextForInjection(newsTitle);
 
         List<News> listOfNewsByTitle = newsRepository.findNewsByNewsTitleOrderByNewsIDAsc(newsTitle);
 

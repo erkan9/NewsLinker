@@ -75,7 +75,7 @@ public class CommentServiceImpl implements CommentService {
         commentDto.setCreationDate(LocalDateTime.now());
 
         // Validate the comment content
-        isCommentContentValid(commentDto.getCommentContent());
+       // isCommentContentValid(commentDto.getCommentContent());
 
         // Map the CommentDto to a Comment entity
         Comment newComment = commentMapper.mapCommentDtoToComment(commentDto);

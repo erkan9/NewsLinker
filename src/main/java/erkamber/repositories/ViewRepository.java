@@ -16,5 +16,7 @@ public interface ViewRepository extends JpaRepository<View, Integer> {
 
     List<View> findViewByViewNewsIDAndViewCreationDateAfter(int newsID, LocalDate afterCreationDate);
 
+    List<View> findViewByViewCreationDateBetween(LocalDate startDate, LocalDate endDate);
+
     List<View> findViewByViewUserID(int userID);
 }

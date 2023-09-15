@@ -370,7 +370,7 @@ public class NewsServiceImpl implements NewsService {
      * @return A list of {@link NewsDetailedDto} representing the top trending news articles.
      */
     @Override
-    public List<NewsDetailedDto> getTopFourTrendingNews(int countOfTrendingNews) {
+    public List<NewsDetailedDto> getTopTrendingNews(int countOfTrendingNews) {
 
         TopTrendingNewsListSize.TRENDING_NEWS_LIST_SIZE.setTopTrendingNewsListSize(countOfTrendingNews);
 

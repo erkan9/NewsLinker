@@ -34,5 +34,5 @@ public interface NewsService {
 
     List<NewsDetailedDto> findNewsByCreationDateAfter(LocalDate afterDate);
 
-    List<NewsDetailedDto> getTopFourTrendingNews(int countOfTrendingNews);
+    List<NewsDetailedDto> getTopTrendingNews(int countOfTrendingNews);
 }

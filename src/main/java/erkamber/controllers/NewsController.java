@@ -50,6 +50,7 @@ public class NewsController {
 
     @GetMapping("/news/trending/{topNewsCount}")
     public ResponseEntity<List<NewsDetailedDto>> getTrendingNews(@PathVariable int topNewsCount) {
+
         List<NewsDetailedDto> trendingNews = this.newsService.getTopTrendingNews(topNewsCount);
 
         return ResponseEntity.ok(trendingNews);

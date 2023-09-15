@@ -669,6 +669,7 @@ public class NewsServiceImpl implements NewsService {
      * @return A list of View objects representing views created within the specified date range.
      */
     private List<View> getViewsWithinDateRange(LocalDate endDate, LocalDate startDate) {
+
         return viewRepository.findViewByViewCreationDateBetween(endDate, startDate);
     }
 
@@ -679,6 +680,7 @@ public class NewsServiceImpl implements NewsService {
      * @return A list of Integer values representing the most common viewNewsIDs.
      */
     private List<Integer> getMostCommonViewNewsIDs(List<View> listOfViews) {
+
         Map<Integer, Long> countByViewNewsID = listOfViews.stream()
                 .collect(Collectors.groupingBy(View::getViewNewsID, Collectors.counting()));
 
@@ -696,6 +698,7 @@ public class NewsServiceImpl implements NewsService {
      * @return A list of {@link News} objects representing the top trending news articles.
      */
     private List<News> fetchTopTrendingNews(List<Integer> mostCommonViewNewsIDs) {
+
         Stream<News> trendingNewsStream = mostCommonViewNewsIDs.stream()
                 .map(newsRepository::findById)
                 .filter(Optional::isPresent)

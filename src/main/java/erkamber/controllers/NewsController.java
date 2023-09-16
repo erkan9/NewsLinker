@@ -48,6 +48,14 @@ public class NewsController {
         return ResponseEntity.ok(allNews);
     }
 
+    @GetMapping("/news/trending/{topNewsCount}")
+    public ResponseEntity<List<NewsDetailedDto>> getTrendingNews(@PathVariable int topNewsCount) {
+
+        List<NewsDetailedDto> trendingNews = this.newsService.getTopTrendingNews(topNewsCount);
+
+        return ResponseEntity.ok(trendingNews);
+    }
+
     @GetMapping("/news/detailed/{newsId}")
     public ResponseEntity<NewsDetailedDto> getNewsDetailedByNewsID(@PathVariable int newsId) {
         NewsDetailedDto newsDetailedByNewsID = this.newsService.getNewsDetailedByNewsID(newsId);

@@ -22,7 +22,7 @@ public interface NewsService {
 
     NewsDetailedDto getNewsDetailedByNewsID(int newsID);
 
-    NewsDetailedDto getNewsAsLoggedUser(int newsID, int userID);
+    NewsDetailedDto getNewsAsLoggedUser(int userID, int newsID);
 
     List<NewsDetailedDto> getAllNews();
 
@@ -33,4 +33,6 @@ public interface NewsService {
     List<NewsDetailedDto> findNewsByCreationDateBefore(LocalDate beforeDate);
 
     List<NewsDetailedDto> findNewsByCreationDateAfter(LocalDate afterDate);
+
+    List<NewsDetailedDto> getTopTrendingNews(int countOfTrendingNews);
 }

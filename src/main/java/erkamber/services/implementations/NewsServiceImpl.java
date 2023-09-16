@@ -3,6 +3,7 @@ package erkamber.services.implementations;
 import erkamber.configurations.JsonObjectConfiguration;
 import erkamber.dtos.*;
 import erkamber.entities.*;
+import erkamber.enums.TopTrendingNewsListSize;
 import erkamber.enums.VoteTypeNews;
 import erkamber.exceptions.InvalidInputException;
 import erkamber.exceptions.ResourceNotFoundException;
@@ -23,7 +24,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class NewsServiceImpl implements NewsService {
@@ -125,7 +129,7 @@ public class NewsServiceImpl implements NewsService {
      * @throws ResourceNotFoundException If the news article with the specified ID is not found, or if the user does not exist.
      */
     @Override
-    public NewsDetailedDto getNewsAsLoggedUser(int newsID, int userID) {
+    public NewsDetailedDto getNewsAsLoggedUser(int userID, int newsID) {
 
         isUserExists(userID);
 
@@ -161,7 +165,7 @@ public class NewsServiceImpl implements NewsService {
 
         validateNewsTitle(newsDto.getNewsTitle());
 
-       //validateTextForInjection(newsDto.getNewsContent());
+        //validateTextForInjection(newsDto.getNewsContent());
 
         News news = newsMapper.mapNewsDtoToNews(newsDto);
 
@@ -357,6 +361,28 @@ public class NewsServiceImpl implements NewsService {
         isListOfNewsEmpty(listOfNewsByCreationDateAfter);
 
         return convertListToNewsDetailedDto(listOfNewsByCreationDateAfter);
+    }
+
+    /**
+     * Retrieves the top trending news articles based on view counts within the last three days.
+     *
+     * @param countOfTrendingNews The number of top trending news articles to retrieve.
+     * @return A list of {@link NewsDetailedDto} representing the top trending news articles.
+     */
+    @Override
+    public List<NewsDetailedDto> getTopTrendingNews(int countOfTrendingNews) {
+
+        TopTrendingNewsListSize.TRENDING_NEWS_LIST_SIZE.setTopTrendingNewsListSize(countOfTrendingNews);
+
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = startDate.minusDays(3);
+
+        List<View> listOfViews = getViewsWithinDateRange(endDate, startDate);
+        List<Integer> mostCommonViewNewsIDs = getMostCommonViewNewsIDs(listOfViews);
+
+        List<News> listOfTopTrendingNews = fetchTopTrendingNews(mostCommonViewNewsIDs);
+
+        return convertListToNewsDetailedDto(listOfTopTrendingNews);
     }
 
     /**
@@ -633,5 +659,51 @@ public class NewsServiceImpl implements NewsService {
 
             throw new InvalidInputException("Invalid News Title!");
         }
+    }
+
+    /**
+     * Retrieves a list of View objects that fall within the specified date range.
+     *
+     * @param endDate   The end date of the date range.
+     * @param startDate The start date of the date range.
+     * @return A list of View objects representing views created within the specified date range.
+     */
+    private List<View> getViewsWithinDateRange(LocalDate endDate, LocalDate startDate) {
+
+        return viewRepository.findViewByViewCreationDateBetween(endDate, startDate);
+    }
+
+    /**
+     * Retrieves a list of the most common viewNewsIDs based on the count of views.
+     *
+     * @param listOfViews The list of View objects containing viewNewsIDs and their associated view counts.
+     * @return A list of Integer values representing the most common viewNewsIDs.
+     */
+    private List<Integer> getMostCommonViewNewsIDs(List<View> listOfViews) {
+
+        Map<Integer, Long> countByViewNewsID = listOfViews.stream()
+                .collect(Collectors.groupingBy(View::getViewNewsID, Collectors.counting()));
+
+        return countByViewNewsID.entrySet().stream()
+                .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
+                .limit(TopTrendingNewsListSize.TRENDING_NEWS_LIST_SIZE.getTopTrendingNewsListSize())
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Fetches the top trending news articles based on a list of common viewNewsIDs.
+     *
+     * @param mostCommonViewNewsIDs The list of common viewNewsIDs representing the top trending articles.
+     * @return A list of {@link News} objects representing the top trending news articles.
+     */
+    private List<News> fetchTopTrendingNews(List<Integer> mostCommonViewNewsIDs) {
+
+        Stream<News> trendingNewsStream = mostCommonViewNewsIDs.stream()
+                .map(newsRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get);
+
+        return trendingNewsStream.collect(Collectors.toList());
     }
 }

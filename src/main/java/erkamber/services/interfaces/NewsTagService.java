@@ -2,7 +2,7 @@ package erkamber.services.interfaces;
 
 import erkamber.dtos.NewsTagDetailedDto;
 import erkamber.dtos.NewsTagDto;
-import erkamber.dtos.NewsTagDtoResponse;
+import erkamber.requests.NewsTagDtoResponse;
 
 import java.util.List;
 

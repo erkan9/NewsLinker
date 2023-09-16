@@ -337,7 +337,9 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDetailedDto> getCommentsByNewsIDAndIDCreationDate(int newsID, LocalDate creationDate) {
 
-        List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCommentNewsIDAndCreationDateOrderByCommentIDAsc(newsID, creationDate);
+        LocalDateTime onCreationDate = creationDate.atStartOfDay();
+
+        List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCommentNewsIDAndCreationDateOrderByCommentIDAsc(newsID, onCreationDate);
 
         return convertListToDetailedDto(listOfCommentsByDate);
     }
@@ -353,7 +355,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDetailedDto> getCommentsByNewsIDAndCreationDateBefore(int newsID, LocalDate creationDate) {
 
-        List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCommentNewsIDAndCreationDateBeforeOrderByCommentIDAsc(newsID, creationDate);
+        LocalDateTime creationDateBefore = creationDate.atStartOfDay();
+
+        List<Comment> listOfCommentsByDate =
+                commentRepository.findCommentsByCommentNewsIDAndCreationDateBeforeOrderByCommentIDAsc(newsID, creationDateBefore);
 
         return convertListToDetailedDto(listOfCommentsByDate);
     }
@@ -369,7 +374,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDetailedDto> getCommentsByNewsIDAndCreationDateAfter(int newsID, LocalDate creationDate) {
 
-        List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCommentNewsIDAndCreationDateAfterOrderByCommentIDAsc(newsID, creationDate);
+        LocalDateTime creationDateAfter = creationDate.atStartOfDay();
+
+        List<Comment> listOfCommentsByDate =
+                commentRepository.findCommentsByCommentNewsIDAndCreationDateAfterOrderByCommentIDAsc(newsID, creationDateAfter);
 
         return convertListToDetailedDto(listOfCommentsByDate);
     }

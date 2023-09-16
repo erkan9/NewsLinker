@@ -5,6 +5,7 @@ import erkamber.entities.NewsTag;
 import erkamber.exceptions.ResourceNotFoundException;
 import erkamber.mappers.NewsTagMapper;
 import erkamber.repositories.NewsTagRepository;
+import erkamber.requests.NewsTagDtoResponse;
 import erkamber.services.interfaces.NewsService;
 import erkamber.services.interfaces.NewsTagService;
 import erkamber.services.interfaces.TagService;

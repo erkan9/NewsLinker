@@ -1,5 +1,6 @@
-package erkamber.dtos;
+package erkamber.requests;
 
+import erkamber.dtos.TagDto;
 import lombok.*;
 
 import javax.validation.constraints.Positive;

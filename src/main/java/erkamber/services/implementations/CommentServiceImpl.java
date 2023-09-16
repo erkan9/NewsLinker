@@ -23,6 +23,7 @@ import javax.mail.MessagingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -337,9 +338,20 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDetailedDto> getCommentsByNewsIDAndIDCreationDate(int newsID, LocalDate creationDate) {
 
-        LocalDateTime onCreationDate = creationDate.atStartOfDay();
+        List<Comment> listOfCommentsByDate = commentRepository.findAll();
 
-        List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCommentNewsIDAndCreationDateOrderByCommentIDAsc(newsID, onCreationDate);
+        Iterator<Comment> iterator = listOfCommentsByDate.iterator();
+
+        while (iterator.hasNext()) {
+
+            Comment comment = iterator.next();
+            LocalDate localDate = LocalDate.from(comment.getCreationDate());
+
+            if (!localDate.equals(creationDate)) {
+
+                iterator.remove();
+            }
+        }
 
         return convertListToDetailedDto(listOfCommentsByDate);
     }

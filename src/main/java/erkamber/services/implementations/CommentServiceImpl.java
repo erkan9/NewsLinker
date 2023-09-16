@@ -23,6 +23,7 @@ import javax.mail.MessagingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -337,7 +338,20 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDetailedDto> getCommentsByNewsIDAndIDCreationDate(int newsID, LocalDate creationDate) {
 
-        List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCommentNewsIDAndCreationDateOrderByCommentIDAsc(newsID, creationDate);
+        List<Comment> listOfCommentsByDate = commentRepository.findAll();
+
+        Iterator<Comment> iterator = listOfCommentsByDate.iterator();
+
+        while (iterator.hasNext()) {
+
+            Comment comment = iterator.next();
+            LocalDate localDate = LocalDate.from(comment.getCreationDate());
+
+            if (!localDate.equals(creationDate)) {
+
+                iterator.remove();
+            }
+        }
 
         return convertListToDetailedDto(listOfCommentsByDate);
     }
@@ -353,7 +367,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDetailedDto> getCommentsByNewsIDAndCreationDateBefore(int newsID, LocalDate creationDate) {
 
-        List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCommentNewsIDAndCreationDateBeforeOrderByCommentIDAsc(newsID, creationDate);
+        LocalDateTime creationDateBefore = creationDate.atStartOfDay();
+
+        List<Comment> listOfCommentsByDate =
+                commentRepository.findCommentsByCommentNewsIDAndCreationDateBeforeOrderByCommentIDAsc(newsID, creationDateBefore);
 
         return convertListToDetailedDto(listOfCommentsByDate);
     }
@@ -369,7 +386,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDetailedDto> getCommentsByNewsIDAndCreationDateAfter(int newsID, LocalDate creationDate) {
 
-        List<Comment> listOfCommentsByDate = commentRepository.findCommentsByCommentNewsIDAndCreationDateAfterOrderByCommentIDAsc(newsID, creationDate);
+        LocalDateTime creationDateAfter = creationDate.atStartOfDay();
+
+        List<Comment> listOfCommentsByDate =
+                commentRepository.findCommentsByCommentNewsIDAndCreationDateAfterOrderByCommentIDAsc(newsID, creationDateAfter);
 
         return convertListToDetailedDto(listOfCommentsByDate);
     }

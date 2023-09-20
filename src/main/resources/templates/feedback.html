@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin: 0 0 10px;
+            border-bottom: 2px solid #333333;
+            padding-bottom: 10px;
+        }
+
+        p {
+            color: #444;
+            font-size: 16px;
+            line-height: 1.5;
+            margin: 0 0 10px;
+        }
+
+        .comment {
+            padding: 10px;
+            background-color: #ffffff;
+            border-left: 3px solid #333;
+        }
+
+        .comment p {
+            margin-bottom: 15px;
+        }
+
+        .signature {
+            text-align: right;
+            font-size: 14px;
+            color: #888;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <table cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+            <td align="center" style="padding: 20px 0 10px 0; background: #ffffff;">
+                <img src="https://t4.ftcdn.net/jpg/03/63/20/53/360_F_363205300_FSj0mJrboFi0q37UaEzGF3OXIM1QhqBn.jpg" alt="" width="300" style="height: auto; display: block;" />
+            </td>
+        </tr>
+    </table>
+    <h1>Обратна връзка</h1>
+    <p>Потребител с имейл: <span th:text="${feedbackAuthorEmail}"></span>,</p>
+    <p>Остави обратна връзка:</p>
+    <div class="comment">
+        <p><span th:text="${feedbackContent}"></span></p>
+    </div>
+    <div class="signature">
+        <p>Поздрави,</p>
+        <p>Екип NewsLinker</p>
+    </div>
+</div>
+</body>
+</html>

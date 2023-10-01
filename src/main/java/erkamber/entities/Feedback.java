@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "feedbacks")
@@ -23,12 +24,16 @@ public class Feedback {
     @Column(name = "feedback_content", length = 400, unique = false, updatable = true, insertable = true, nullable = false)
     private String feedbackContent;
 
+    @Column(name = "feedback_creation_date", unique = false, updatable = false, insertable = true, nullable = false)
+    private LocalDateTime feedbackCreationDate;
+
     public Feedback() {
     }
 
-    public Feedback(int feedbackID, int authorID, String feedbackContent) {
+    public Feedback(int feedbackID, int authorID, String feedbackContent, LocalDateTime feedbackCreationDate) {
         this.feedbackID = feedbackID;
         this.authorID = authorID;
         this.feedbackContent = feedbackContent;
+        this.feedbackCreationDate = feedbackCreationDate;
     }
 }

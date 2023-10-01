@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -24,4 +25,5 @@ public class FeedbackDto {
     @Size(min = 2, max = 300, message = "Feedback Content length could be max 500 characters")
     private String feedbackContent;
 
+    private LocalDateTime feedbackCreationDate;
 }

@@ -1,10 +1,8 @@
 package erkamber.services.interfaces;
 
 import erkamber.dtos.FeedbackDto;
-import erkamber.entities.Feedback;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface FeedbackService {
@@ -13,7 +11,7 @@ public interface FeedbackService {
 
     int deleteFeedbackByFeedbackID(int feedbackID);
 
-    int deleteFeedbackByUserID(int userID);
+    int deleteFeedbackByAuthorID(int authorID);
 
     int deleteFeedbacksBetweenDate(LocalDate startDate, LocalDate endDate);
 

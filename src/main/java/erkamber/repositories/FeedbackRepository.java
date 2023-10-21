@@ -18,5 +18,7 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Integer> {
 
     List<Feedback> findFeedbackByFeedbackCreationDateBefore(LocalDateTime feedbackCreationDate);
 
+    List<Feedback> findFeedbackByFeedbackCreationDateBetween(LocalDateTime startDate, LocalDateTime endDate);
+
     List<Feedback> findFeedbackByFeedbackContentContaining(String feedbackContentContaining);
 }

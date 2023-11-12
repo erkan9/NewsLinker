@@ -1,7 +1,9 @@
 package erkamber.services.implementations;
 
+import erkamber.dtos.CommentDetailedDto;
 import erkamber.dtos.FeedbackDto;
 import erkamber.dtos.UserDto;
+import erkamber.entities.Comment;
 import erkamber.entities.Feedback;
 import erkamber.exceptions.ResourceNotFoundException;
 import erkamber.mappers.FeedbackMapper;
@@ -245,6 +247,20 @@ public class FeedbackServiceImpl implements FeedbackService {
         List<Feedback> listOfFeedbacksContainingWord = feedbackRepository.findFeedbackByFeedbackContentContaining(word);
 
         return mapFeedbackListToFeedbackDto(listOfFeedbacksContainingWord);
+    }
+
+
+    @Override
+    public FeedbackDto getFeedbackById(int feedbackId) {
+
+        Optional<Feedback> optionalFeedback = feedbackRepository.findById(feedbackId);
+
+        Feedback searchedFeedback = optionalFeedback.orElseThrow(() ->
+                new ResourceNotFoundException("Feedback with ID not Found:" + feedbackId, "Feedback"));
+
+        UserDto feedbackAuthor = userService.getUserByID(searchedFeedback.getAuthorID());
+
+        return feedbackMapper.mapFeedbackToFeedbackDto(searchedFeedback, feedbackAuthor);
     }
 
     /**

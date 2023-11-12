@@ -15,6 +15,8 @@ public interface FeedbackService {
 
     int deleteFeedbacksBetweenDate(LocalDate startDate, LocalDate endDate);
 
+    FeedbackDto getFeedbackById(int feedbackId);
+
     List<FeedbackDto> getAllFeedbacks();
 
     List<FeedbackDto> getFeedbacksByAuthorID(int authorID);

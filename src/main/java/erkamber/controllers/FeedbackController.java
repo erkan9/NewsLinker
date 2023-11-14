@@ -51,20 +51,18 @@ public class FeedbackController {
         return ResponseEntity.ok(feedbackService.getFeedbacksByAuthorID(authorID));
     }
 
-    @DeleteMapping(value = "/feedbacks", params = {"authorId"})
-    public ResponseEntity<Integer> deleteFeedbackByAuthorID(@RequestParam("authorId")
-                                                            @Positive(message = "Author ID must be a Positive number!")
-                                                            int authorID) {
+    @DeleteMapping("/feedbacks/author/{authorId}")
+    public ResponseEntity<Integer> deleteFeedbackByAuthorsID(@PathVariable int authorId) {
 
-        return ResponseEntity.ok(feedbackService.deleteFeedbackByAuthorID(authorID));
+        return ResponseEntity.ok(feedbackService.deleteFeedbackByAuthorID(authorId));
     }
 
     @DeleteMapping(value = "/feedbacks", params = {"authorId"})
-    public ResponseEntity<Integer> deleteFeedbackByFeedbackID(@RequestParam("authorId")
+    public ResponseEntity<Integer> deleteFeedbackByID(@RequestParam("authorId")
                                                               @Positive(message = "Author ID must be a Positive number!")
-                                                              int feedbackId) {
+                                                              int authorId) {
 
-        return ResponseEntity.ok(feedbackService.deleteFeedbackByFeedbackID(feedbackId));
+        return ResponseEntity.ok(feedbackService.deleteFeedbackByAuthorID(authorId));
     }
 
     @GetMapping(value = "/feedbacks", params = {"creationDate"})
